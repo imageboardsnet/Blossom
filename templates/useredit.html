@@ -1,0 +1,28 @@
+<div class="editform">
+    <div class="ui attached message">
+        <div class="header">
+            Edit user
+        </div>
+    </div>
+    <form class="ui form attached fluid segment" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="field">
+            <label>Username</label>
+            {{ form.username(placeholder="Enter username") }}
+        </div>
+        <div class="field">
+            <label>Password</label>
+            {{ form.password(placeholder="Enter password") }}
+        </div>
+        <div class="field">
+            <label>Role</label>
+            {{ form.role(placeholder="Enter role") }}
+        </div>
+        <div class="field">
+            <label>Imageboards</label>
+            {{ form.imageboards(placeholder="Enter imageboards") }}
+        </div>
+        {{ form.submit(class="ui primary button") }}
+        <a href="/users" class="ui button">Cancel</a>
+    </form>
+</div>

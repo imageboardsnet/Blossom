@@ -1,0 +1,60 @@
+<div class="editform">
+    <div class="ui attached message">
+        <div class="header">
+            Edit Imageboard
+        </div>
+    </div>
+    <form class="ui form attached fluid segment" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="three fields">
+            <div class="field two wide">
+                <label>ID</label>
+                {{ form.id(placeholder="Enter ID", disabled=True) }}
+            </div>
+            <div class="field two wide">
+                <label>Activity</label>
+                {{ form.activity(placeholder="Enter activity") }}
+            </div>
+            <div class="field two wide">
+                <label>Status</label>
+                {{ form.status() }}
+            </div>
+        </div>
+        <div class="field">
+            <label>Name</label>
+            {{ form.name(placeholder="Enter name") }}
+        </div>
+        <div class="field">
+            <label>URL</label>
+            {{ form.url(placeholder="Enter URL") }}
+        </div>
+        <div class="field">
+            <label>Mirrors</label>
+            {{ form.mirrors(placeholder="Enter mirrors") }}
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>Language</label>
+                {{ form.language(placeholder="Enter language") }}
+            </div>
+            <div class="field">
+                <label>Software</label>
+                {{ form.software(placeholder="Enter software") }}
+            </div>
+        </div>
+        <div class="field">
+            <label>Favicon</label>
+            {{ form.favicon(placeholder="Enter favicon URL") }}
+        </div>
+        <div class="field">
+            <label>Boards</label>
+            {{ form.boards(placeholder="Enter boards") }}
+        </div>
+        <div class="field">
+            <label>Description</label>
+            {{ form.description() }}
+        </div>
+            {{ form.submit(class="ui primary button") }}
+            <a href="/" class="ui button">Cancel</a>
+    </form>
+</div>

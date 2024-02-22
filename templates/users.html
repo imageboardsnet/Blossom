@@ -1,0 +1,39 @@
+<div class="ui container">
+    <h1>User List</h1>
+    <table class="ui celled table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Role</th>
+                <th>Imageboards</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    {% if user.imageboards %}
+                    <ul>
+                        {% for imageboard in user.imageboards %}
+                        <li>{{ imageboard }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/users/edit/{{ user.id }}" class="ui button"><i class="edit icon"></i> Edit</a>
+                    <a href="/users/delete/{{ user.id }}" class="ui button"><i class="trash icon"></i> Delete</a>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,56 @@
+<table class="ui striped collapsing table list">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>name</th>
+            <th>url</th>
+            <th>boards</th>
+            <th>activity</th>
+            <th>mirrors</th>
+            <th>software</th>
+            <th>language</th>
+            <th>status</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    {% for imb in imageboards %}
+    <tr>
+        <td>{{ imb.id }}</td>
+        <td>{{ imb.name }}</td>
+        <td><a href="{{ imb.url }}">{{ imb.url }}</a></td>
+        <td>{% for board in imb.boards %}
+            {{ board }}
+            {% endfor %}
+        </td>
+        <td>{{ imb.activity }}</td>
+        <td>
+            {% if imb.mirrors is defined %}
+                Yes
+            {% else %}
+                No
+            {% endif %}
+        </td>
+        <td>
+            {% for sw in imb.software %}
+                {{ sw }}
+            {% endfor %}
+        </td>
+        <td>
+            {% for lg in imb.language %}
+                {{ lg }}
+            {% endfor %}
+        </td>
+        <td>
+            {% if imb.status == 'online' %}
+                <div class="ui green label">{{ imb.status }}</div>
+            {% else %}
+                <div class="ui red label">{{ imb.status }}</div>
+            {% endif %}
+        </td>
+        <td>
+            <a href="/dashboard/edit/{{ imb.id }}" class="ui button"><i class="edit icon"></i> Edit</a>
+            <a href="/dashboard/delete/{{ imb.id }}" class="ui button"><i class="trash icon"></i> Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
