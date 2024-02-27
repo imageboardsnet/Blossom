@@ -1,10 +1,8 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Optional
-from dbmanager import load_imageboards, delete_imageboard, get_imageboard, edit_imageboard, check_user, load_user_database, edit_user, remove_user
-import secrets
+from obj.forms import LoginForm, ibEditForm, UserEditForm, UserAddForm
+from obj.users import usersb
+from obj.imageboards import imageboardsb
 
 app = Flask(__name__)
 
@@ -14,33 +12,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Login')
-
-class EditForm(FlaskForm):
-    id = StringField('ID')
-    activity = StringField('Activity', validators=[DataRequired()])
-    status = StringField('Status', validators=[DataRequired()])
-    name = StringField('Name', validators=[DataRequired()])
-    url = StringField('URL', validators=[DataRequired()])
-    mirrors = StringField('Mirrors', validators=[Optional()])
-    language = StringField('Language', validators=[DataRequired()])
-    software = StringField('Software', validators=[DataRequired()])
-    favicon = StringField('Favicon', validators=[Optional()])
-    boards = StringField('Boards', validators=[Optional()])
-    description = StringField('Description', validators=[Optional()])
-    submit = SubmitField('Save')
-
-class UsereditForm(FlaskForm):
-    id = StringField('ID')
-    username = StringField('Username')
-    password = PasswordField('Password')
-    role = StringField('Role', validators=[DataRequired()])
-    imageboards = StringField('Imageboards', validators=[Optional()])
-    submit = SubmitField('Save')
-
 class User(UserMixin):
     def __init__(self, id, username):
         self.id = id
@@ -48,8 +19,8 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def user_loader(user_id):
-    users = load_user_database()
-    user = next((user for user in users if str(user['id']) == user_id), None)
+    usersl = usersb()
+    user = next((user for user in usersl if str(user['id']) == user_id), None)
     if user:
         loaded_user = User(id=str(user['id']), username=user['username'])
         return loaded_user
@@ -70,78 +41,85 @@ def index():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    imageboards = load_imageboards()
-    return render_page("Blosson | Dashboard", render_template('boards.html', imageboards=imageboards))
+    imageboardsl = imageboardsb()
+    return render_page("Blosson | Dashboard", render_template('boards.html', imageboards=imageboardsl))
 
 
 @app.route('/dashboard/delete/<int:imageboard_id>')
 @login_required
 def delete(imageboard_id):
-    delete_imageboard(imageboard_id)
+    imageboardsl = imageboardsb()
+    imageboardsl.delete_imageboard(imageboard_id)
     return dashboard()
 
 @app.route('/dashboard/edit/<int:imageboard_id>', methods=['GET', 'POST'])
 @login_required
 def edit(imageboard_id):
-    imageboard = get_imageboard(imageboard_id)
-    form = EditForm()
-    form.id.data = imageboard["id"]
-    form.activity.data = imageboard["activity"]
-    form.status.data = imageboard["status"]
-    form.name.data = imageboard["name"]
-    form.url.data = imageboard["url"]
-    form.mirrors.data = imageboard["mirrors"]
-    form.language.data = imageboard["language"]
-    form.software.data = imageboard["software"]
-    form.favicon.data = imageboard["favicon"]
-    form.boards.data = imageboard["boards"]
-    form.description.data = imageboard["description"]
-    if form.validate_on_submit():
-        edit_imageboard(imageboard_id, "activity", form.activity.data)
-        edit_imageboard(imageboard_id, "status", form.status.data)
-        edit_imageboard(imageboard_id, "name", form.name.data)
-        edit_imageboard(imageboard_id, "url", form.url.data)
-        edit_imageboard(imageboard_id, "mirrors", form.mirrors.data)
-        edit_imageboard(imageboard_id, "language", form.language.data)
-        edit_imageboard(imageboard_id, "software", form.software.data)
-        edit_imageboard(imageboard_id, "favicon", form.favicon.data)
-        edit_imageboard(imageboard_id, "boards", form.boards.data)
-        edit_imageboard(imageboard_id, "description", form.description.data)
-        return redirect(url_for('dashboard'))
+    imageboardsl = imageboardsb()
+    imageboard = imageboardsl.get_imageboard(imageboard_id)
+    form = ibEditForm()
+    if request.method == 'GET':
+        for field in ["activity", "status", "name", "url", "favicon", "description"]:
+            form[field].data = imageboard[field]
+        for field in ["mirrors", "language", "software", "boards"]:
+            form[field].data = ','.join(imageboard[field])
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            updates = {}
+            for field in ["activity", "status", "name", "url", "favicon", "description"]:
+                updates[field] = getattr(form, field).data
+            for field in ["mirrors", "language", "software", "boards"]:
+                updates[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
+            imageboardsl.update_imageboard(imageboard_id, updates)
+            return redirect(url_for('dashboard'))
     return render_page("Blossom | Edit", render_template('ibedit.html', id=imageboard_id, form=form))
 
 @app.route('/users', methods=['GET', 'POST'])
 @login_required
 def users():
-    users = load_user_database()
-    return render_page("Blossom | Users", render_template('users.html', users=users))
+    usersl = usersb()
+    return render_page("Blossom | Users", render_template('users.html', users=usersl))
+
+
+@app.route('/users/add', methods=['GET', 'POST'])
+@login_required
+def useradd():
+    form = UserAddForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            usersl = usersb()
+            usersl.add_user(form.data['username'], form.data['password'], form.data['role'], form.data['imageboards'])
+            return redirect(url_for('users'))
+    return render_page("Blossom | Add User", render_template('useradd.html', form=form))
 
 @app.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def useredit(user_id):
-    users = load_user_database()
-    user = next((user for user in users if user['id'] == user_id), None)
-    form = UsereditForm()
-    form.id.data = user["id"]
-    form.username.data = user["username"]
-    form.password.data = user["password"]
-    form.role.data = user["role"]
-    if "imageboards" in user:
-        form.imageboards.data = user["imageboards"]
-    if form.validate_on_submit():
-        edit_user(user_id, "username", form.username.data)
-        edit_user(user_id, "password", form.password.data)
-        edit_user(user_id, "role", form.role.data)
-        edit_user(user_id, "imageboards", form.imageboards.data)
-        return redirect(url_for('users'))
-    return render_page("Blossom | User Edit", render_template('useredit.html', id=user_id, form=form))
+    usersl = usersb()
+    user = next((user for user in usersl if user['id'] == user_id), None)
+    form = UserEditForm()
+    if request.method == 'GET':
+        form.username.data = user['username']
+        form.role.data = user['role']
+        if "imageboards" in user:
+            form.imageboards.data = ','.join(user['imageboards'])
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            updates = {}
+            updates['username'] = form.data['username'] 
+            updates['role'] = form.data['role']
+            imageboards_str = getattr(form, 'imageboards').data
+            updates['imageboards'] = [ib.strip() for ib in imageboards_str.split(',')]
+            usersl.edit_user(user_id, updates)
+            return redirect(url_for('users'))
+    return render_page("Blossom | Edit User", render_template('useredit.html', id=user_id, form=form))
 
 @app.route('/users/delete/<int:user_id>')
 @login_required
 def userdelete(user_id):
-    remove_user(user_id)
-    return users()
-
+    usersl = usersb()
+    usersl.remove_user(user_id)
+    return redirect(url_for('users'))
 
 @app.route('/about')
 def about():
@@ -151,8 +129,8 @@ def about():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        users = load_user_database()
-        id = check_user(users, form.username.data, form.password.data)
+        usersl = usersb()
+        id = usersl.check_user(form.username.data, form.password.data)
         if id != False:
             user_obj = User(id, form.username.data)
             login_user(user_obj)

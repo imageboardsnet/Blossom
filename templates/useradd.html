@@ -1,7 +1,7 @@
 <div class="editform">
     <div class="ui attached message">
         <div class="header">
-            Edit user
+            Add user
         </div>
     </div>
     <form class="ui form attached fluid segment" method="POST">
@@ -9,6 +9,10 @@
         <div class="field">
             <label>Username</label>
             {{ form.username(placeholder="Enter username") }}
+        </div>
+        <div class="field">
+            <label>Password</label>
+            {{ form.password(placeholder="Enter password") }}
         </div>
         <div class="field">
             <label>Role</label>

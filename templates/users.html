@@ -5,7 +5,6 @@
             <tr>
                 <th>ID</th>
                 <th>Username</th>
-                <th>Password</th>
                 <th>Role</th>
                 <th>Imageboards</th>
                 <th>Actions</th>
@@ -16,7 +15,6 @@
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.password }}</td>
                 <td>{{ user.role }}</td>
                 <td>
                     {% if user.imageboards %}
@@ -36,4 +34,5 @@
             {% endfor %}
         </tbody>
     </table>
+    <a href="/users/add" class="ui button">New user</a>
 </div>
