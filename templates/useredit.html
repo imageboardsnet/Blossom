@@ -1,10 +1,10 @@
 <div class="editform">
-    <div class="ui attached message">
-        <div class="header">
+    <div class="ui attached message inverted">
+        <div class="header inverted">
             Edit user
         </div>
     </div>
-    <form class="ui form attached fluid segment" method="POST">
+    <form class="ui form attached fluid segment inverted" method="POST">
         {{ form.hidden_tag() }}
         <div class="field">
             <label>Username</label>
@@ -18,7 +18,7 @@
             <label>Imageboards</label>
             {{ form.imageboards(placeholder="Enter imageboards") }}
         </div>
-        {{ form.submit(class="ui primary button") }}
-        <a href="/users" class="ui button">Cancel</a>
+        {{ form.submit(class="ui button green inverted") }}
+        <a href="/users" class="ui button inverted">Cancel</a>
     </form>
 </div>

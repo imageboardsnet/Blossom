@@ -8,10 +8,18 @@ class imageboardsb:
         if os.path.exists(imageboards_path):
             with open(imageboards_path, 'r', encoding='utf-8') as f:
                 self.imageboards = json.load(f)
+    def get_last_id(self):
+        return max([imageboard['id'] for imageboard in self.imageboards])
 
     def save_imageboards(self):
         with open(imageboards_path, 'w') as f:
             json.dump(self.imageboards, f)
+
+    def add_imageboard(self, imageboard):
+        new_id = self.get_last_id() + 1
+        imageboard['id'] = new_id
+        self.imageboards.append(imageboard)
+        self.save_imageboards()
 
     def update_imageboard(self, imageboard_id, updates):
         for imageboard in self.imageboards:
@@ -31,7 +39,7 @@ class imageboardsb:
             if imageboard['id'] == imageboard_id:
                 self.imageboards.remove(imageboard)
                 self.save_imageboards()
-
+                
     def __iter__(self):
         return iter(self.imageboards)
 

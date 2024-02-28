@@ -1,11 +1,11 @@
 <h2 class="ui center aligned icon header inverted">
     <i class="circular user icon inverted"></i>
-    Blossom | Login
+    Blossom | Register
   </h2>
 <div class="loginform">
     <div class="ui attached message inverted">
         <div class="header inverted">
-            Login
+            Register
         </div>
     </div>
     <div class="ui form attached fluid segment inverted">
@@ -13,14 +13,14 @@
             {{ form.hidden_tag() }}
             <p>
                 {{ form.username.label }}<br>
-                {{ form.username(size=32, class="inverted") }}<br>
+                {{ form.username(size=32) }}<br>
             </p>
             <p>
                 {{ form.password.label }}<br>
                 {{ form.password(size=32) }}<br>
             </p>
             <p>{{ form.submit(class="ui button inverted") }}
-            <a href="/register" class="ui button inverted">Register</a></p>
+            <a href="/login" class="ui button inverted">Login</a></p>
         </form>
     </div>
 </div>

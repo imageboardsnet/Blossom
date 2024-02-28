@@ -1,4 +1,11 @@
-<table class="ui striped collapsing table list">
+  <h2 class="ui center aligned icon header inverted">
+    <i class="circular comments icon inverted"></i>
+    Imageboard List
+    <div class="sub header inverted"><a href="/dashboard/add" class="ui button inverted">Add Imageboard</a></div>
+  </h2>
+<div class="ui fluid container inverted">
+
+    <table class="ui striped collapsing table list inverted">
     <thead>
         <tr>
             <th>ID</th>
@@ -50,9 +57,10 @@
             {% endif %}
         </td>
         <td>
-            <a href="/dashboard/edit/{{ imb.id }}" class="ui button"><i class="edit icon"></i> Edit</a>
-            <a href="/dashboard/delete/{{ imb.id }}" class="ui button"><i class="trash icon"></i> Delete</a>
+            <a href="/dashboard/edit/{{ imb.id }}" class="ui button inverted"><i class="edit icon"></i> Edit</a>
+            <a href="/dashboard/delete/{{ imb.id }}" class="ui button red  inverted"><i class="trash icon"></i> Delete</a>
         </td>
     </tr>
     {% endfor %}
 </table>
+</div>

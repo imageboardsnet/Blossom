@@ -22,6 +22,12 @@ class usersb:
                 return user['id']
         return False
     
+    def get_user(self, user_id):
+        for user in self.users:
+            if user['id'] == user_id:
+                return user
+        return False
+    
     def add_user(self, username, password, role, imageboards):
         user = {
             'id': len(self.users) + 1,

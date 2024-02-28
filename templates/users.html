@@ -1,6 +1,11 @@
-<div class="ui container">
-    <h1>User List</h1>
-    <table class="ui celled table">
+<div class="ui container inverted">
+    <h2 class="ui center aligned icon header inverted">
+        <i class="circular users icon inverted"></i>
+        Users List
+        <div class="sub header inverted"><a href="/users/add" class="ui button inverted">New user</a></div>
+      </h2>
+
+    <table class="ui celled table inverted">
         <thead>
             <tr>
                 <th>ID</th>
@@ -28,11 +33,11 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="/users/edit/{{ user.id }}" class="ui button"><i class="edit icon"></i> Edit</a>
-                    <a href="/users/delete/{{ user.id }}" class="ui button"><i class="trash icon"></i> Delete</a>
+                    <a href="/users/edit/{{ user.id }}" class="ui button inverted"><i class="edit icon"></i> Edit</a>
+                    <a href="/users/delete/{{ user.id }}" class="ui button red inverted"><i class="trash icon"></i> Delete</a>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="/users/add" class="ui button">New user</a>
+    
 </div>

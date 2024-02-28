@@ -1,16 +1,12 @@
 <div class="editform">
     <div class="ui attached message inverted">
         <div class="header inverted">
-            Edit Imageboard
+            Add Imageboard
         </div>
     </div>
     <form class="ui form attached fluid segment inverted" method="POST">
         {{ form.hidden_tag() }}
-        <div class="three fields">
-            <div class="field two wide">
-                <label>ID</label>
-                {{ form.id(placeholder="Enter ID", disabled=True) }}
-            </div>
+        <div class="two fields">
             <div class="field two wide">
                 <label>Activity</label>
                 {{ form.activity(placeholder="Enter activity") }}

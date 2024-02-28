@@ -1,4 +1,5 @@
 import requests
+import dns.resolver
 
 def check_onlines(url, timeout=5):
     try:
@@ -16,3 +17,12 @@ def download_favicon(url, path):
     except:
         pass
     return path
+
+
+def check_dns_txtrecord(url):
+    try:
+        answers = dns.resolver.resolve(url, 'TXT')
+        return answers
+    except:
+        return False
+   
