@@ -1,6 +1,6 @@
   <h2 class="ui center aligned icon header inverted">
     <i class="circular comments icon inverted"></i>
-    Imageboard List
+    Imageboards List
     <div class="sub header inverted"><a href="/dashboard/add" class="ui button inverted">Add Imageboard</a></div>
   </h2>
 <div class="ui fluid container inverted">
@@ -50,10 +50,16 @@
             {% endfor %}
         </td>
         <td>
-            {% if imb.status == 'online' %}
-                <div class="ui green label">{{ imb.status }}</div>
-            {% else %}
-                <div class="ui red label">{{ imb.status }}</div>
+            {% if imb.status == 'active' %}
+                <div class="ui green label inverted">Active</div>
+            {% elif imb.status == 'inactive' %}
+                <div class="ui yellow label inverted">Inactive</div>
+            {% elif imb.status == 'pending' %}
+                <div class="ui grey label inverted">Pending</div>
+            {% elif imb.status == 'offline' %}
+                <div class="ui red label inverted">Offline</div>
+            {% elif imb.status == 'deleted' %}
+                <div class="ui black label inverted">Deleted</div>
             {% endif %}
         </td>
         <td>

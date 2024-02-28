@@ -6,17 +6,11 @@
     </div>
     <form class="ui form attached fluid segment inverted" method="POST">
         {{ form.hidden_tag() }}
-        <div class="two fields">
-            <div class="field two wide">
+            <div class="field three wide">
                 <label>Activity</label>
-                {{ form.activity(placeholder="Enter activity") }}
+                {{ form.activity(placeholder="Number of post") }}
             </div>
-            <div class="field two wide">
-                <label>Status</label>
-                {{ form.status() }}
-            </div>
-        </div>
-        <div class="field">
+        <div class="field"><select class="ui fluid search dropdown" multiple=""></select>
             <label>Name</label>
             {{ form.name(placeholder="Enter name") }}
         </div>

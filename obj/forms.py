@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Optional
 
 class LoginForm(FlaskForm):
@@ -17,7 +17,7 @@ class RegisterForm(FlaskForm):
 class ibEditForm(FlaskForm):
     id = StringField('ID')
     activity = StringField('Activity', validators=[DataRequired()])
-    status = StringField('Status', validators=[DataRequired()])
+    status = SelectField('Status', choices=[('active', 'Active'), ('inactive', 'Inactive',), ('offline', 'Offline'),('pending','Pending'),('deleted','Deleted') ], validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     url = StringField('URL', validators=[DataRequired()])
     mirrors = StringField('Mirrors', validators=[Optional()])
@@ -30,7 +30,6 @@ class ibEditForm(FlaskForm):
 
 class ibAddForm(FlaskForm):
     activity = StringField('Activity', validators=[DataRequired()])
-    status = StringField('Status', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     url = StringField('URL', validators=[DataRequired()])
     mirrors = StringField('Mirrors', validators=[Optional()])

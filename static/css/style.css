@@ -1,6 +1,7 @@
 body {
     font-family: 'Roboto', sans-serif !important;
-    background-color: #101010;
+    background: #d37b6e;
+    background-image: url(https://imageboards.net/static/noise.png);
     margin: 0;
     padding: 0;
 }

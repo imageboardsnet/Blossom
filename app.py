@@ -30,7 +30,9 @@ def user_loader(user_id):
 
 def render_page(title,content):
     if current_user.is_authenticated:
-        return render_template('index.html',title=title, navbar= render_template('navbar.html') ,content=content)
+        if current_user.role == "admin":
+            return render_template('index.html',title=title, navbar= render_template('navbar.html', user=current_user.username, admin=True) ,content=content)
+        return render_template('index.html',title=title, navbar= render_template('navbar.html', user=current_user.username) ,content=content)
     return render_template('index.html',title=title, content=content)
 
 @app.route('/')
@@ -69,7 +71,7 @@ def add():
                 usersl.edit_user(current_user.id, update)
             imageboardsl.add_imageboard(form.data)
             return redirect(url_for('dashboard'))
-    return render_page("Blossom | Add", render_template('ibadd.html', form=form))
+    return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
 
 
 @app.route('/dashboard/delete/<int:imageboard_id>')
@@ -97,7 +99,7 @@ def edit(imageboard_id):
     imageboard = imageboardsl.get_imageboard(imageboard_id)
     form = ibEditForm()
     if request.method == 'GET':
-        for field in ["activity", "status", "name", "url", "favicon", "description"]:
+        for field in ["id","activity", "status", "name", "url", "favicon", "description"]:
             form[field].data = imageboard[field]
         for field in ["mirrors", "language", "software", "boards"]:
             form[field].data = ','.join(imageboard[field])
@@ -110,11 +112,13 @@ def edit(imageboard_id):
                 updates[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
             imageboardsl.update_imageboard(imageboard_id, updates)
             return redirect(url_for('dashboard'))
-    return render_page("Blossom | Edit", render_template('ibedit.html', id=imageboard_id, form=form))
+    return render_page("Blossom | Edit imageboard", render_template('forms/ibedit.html', id=imageboard_id, form=form))
 
 @app.route('/users', methods=['GET', 'POST'])
 @login_required
 def users():
+    if current_user.role != "admin":
+        return redirect(url_for('dashboard'))
     usersl = usersb()
     return render_page("Blossom | Users", render_template('users.html', users=usersl))
 
@@ -130,7 +134,7 @@ def useradd():
             usersl = usersb()
             usersl.add_user(form.data['username'], form.data['password'], form.data['role'], form.data['imageboards'])
             return redirect(url_for('users'))
-    return render_page("Blossom | Add User", render_template('useradd.html', form=form))
+    return render_page("Blossom | Add User", render_template('forms/useradd.html', form=form))
 
 @app.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -154,7 +158,7 @@ def useredit(user_id):
             updates['imageboards'] = [ib.strip() for ib in imageboards_str.split(',')]
             usersl.edit_user(user_id, updates)
             return redirect(url_for('users'))
-    return render_page("Blossom | Edit User", render_template('useredit.html', id=user_id, form=form))
+    return render_page("Blossom | Edit User", render_template('forms/useredit.html', id=user_id, form=form))
 
 @app.route('/users/delete/<int:user_id>')
 @login_required
@@ -177,7 +181,7 @@ def register():
             usersl = usersb()
             usersl.add_user(form.data['username'], form.data['password'], form.data['role'], form.data['imageboards'])
             return redirect(url_for('login'))
-    return render_page("Blossom | Register", render_template('register.html', form=form))
+    return render_page("Blossom | Register", render_template('forms/register.html', form=form))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -192,7 +196,7 @@ def login():
         else :
 
             flash('Invalid username or password')
-    return render_page("Blosson | Login", render_template('login.html', form=form))
+    return render_page("Blosson | Login", render_template('forms/login.html', form=form))
 
 @app.route('/logout')
 @login_required
