@@ -185,6 +185,17 @@ def userreset(user_id):
     usersl.set_password(user_id, new_password)
     return render_page("Blossom | Reset Password", render_template('forms/userreset.html',username=usersl.get_username(user_id) , password=new_password))
 
+@app.route('/sauron')
+@login_required
+def sauron():
+    if current_user.role != "admin":
+        return redirect(url_for('dashboard'))
+    imageboardsl = imageboardsb()
+    active_boards = [ib for ib in imageboardsl if ib['status'] == "active"]
+    pending_boards = [ib for ib in imageboardsl if ib['status'] == "pending"]
+    inactive_boards = [ib for ib in imageboardsl if ib['status'] == "inactive"]
+    return render_page("Blossom | Sauron", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), inactive_boards=len(inactive_boards),total_boards=len(imageboardsl)))
+
 @app.route('/about')
 def about():
     return render_page("Blossom | About", render_template('about.html'))

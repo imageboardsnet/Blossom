@@ -14,6 +14,7 @@ class usersb:
                 self.users = json.load(f)
         else:
             self.users = []
+            self.save_users()
 
     def save_users(self):
         with open(users_path, 'w') as f:
