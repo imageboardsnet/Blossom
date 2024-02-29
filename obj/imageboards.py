@@ -1,7 +1,7 @@
 import os
 import json
 
-imageboards_path = 'data/boards/imageboards.json'
+imageboards_path = 'data/imageboards.json'
 
 class imageboardsb:
     def __init__(self):
@@ -42,6 +42,9 @@ class imageboardsb:
                 
     def __iter__(self):
         return iter(self.imageboards)
+    
+    def __len__(self):
+        return len(self.imageboards)
 
     def assign_fields(self):
         id_counter = 1

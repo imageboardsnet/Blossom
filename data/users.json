@@ -1,20 +1,16 @@
 [
     {
-        "id": 1,
+        "id": 4,
         "username": "admin",
-        "password": "admin",
+        "password": "$argon2id$v=19$m=65536,t=3,p=4$AsNvQwky1o3kbAR/3Ofhfg$mqWE14NKHPmmAWvWx4qSQ1j4gSA747OsVyWSDxXB2ws",
         "role": "admin",
-        "imageboards": ""
+        "imageboards": []
     },
     {
         "id": 2,
-        "username": "user",
-        "password": "user",
+        "username": "w2XK",
+        "password": "$argon2id$v=19$m=65536,t=3,p=4$LQjx2NFt/M6vgKhyED8UAQ$uMAwClQf8EhWCrmRAluna+3unkNlK49EFjw6etv/+PU",
         "role": "user",
-        "imageboards": [
-            "5",
-            "7",
-            "25"
-        ]
+        "imageboards": []
     }
 ]

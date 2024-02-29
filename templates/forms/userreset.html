@@ -1,0 +1,33 @@
+<h2 class="ui center aligned icon header inverted">
+    <i class="circular user icon inverted"></i>
+    Blossom | Password Reset
+  </h2>
+<div class="loginform">
+    <div class="ui attached message inverted">
+        <div class="header inverted">
+            Password Reset
+        </div>
+    </div>
+    <div class="ui form attached fluid segment inverted">
+
+        <div class="ui message inverted">
+             <p>Username</p>
+             <div class="ui action input">
+                <input type="text" value="{{ username }}" readonly>
+                <button class="ui inverted right labeled icon button">
+                  <i class="copy icon"></i>
+                  Copy
+                </button>
+              </div>
+             <p>Password</p>
+             <div class="ui action input">
+                <input type="text" value="{{ password }}" readonly>
+                <button class="ui inverted right labeled icon button">
+                  <i class="copy icon"></i>
+                  Copy
+                </button>
+              </div>
+          </div>
+          <a href="/users" class="ui button inverted">back</a>
+        </div>
+</div>

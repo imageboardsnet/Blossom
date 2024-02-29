@@ -1,7 +1,10 @@
 import os
 import json
+from argon2 import PasswordHasher
 
 users_path = 'data/users.json'
+
+ph = PasswordHasher()
 
 class usersb:
 
@@ -18,7 +21,10 @@ class usersb:
 
     def check_user(self, username, password):
         for user in self.users:
-            if user['username'] == username and user['password'] == password:
+            if user['username'] == username and ph.verify(user['password'], password):
+                if ph.check_needs_rehash(user['password']):
+                    user['password'] = ph.hash(password)
+                    self.save_users()
                 return user['id']
         return False
     
@@ -28,7 +34,14 @@ class usersb:
                 return user
         return False
     
+    def get_username(self, user_id):
+        for user in self.users:
+            if user['id'] == user_id:
+                return user['username']
+        return False
+    
     def add_user(self, username, password, role, imageboards):
+        password = ph.hash(password)
         user = {
             'id': len(self.users) + 1,
             'username': username,
@@ -39,11 +52,10 @@ class usersb:
         self.users.append(user)
         self.save_users()
     
-    def edit_user(self, user_id, updates):
+    def set_password(self, user_id, password):
         for user in self.users:
             if user['id'] == user_id:
-                for field, value in updates.items():
-                    user[field] = value
+                user['password'] = ph.hash(password)
                 self.save_users()
                 break
 
@@ -52,6 +64,13 @@ class usersb:
             if user['id'] == user_id:
                 self.users.remove(user)
                 self.save_users()
+
+    def add_imageboard(self, user_id, imageboard_id):
+        for user in self.users:
+            if user['id'] == int(user_id):
+                user['imageboards'].append(imageboard_id)
+                self.save_users()
+                break
 
     def __iter__(self):
         return iter(self.users)

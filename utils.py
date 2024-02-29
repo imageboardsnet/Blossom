@@ -1,6 +1,7 @@
 import requests
 import dns.resolver
 
+
 def check_onlines(url, timeout=5):
     try:
         r = requests.get(url, timeout=timeout)
@@ -25,4 +26,3 @@ def check_dns_txtrecord(url):
         return answers
     except:
         return False
-   

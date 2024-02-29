@@ -8,11 +8,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class RegisterForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    role = StringField('Role', validators=[DataRequired()])
-    imageboards = StringField('Imageboards', validators=[Optional()])
-    submit = SubmitField('Register')
+    submit = SubmitField('Register me!')
 
 class ibEditForm(FlaskForm):
     id = StringField('ID')

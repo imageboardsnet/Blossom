@@ -3,6 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from obj.forms import LoginForm, RegisterForm, ibEditForm,ibAddForm, UserEditForm, UserAddForm
 from obj.users import usersb
 from obj.imageboards import imageboardsb
+import secrets
 
 app = Flask(__name__)
 
@@ -63,13 +64,18 @@ def add():
     if request.method == 'POST':
         if form.validate_on_submit():
             imageboardsl = imageboardsb()
+            newib = {}
+            newib['status'] = "pending"
+            for field in ["activity", "name", "url", "favicon", "description"]:
+                newib[field] = getattr(form, field).data
+            for field in ["mirrors", "language", "software", "boards"]:
+                newib[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
+            imageboardsl.add_imageboard(newib)
             if current_user.role == "user":
-                form.data['status'] = "pending"
-                usersl = usersb()
-                update = {}
-                update['imageboards'] = current_user.imageboards + [str(imageboardsl.get_last_id() + 1)]
-                usersl.edit_user(current_user.id, update)
-            imageboardsl.add_imageboard(form.data)
+                userl = usersb()
+                print (str(len(imageboardsl)))
+                print (current_user.id)
+                userl.add_imageboard(current_user.id, str(len(imageboardsl)))
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
 
@@ -156,7 +162,7 @@ def useredit(user_id):
             updates['role'] = form.data['role']
             imageboards_str = getattr(form, 'imageboards').data
             updates['imageboards'] = [ib.strip() for ib in imageboards_str.split(',')]
-            usersl.edit_user(user_id, updates)
+            usersl.add_imageboard(user_id, updates['imageboards'])
             return redirect(url_for('users'))
     return render_page("Blossom | Edit User", render_template('forms/useredit.html', id=user_id, form=form))
 
@@ -169,6 +175,16 @@ def userdelete(user_id):
     usersl.remove_user(user_id)
     return redirect(url_for('users'))
 
+@app.route('/users/reset/<int:user_id>')
+@login_required
+def userreset(user_id):
+    if current_user.role != "admin":
+        return redirect(url_for('users'))
+    new_password = secrets.token_urlsafe(16)
+    usersl = usersb()
+    usersl.set_password(user_id, new_password)
+    return render_page("Blossom | Reset Password", render_template('forms/userreset.html',username=usersl.get_username(user_id) , password=new_password))
+
 @app.route('/about')
 def about():
     return render_page("Blossom | About", render_template('about.html'))
@@ -178,10 +194,12 @@ def register():
     form = RegisterForm()
     if request.method == 'POST':
         if form.validate_on_submit():
+            username = secrets.token_urlsafe(3)
+            password = secrets.token_urlsafe(16)
             usersl = usersb()
-            usersl.add_user(form.data['username'], form.data['password'], form.data['role'], form.data['imageboards'])
-            return redirect(url_for('login'))
-    return render_page("Blossom | Register", render_template('forms/register.html', form=form))
+            usersl.add_user(username, password, "user", [])
+            return render_page("Blossom | Register", render_template('forms/register2.html', username=username, password=password))
+    return render_page("Blossom | Register", render_template('forms/register1.html', form=form))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

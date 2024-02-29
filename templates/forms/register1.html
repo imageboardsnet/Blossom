@@ -1,0 +1,21 @@
+<h2 class="ui center aligned icon header inverted">
+    <i class="circular user icon inverted"></i>
+    Blossom | Register
+  </h2>
+<div class="loginform">
+    <div class="ui attached message inverted">
+        <div class="header inverted">
+            Instant Registration™
+        </div>
+    </div>
+    <div class="ui form attached fluid segment inverted">
+        <div class="ui message inverted">
+            <p>Register instantly. Click on the submit button to get your username and password.</p>
+            <p>After you register, save your credentials in your password manager.</p>
+          </div>
+        <form method="post">
+            {{ form.hidden_tag() }} 
+            <p>{{ form.submit(class="ui button green inverted") }}
+        </form>
+    </div>
+</div>
