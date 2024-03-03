@@ -1,2 +1,7 @@
 flask
+wtforms
+flask-wtf
+flask-login
+argon2-cffi
+dnspython
 gunicorn
