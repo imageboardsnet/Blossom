@@ -3,6 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from obj.forms import LoginForm, RegisterForm, ibEditForm,ibAddForm, UserEditForm, UserAddForm
 from obj.users import usersb
 from obj.imageboards import imageboardsb
+from sauron import check_imageboards
 import secrets
 
 app = Flask(__name__)
@@ -195,6 +196,14 @@ def sauron():
     pending_boards = [ib for ib in imageboardsl if ib['status'] == "pending"]
     inactive_boards = [ib for ib in imageboardsl if ib['status'] == "inactive"]
     return render_page("Blossom | Sauron", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), inactive_boards=len(inactive_boards),total_boards=len(imageboardsl)))
+
+@app.route('/sauron/check')
+@login_required
+def sauron_check():
+    if current_user.role != "admin":
+        return redirect(url_for('dashboard'))
+    check_imageboards()
+    return redirect(url_for('sauron'))
 
 @app.route('/about')
 def about():

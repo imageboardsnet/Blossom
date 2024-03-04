@@ -1,1 +1,9 @@
-[{"id": 1, "username": "D5i7", "password": "$argon2id$v=19$m=65536,t=3,p=4$kgofIYwAvQPkwVxtPHEe5g$80Gvm9gYTH6jNdkTNoxdV20GvilGYx2ALAEI2gawjwM", "role": "admin", "imageboards": []}]
+[
+    {
+        "id": 1,
+        "username": "D5i7",
+        "password": "$argon2id$v=19$m=65536,t=3,p=4$kgofIYwAvQPkwVxtPHEe5g$80Gvm9gYTH6jNdkTNoxdV20GvilGYx2ALAEI2gawjwM",
+        "role": "admin",
+        "imageboards": []
+    }
+]

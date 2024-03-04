@@ -39,6 +39,13 @@ class imageboardsb:
             if imageboard['id'] == imageboard_id:
                 self.imageboards.remove(imageboard)
                 self.save_imageboards()
+
+    def set_status(self, imageboard_id, status):
+        for imageboard in self.imageboards:
+            if imageboard['id'] == imageboard_id:
+                imageboard['status'] = status
+                self.save_imageboards()
+                break
                 
     def __iter__(self):
         return iter(self.imageboards)
