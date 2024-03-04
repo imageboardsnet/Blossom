@@ -1,7 +1,10 @@
 import os
 import json
+import requests
 
 imageboards_path = 'data/imageboards.json'
+
+imageboards_endpoint_old = 'https://imageboardsnet.github.io/imageboards.json/imageboards.json'
 
 class imageboardsb:
     def __init__(self):
@@ -58,6 +61,7 @@ class imageboardsb:
         return len(self.imageboards)
 
     def assign_fields(self):
+        self.imageboards = requests.get(imageboards_endpoint_old).json()
         id_counter = 1
         for imageboard in self.imageboards:
             imageboard['id'] = id_counter
@@ -73,5 +77,4 @@ class imageboardsb:
                 imageboard['language'] = ""
             if 'software' not in imageboard:
                 imageboard['software'] = ""
-        self.imageboards = {k: v for k, v in sorted(imageboard.items())}
         self.save_imageboards()

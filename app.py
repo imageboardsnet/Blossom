@@ -3,9 +3,10 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from obj.forms import LoginForm, RegisterForm, ibEditForm,ibAddForm, UserEditForm, UserAddForm
 from obj.users import usersb
 from obj.imageboards import imageboardsb
-from sauron import check_imageboards, get_status_state, get_status_time
+from sauron import check_imageboards, get_status_state, get_status_time, set_status_state
 import secrets
 import time
+import threading
 
 app = Flask(__name__)
 
@@ -14,6 +15,8 @@ app.config['SECRET_KEY'] = "blossom_secret_key"
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+thread_event = threading.Event()
 
 class User(UserMixin):
     def __init__(self, id, username, role,imageboards):
@@ -195,7 +198,7 @@ def sauron():
     imageboardsl = imageboardsb()
     active_boards = [ib for ib in imageboardsl if ib['status'] == "active"]
     pending_boards = [ib for ib in imageboardsl if ib['status'] == "pending"]
-    inactive_boards = [ib for ib in imageboardsl if ib['status'] == "inactive"]
+    offline_boards = [ib for ib in imageboardsl if ib['status'] == "offline"]
     last_check_time = get_status_time()
     state = get_status_state()
     time_elapsed = int(time.time()) - int(last_check_time)
@@ -208,15 +211,42 @@ def sauron():
     else:
         hours = time_elapsed // 3600
         time_elapsed_str = f"{hours} hours ago"
-    return render_page("Blossom | Sauron", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), inactive_boards=len(inactive_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_str , state=state))
+    return render_page("Blossom | Sauron", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_str , state=state))
+
+
+
 
 @app.route('/sauron/check')
 @login_required
 def sauron_check():
     if current_user.role != "admin":
         return redirect(url_for('dashboard'))
-    check_imageboards()
+    try:
+        thread_event.set()
+        thread = threading.Thread(target=check_imageboards)
+        thread.start()
+        return redirect(url_for('sauron'))
+    except Exception as error:
+        return redirect(url_for('sauron'))
+
+@app.route('/sauron/stop')
+@login_required
+def sauron_stop():
+    if current_user.role != "admin":
+        return redirect(url_for('dashboard'))
+    thread_event.clear()
+    if get_status_state() == "checking":
+        set_status_state("canceled")
     return redirect(url_for('sauron'))
+
+@app.route('/initib')
+@login_required
+def initib():
+    if current_user.role != "admin":
+        return redirect(url_for('dashboard'))
+    imageboardsl = imageboardsb()
+    imageboardsl.assign_fields()
+    return redirect(url_for('dashboard'))
 
 @app.route('/about')
 def about():
@@ -245,7 +275,6 @@ def login():
             login_user(user_obj)
             return redirect(url_for('dashboard'))
         else :
-
             flash('Invalid username or password')
     return render_page("Blosson | Login", render_template('forms/login.html', form=form))
 

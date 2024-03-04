@@ -3,7 +3,6 @@ import json
 import os
 import requests
 from obj.imageboards import imageboardsb
-import threading
 
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'}
 
@@ -40,8 +39,14 @@ def set_status_state(state):
     status['state'] = state
     save_content(status)
 
+def url_builder(url):
+    if url.startswith('http://') or url.startswith('https://'):
+        return url
+    else:
+        return 'https://' + url
+
 def check_imageboard(imageboard):
-    url = imageboard['url']
+    url = url_builder(imageboard['url'])
     try:
         response = requests.get(url, headers=headers, timeout=10)
         if response.status_code == 200 or response.status_code == 403 or response.status_code == 505:
@@ -52,25 +57,15 @@ def check_imageboard(imageboard):
         return False
     
 def check_imageboards():
-    if get_status_state() == "running":
-        return
-    imageboardsl = imageboardsb()
-    threads = []
+    set_status_state("checking")
     set_status_time()
-    set_status_state("running")
-    
-    for imageboard in imageboardsl:
-        thread = threading.Thread(target=check_imageboard, args=(imageboard,))
-        threads.append(thread)
-        thread.start()
-    
-    for thread in threads:
-        thread.join()
-    
-    for imageboard in imageboardsl:
-        if imageboard['status'] == "active":
-            imageboardsl.set_status(imageboard['id'], "active")
-        else:
-            imageboardsl.set_status(imageboard['id'], "inactive")
-
+    imageboards = imageboardsb()
+    for imageboard in imageboards:
+        check = check_imageboard(imageboard)
+        if imageboard['status'] == 'pending':
+            pass
+        elif check:
+            imageboards.set_status(imageboard['id'], 'active')
+        elif not check:
+            imageboards.set_status(imageboard['id'], 'offline')
     set_status_state("idle")
