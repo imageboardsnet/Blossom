@@ -3,8 +3,9 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from obj.forms import LoginForm, RegisterForm, ibEditForm,ibAddForm, UserEditForm, UserAddForm
 from obj.users import usersb
 from obj.imageboards import imageboardsb
-from sauron import check_imageboards
+from sauron import check_imageboards, get_status_state, get_status_time
 import secrets
+import time
 
 app = Flask(__name__)
 
@@ -195,7 +196,19 @@ def sauron():
     active_boards = [ib for ib in imageboardsl if ib['status'] == "active"]
     pending_boards = [ib for ib in imageboardsl if ib['status'] == "pending"]
     inactive_boards = [ib for ib in imageboardsl if ib['status'] == "inactive"]
-    return render_page("Blossom | Sauron", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), inactive_boards=len(inactive_boards),total_boards=len(imageboardsl)))
+    last_check_time = get_status_time()
+    state = get_status_state()
+    time_elapsed = int(time.time()) - int(last_check_time)
+    time_elapsed_str = ""
+    if time_elapsed < 60:
+        time_elapsed_str = f"{time_elapsed} seconds ago"
+    elif time_elapsed < 3600:
+        minutes = time_elapsed // 60
+        time_elapsed_str = f"{minutes} minutes ago"
+    else:
+        hours = time_elapsed // 3600
+        time_elapsed_str = f"{hours} hours ago"
+    return render_page("Blossom | Sauron", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), inactive_boards=len(inactive_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_str , state=state))
 
 @app.route('/sauron/check')
 @login_required

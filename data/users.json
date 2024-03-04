@@ -5,5 +5,12 @@
         "password": "$argon2id$v=19$m=65536,t=3,p=4$kgofIYwAvQPkwVxtPHEe5g$80Gvm9gYTH6jNdkTNoxdV20GvilGYx2ALAEI2gawjwM",
         "role": "admin",
         "imageboards": []
+    },
+    {
+        "id": 2,
+        "username": "e2xj",
+        "password": "$argon2id$v=19$m=65536,t=3,p=4$eJCv8AMnEla8ftSTDejrAQ$3VRkSBeMSyPVHTfKKyDB048mcW9FKiEH7oW2wYHKuwE",
+        "role": "admin",
+        "imageboards": []
     }
 ]

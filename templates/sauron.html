@@ -45,21 +45,37 @@
 </div>
 <div class="ui message inverted about">
     <div class="ui header inverted">Status Bot</div>
-        <div class="ui grid">
-            <div class="four wide column">
-                <div class="ui statistic inverted">
-                    <div class="value inverted">
-                        {{ last_check_time }}
-                    </div>
-                    <div class="label inverted">
-                        Last Check Time
-                    </div>
+    <div class="ui grid">
+        <div class="height wide column">
+            <div class="ui statistic inverted">
+                <div class="value inverted">
+                    {{ last_check_time }}
+                </div>
+                <div class="label inverted">
+                    Last Check Time
                 </div>
             </div>
-            <div class="four wide column">
-                <a href="/sauron/check" class="ui button green inverted">Check Now</a>
+        </div>
+        <div class="three wide column">
+            <div class="ui statistic inverted">
+                <div class="value inverted">
+                    {{ state }}
+                </div>
+                <div class="label inverted">
+                    Status
+                </div>
             </div>
         </div>
+        <div class="four wide column">
+            <a href="/sauron/check" class="ui button green inverted">Check Now</a>
+        </div>
     </div>
-    
+    <form action="/sauron/interval" method="POST">
+        <div class="ui input">
+            <input type="number" name="interval" placeholder="Interval in minutes" required>
+        </div>
+        <button type="submit" class="ui button green inverted">Set Interval</button>
+    </form>
+</div>
+
 </div>

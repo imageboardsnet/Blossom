@@ -1,6 +1,5 @@
-[
-    {    
-        "last_check": "2019-07-01T00:00:00",
-        "status": "done"
-    }
-]
+{
+    "last_check": 1709568958,
+    "state": "idle",
+    "interval": 60
+}

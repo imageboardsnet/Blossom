@@ -8,7 +8,11 @@ class imageboardsb:
         if os.path.exists(imageboards_path):
             with open(imageboards_path, 'r', encoding='utf-8') as f:
                 self.imageboards = json.load(f)
+
     def get_last_id(self):
+        print (self.imageboards)
+        if self.imageboards == []:
+            return 0
         return max([imageboard['id'] for imageboard in self.imageboards])
 
     def save_imageboards(self):
