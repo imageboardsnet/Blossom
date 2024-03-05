@@ -71,34 +71,41 @@
                 </div>
             </div>
         </div>
-        <div class="five wide column">
-            <form action="/sauron/interval" method="POST">
-                <div class="ui right labeled input inverted">
-                    <select class="ui selection dropdown inverted">
-                      <option>30m</option>
-                      <option>60m</option>
-                      <option>120m</option>
-                      <option>5h</option>
-                      <option>24h</option>
-                    </select>
-                    <button type="submit" class="ui button inverted">Set</button>
-                  </div>
-            </form>
+        <div class="two wide column">
+            <a href="/sauron/run" class="ui button green inverted">Run</a>
         </div>
-        <div class="three wide column">
-            <a href="/sauron/check" class="ui button inverted">Check Now</a>
-        </div>
-        <div class="three wide column">
-            <a href="/sauron/stop" class="ui button inverted">Stop task</a>
+        <div class="two wide column">
+            <a href="/sauron/stop" class="ui button red inverted">Stop</a>
         </div>
     </div>
 </div>
 
 <div class="ui message inverted about">
-    <div class="ui header inverted">Webring Status</div>
+    <div class="ui header inverted">Endpoint builder</div>
     <br>
     <div class="ui grid">
-        To be implemented
+        <div class="three wide column">
+            <div class="ui statistic inverted">
+                <div class="label inverted">
+                    Build Time
+                </div>
+                <div class="label inverted">
+                    {{ build_date }}
+                </div>
+            </div>
+        </div>
+        <div class="three wide column">
+            <div class="ui statistic inverted">
+                <div class="label inverted">
+                    Next Build
+                </div>
+                <div class="label inverted">
+                    {{ next_build_date }}
+                </div>
+            </div>
+        </div>
+        <div class="three wide column">
+            <a href="/endpoints/build" class="ui button inverted">Build</a>
     </div>
 </div>
 </div>

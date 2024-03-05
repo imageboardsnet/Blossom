@@ -62,7 +62,7 @@ class imageboardsb:
 
     def assign_fields(self):
         self.imageboards = requests.get(imageboards_endpoint_old).json()
-        id_counter = 1
+        id_counter = 0
         for imageboard in self.imageboards:
             imageboard['id'] = id_counter
             id_counter += 1

@@ -4,6 +4,7 @@ from obj.forms import LoginForm, RegisterForm, ibEditForm,ibAddForm, UserEditFor
 from obj.users import usersb
 from obj.imageboards import imageboardsb
 from sauron import check_imageboards, get_status_state, get_status_time, set_status_state
+from endpoints import build_endpoints, get_build_date, get_next_build_date
 import secrets
 import time
 import threading
@@ -83,7 +84,6 @@ def add():
                 userl.add_imageboard(current_user.id, str(len(imageboardsl)))
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
-
 
 @app.route('/dashboard/delete/<int:imageboard_id>')
 @login_required
@@ -211,12 +211,9 @@ def sauron():
     else:
         hours = time_elapsed // 3600
         time_elapsed_str = f"{hours} hours ago"
-    return render_page("Blossom | Sauron", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_str , state=state))
+    return render_page("Blossom | Sauron", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_str , state=state, next_build_date=get_next_build_date(), build_date=get_build_date()))
 
-
-
-
-@app.route('/sauron/check')
+@app.route('/sauron/run')
 @login_required
 def sauron_check():
     if current_user.role != "admin":
@@ -237,6 +234,14 @@ def sauron_stop():
     thread_event.clear()
     if get_status_state() == "checking":
         set_status_state("canceled")
+    return redirect(url_for('sauron'))
+
+@app.route('/endpoints/build')
+@login_required
+def endpoints_build():
+    if current_user.role != "admin":
+        return redirect(url_for('dashboard'))
+    build_endpoints()
     return redirect(url_for('sauron'))
 
 @app.route('/initib')
