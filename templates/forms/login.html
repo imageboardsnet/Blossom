@@ -1,14 +1,26 @@
 <h2 class="ui center aligned icon header inverted">
     <i class="circular spa icon inverted"></i>
     Blossom
-  </h2>
+</h2>
 <div class="loginform">
     <div class="ui attached message inverted">
         <div class="header inverted">
             Login
         </div>
     </div>
-    <div class="ui form attached fluid segment inverted">
+    <div class="ui form attached fluid segment inverted error">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="ui error message">
+                <div class="header">Action Forbidden</div>
+                <p>{{ message }}</p>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         <form method="post">
             {{ form.hidden_tag() }}
             <p>
@@ -19,8 +31,10 @@
                 {{ form.password.label }}<br>
                 {{ form.password(size=32) }}<br>
             </p>
+            <div class="h-captcha" data-sitekey="27abfb38-cb86-429c-8790-cb359f77454f"></div>
             <p>{{ form.submit(class="ui button inverted") }}
-            <a href="/register" class="ui button inverted">Register</a></p>
+                <a href="/register" class="ui button inverted">Register</a>
+            </p>
         </form>
     </div>
 </div>

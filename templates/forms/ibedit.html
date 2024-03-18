@@ -4,7 +4,20 @@
             Edit Imageboard
         </div>
     </div>
-    <form class="ui form attached fluid segment inverted" method="POST">
+    <form class="ui form attached fluid segment inverted error" method="POST">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="ui error message">
+                <div class="header">Action Forbidden</div>
+                <p>{{ message }}</p>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+
         {{ form.hidden_tag() }}
         <div class="three fields">
             <div class="field two wide">
@@ -54,6 +67,7 @@
             <label>Description</label>
             {{ form.description() }}
         </div>
+        <div class="h-captcha" data-sitekey="27abfb38-cb86-429c-8790-cb359f77454f"></div>
             {{ form.submit(class="ui button green inverted") }}
             <a href="/" class="ui button inverted">Cancel</a>
     </form>

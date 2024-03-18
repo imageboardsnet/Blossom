@@ -24,17 +24,6 @@ def get_build_date():
     status = {}
     status = get_content()
     return str(status['build_date'])
-    
-def get_next_build_date():
-    status = {}
-    status = get_content()
-    return str(status['next_build_date'])
-
-def set_next_build_date(next_build):
-    status = {}
-    status = get_content()
-    status['next_build_date'] = next_build
-    save_content(status)
 
 def build_endpoint(legacy=False):
     imageboards = imageboardsb()
@@ -50,7 +39,6 @@ def build_endpoint(legacy=False):
 
 def build_endpoints():
     set_build_date()
-    set_next_build_date(int(time.time()) + 3600)
     endpoint = build_endpoint()
     endpoint_legacy = build_endpoint(legacy=True)
     with open('endpoints/imageboards.json', 'w') as f:

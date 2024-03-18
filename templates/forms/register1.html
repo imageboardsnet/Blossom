@@ -8,13 +8,26 @@
             Instant Registration™
         </div>
     </div>
-    <div class="ui form attached fluid segment inverted">
+    <div class="ui form attached fluid segment inverted error">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="ui error message">
+                <div class="header">Action Forbidden</div>
+                <p>{{ message }}</p>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         <div class="ui message inverted">
             <p>Register instantly. Click on the submit button to get your username and password.</p>
             <p>After you register, save your credentials in your password manager.</p>
           </div>
         <form method="post">
             {{ form.hidden_tag() }} 
+            <div class="h-captcha" data-sitekey="27abfb38-cb86-429c-8790-cb359f77454f"></div>
             <p>{{ form.submit(class="ui button green inverted") }}
         </form>
     </div>

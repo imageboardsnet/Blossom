@@ -3,15 +3,16 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from obj.forms import LoginForm, RegisterForm, ibEditForm,ibAddForm, UserEditForm, UserAddForm
 from obj.users import usersb
 from obj.imageboards import imageboardsb
-from sauron import check_imageboards, get_status_state, get_status_time, set_status_state
-from endpoints import build_endpoints, get_build_date, get_next_build_date
+from utils.sauron import check_imageboards, get_status_state, get_status_time, set_status_state
+from utils.endpoints import build_endpoints, get_build_date
+from utils.utils import time_elapsed_str, verify_hcaptcha
 import secrets
-import time
 import threading
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = "blossom_secret_key"
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -69,6 +70,9 @@ def add():
     form = ibAddForm()
     if request.method == 'POST':
         if form.validate_on_submit():
+            if not verify_hcaptcha(request.form.get('h-captcha-response')):
+                flash('hCaptcha verification failed')
+                return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
             imageboardsl = imageboardsb()
             newib = {}
             newib['status'] = "pending"
@@ -121,6 +125,8 @@ def edit(imageboard_id):
                 updates[field] = getattr(form, field).data
             for field in ["mirrors", "language", "software", "boards"]:
                 updates[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
+            if current_user.role == "user":
+                updates['status'] = "pending"
             imageboardsl.update_imageboard(imageboard_id, updates)
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Edit imageboard", render_template('forms/ibedit.html', id=imageboard_id, form=form))
@@ -201,17 +207,9 @@ def sauron():
     offline_boards = [ib for ib in imageboardsl if ib['status'] == "offline"]
     last_check_time = get_status_time()
     state = get_status_state()
-    time_elapsed = int(time.time()) - int(last_check_time)
-    time_elapsed_str = ""
-    if time_elapsed < 60:
-        time_elapsed_str = f"{time_elapsed} seconds ago"
-    elif time_elapsed < 3600:
-        minutes = time_elapsed // 60
-        time_elapsed_str = f"{minutes} minutes ago"
-    else:
-        hours = time_elapsed // 3600
-        time_elapsed_str = f"{hours} hours ago"
-    return render_page("Blossom | Sauron", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_str , state=state, next_build_date=get_next_build_date(), build_date=get_build_date()))
+    time_elapsed_status = time_elapsed_str(last_check_time)
+    time_elapsed_build = time_elapsed_str(get_build_date())
+    return render_page("Blossom | Sauron", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_status , state=state, build_date=time_elapsed_build))
 
 @app.route('/sauron/run')
 @login_required
@@ -259,9 +257,14 @@ def about():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
     form = RegisterForm()
     if request.method == 'POST':
         if form.validate_on_submit():
+            if not verify_hcaptcha(request.form.get('h-captcha-response')):
+                flash('hCaptcha verification failed')
+                return render_page("Blossom | Register", render_template('forms/register1.html', form=form))
             username = secrets.token_urlsafe(3)
             password = secrets.token_urlsafe(16)
             usersl = usersb()
@@ -271,8 +274,13 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
+        if not verify_hcaptcha(request.form.get('h-captcha-response')):
+            flash('hCaptcha verification failed')
+            return render_page("Blosson | Login", render_template('forms/login.html', form=form))
         usersl = usersb()
         id = usersl.check_user(form.username.data, form.password.data)
         if id != False:
