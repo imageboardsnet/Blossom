@@ -36,6 +36,10 @@ class ibAddForm(FlaskForm):
     description = StringField('Description', validators=[Optional()])
     submit = SubmitField('Add')
 
+class ibClaimForm(FlaskForm):
+    id = StringField('ID')
+    submit = SubmitField('Claim')
+
 class UserEditForm(FlaskForm):
     id = StringField('ID')
     username = StringField('Username')

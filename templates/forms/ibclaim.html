@@ -1,0 +1,37 @@
+<div class="editform">
+    <div class="ui attached message inverted">
+        <div class="header inverted">
+            Claim Imageboard
+        </div>
+    </div>
+    <form class="ui form attached fluid segment inverted error" method="POST">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="ui error message">
+                <div class="header">Action Forbidden</div>
+                <p>{{ message }}</p>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {{ form.hidden_tag() }}
+        
+        <div class="field">
+            <label>Show All Imageboards</label>
+            <button class="ui button blue inverted" onclick="showAllImageboards()">Show All</button>
+        </div>
+
+        <div class="field">
+            <label>ID</label>
+            {{ form.id(placeholder="Enter Imageboard ID") }}
+        </div>
+        <p> To validate the claim, on need to add the following TXT record</p>
+        <p> <b>ibclaim-{{ useruuid }}</b> </p>
+        <div class="h-captcha" data-sitekey="27abfb38-cb86-429c-8790-cb359f77454f"></div>
+            {{ form.submit(class="ui button green inverted") }}
+            <a href="/" class="ui button inverted">Cancel</a>
+    </form>
+</div>

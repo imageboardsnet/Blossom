@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from obj.forms import LoginForm, RegisterForm, ibEditForm,ibAddForm, UserEditForm, UserAddForm
+from obj.forms import LoginForm, RegisterForm, ibEditForm, ibAddForm, ibClaimForm, UserEditForm, UserAddForm
 from obj.users import usersb
 from obj.imageboards import imageboardsb
 from utils.sauron import check_imageboards, get_status_state, get_status_time, set_status_state
@@ -21,18 +21,19 @@ login_manager.login_view = 'login'
 thread_event = threading.Event()
 
 class User(UserMixin):
-    def __init__(self, id, username, role,imageboards):
+    def __init__(self, id, username, role, imageboards, uuid):
         self.id = id
         self.username = username
         self.role = role
         self.imageboards = imageboards
+        self.uuid = uuid
 
 @login_manager.user_loader
 def user_loader(user_id):
     usersl = usersb()
     user = next((user for user in usersl if str(user['id']) == user_id), None)
     if user:
-        loaded_user = User(id=str(user['id']), username=user['username'], role=user['role'], imageboards=user['imageboards'])
+        loaded_user = User(id=str(user['id']), username=user['username'], role=user['role'], imageboards=user['imageboards'], uuid=user['uuid'])
         return loaded_user
     return None
 
@@ -88,6 +89,22 @@ def add():
                 userl.add_imageboard(current_user.id, str(len(imageboardsl)))
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
+
+@app.route('/dashboard/claim', methods=['GET', 'POST'])
+@login_required
+def claim():
+    form = ibClaimForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            if not verify_hcaptcha(request.form.get('h-captcha-response')):
+                flash('hCaptcha verification failed')
+                return render_page("Blossom | Claim imageboard", render_template('forms/ibclaim.html', form=form))
+            if current_user.role == "user":
+                userl = usersb()
+                userl.add_imageboard(current_user.id, getattr(form, 'id').data)
+            return redirect(url_for('dashboard'))
+    return render_page("Blossom | Claim imageboard", render_template('forms/ibclaim.html', form=form, useruuid=current_user.uuid))
+
 
 @app.route('/dashboard/delete/<int:imageboard_id>')
 @login_required
@@ -292,7 +309,7 @@ def login():
         usersl = usersb()
         id = usersl.check_user(form.username.data, form.password.data)
         if id != False:
-            user_obj = User(id, form.username.data, usersl.get_user(id)['role'], usersl.get_user(id)['imageboards'])
+            user_obj = User(id, form.username.data, usersl.get_user(id)['role'], usersl.get_user(id)['imageboards'], usersl.get_user(id)['uuid'])
             login_user(user_obj)
             return redirect(url_for('dashboard'))
         else :

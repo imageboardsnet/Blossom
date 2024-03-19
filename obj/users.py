@@ -1,6 +1,7 @@
 import os
 import json
 from argon2 import PasswordHasher
+import uuid 
 
 users_path = 'data/users.json'
 
@@ -43,12 +44,14 @@ class usersb:
     
     def add_user(self, username, password, role, imageboards):
         password = ph.hash(password)
+        useruuid = str(uuid.uuid4())
         user = {
             'id': len(self.users) + 1,
             'username': username,
             'password': password,
             'role': role,
-            'imageboards': imageboards
+            'imageboards': imageboards,
+            'uuid': useruuid
         }
         self.users.append(user)
         self.save_users()
