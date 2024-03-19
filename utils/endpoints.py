@@ -45,3 +45,11 @@ def build_endpoints():
         json.dump(endpoint, f)
     with open('endpoints/imageboards_legacy.json', 'w') as f:
         json.dump(endpoint_legacy, f)
+
+def get_endpoints(legacy=False):
+    if legacy:
+        with open('endpoints/imageboards_legacy.json', 'r') as f:
+            return json.load(f)
+    else:
+        with open('endpoints/imageboards.json', 'r') as f:
+            return json.load(f)

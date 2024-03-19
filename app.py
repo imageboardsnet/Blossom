@@ -4,7 +4,7 @@ from obj.forms import LoginForm, RegisterForm, ibEditForm,ibAddForm, UserEditFor
 from obj.users import usersb
 from obj.imageboards import imageboardsb
 from utils.sauron import check_imageboards, get_status_state, get_status_time, set_status_state
-from utils.endpoints import build_endpoints, get_build_date
+from utils.endpoints import build_endpoints, get_build_date, get_endpoints
 from utils.utils import time_elapsed_str, verify_hcaptcha
 import secrets
 import threading
@@ -242,6 +242,14 @@ def endpoints_build():
     build_endpoints()
     return redirect(url_for('sauron'))
 
+@app.route('/imageboards.json')
+def imageboards_json():
+    return get_endpoints()
+
+@app.route('/imageboards_legacy.json')
+def imageboards_legacy_json():
+    return get_endpoints(legacy=True)
+
 @app.route('/initib')
 @login_required
 def initib():
@@ -296,6 +304,14 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_page("Blossom | 404", render_template('error.html')), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_page("Blossom | 500", render_template('error.html')), 500
 
 if __name__ == '__main__':
     app.run() 
