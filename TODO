@@ -1,10 +1,14 @@
-# []: # (General TODO)
+TODO list for 1.0.0
+- [ ] Link acounts to imageboard via DNS records
+- [ ] Add caching to endpoints
+- [ ] Add proxy to status bot
+- [ ] Use Webring API to get imageboard status
 - [ ] Make form fields more human-friendly and less technical
 - [ ] Add tool to download favicon
-- [ ] Add tool to download website screenshot
-- [ ] Ad manager ? (Maybe)
 - [ ] Replace about page with proper text
 - [ ] Clean up code 
 - [ ] Find a way to keep user data safe with docker
 - [ ] Push to production
 - [ ] write a README
+- [ ] Ad manager ? (Maybe)
+- [ ] Add tool to download website screenshot
