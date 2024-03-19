@@ -2,6 +2,7 @@ import requests
 import dns.resolver
 import time
 from var.auth import secret_key
+from obj.imageboards import imageboardsb
 
 def download_favicon(url, path):
     try:
@@ -44,3 +45,19 @@ def verify_hcaptcha(token):
     if r.json().get('success') is None:
         return False
     return r.json().get('success')
+
+def check_claimed_imageboard(user_uuid, ib_id):
+    """ Check if user has claimed imageboard. """
+    imageboards = imageboardsb()
+    imageboard = imageboards.get_imageboard(ib_id)
+    if imageboard is None:
+        return False
+    ib_url = imageboard['url']
+    txtrecords = check_dns_txtrecord(ib_url)
+    if txtrecords is False:
+        return False
+    for txtrecord in txtrecords:
+        if txtrecord.to_text() == "ibclaim-" + user_uuid:
+            return True
+    return False
+
