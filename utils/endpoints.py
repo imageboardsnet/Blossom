@@ -26,8 +26,9 @@ def get_build_date():
     return str(status['build_date'])
 
 def build_endpoint(legacy=False):
+    timestap = get_build_date()
     imageboards = imageboardsb()
-    clean_imageboards = []
+    clean_imageboards = ["timestamp", timestap]
     for imageboard in imageboards:
         if imageboard['status'] == 'active':
             if legacy:
