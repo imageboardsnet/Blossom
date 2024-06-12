@@ -3,9 +3,9 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from obj.forms import LoginForm, RegisterForm, ibEditForm, ibAddForm, ibClaimForm, UserEditForm, UserAddForm
 from obj.users import usersb
 from obj.imageboards import imageboardsb
-from utils.sauron import check_imageboards, get_status_state, get_status_time, set_status_state
-from utils.endpoints import build_endpoints, get_build_date, get_endpoints
-from utils.utils import time_elapsed_str, verify_hcaptcha
+from butils.sauron import check_imageboards, get_status_state, get_status_time, set_status_state
+from butils.endpoints import build_endpoints, get_build_date, get_endpoints
+from butils.utils import time_elapsed_str, verify_hcaptcha
 import secrets
 import threading
 
