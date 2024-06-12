@@ -3,3 +3,6 @@ services:
     build: .
     ports:
       - "7070:7000"
+    volumes:
+      - ./data:/code/data
+      - ./endpoints:/code/endspoints
