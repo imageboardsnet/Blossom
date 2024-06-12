@@ -16,9 +16,10 @@ COPY . .
 COPY static /code
 COPY templates /code
 COPY obj /code
+COPY utils /code
 
 # Create necessary directories
-RUN mkdir -p /code/data /code/endpoints
+RUN mkdir -p /code/data /code/endpoints /code/var
 
 # Command to run the application
 CMD ["gunicorn", "-b", "0.0.0.0:7000", "app:create_app()"]

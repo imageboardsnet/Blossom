@@ -1,0 +1,1 @@
+secret_key = "secret_key" #hcaptcha secret key
