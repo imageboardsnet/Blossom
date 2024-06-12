@@ -16,7 +16,7 @@ COPY . .
 COPY static /code
 COPY templates /code
 COPY obj /code
-COPY utils /code
+COPY butils /code
 
 # Create necessary directories
 RUN mkdir -p /code/data /code/endpoints /code/var
