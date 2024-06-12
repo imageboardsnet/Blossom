@@ -6,3 +6,4 @@ services:
     volumes:
       - ./data:/code/data
       - ./endpoints:/code/endspoints
+      - ./var:/code/var
