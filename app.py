@@ -122,9 +122,11 @@ def unclaim(imageboard_id):
 @login_required
 def claim_ib(imageboard_id):
     if current_user.role == "user":
-        if (check_claimed_imageboard(current_user.uuid, imageboard_id)):
+        if (check_claimed_imageboard(current_user.uuid, imageboard_id)) == True: 
             userl = usersb()
+            userl.remove_claim(current_user.id, str(imageboard_id))
             userl.add_imageboard(current_user.id, str(imageboard_id))
+            return redirect(url_for('dashboard'))
     return redirect(url_for('myclaim'))
 
 @app.route('/dashboard/myclaim', methods=['GET'])
@@ -336,7 +338,7 @@ def login():
         usersl = usersb()
         id = usersl.check_user(form.username.data, form.password.data)
         if id != False:
-            user_obj = User(id, form.username.data, usersl.get_user(id)['role'], usersl.get_user(id)['imageboards'], usersl.get_user(id)['uuid'])
+            user_obj = User(id, form.username.data, usersl.get_user(id)['role'], usersl.get_user(id)['imageboards'],usersl.get_user(id)['claim'] , usersl.get_user(id)['uuid'])
             login_user(user_obj)
             return redirect(url_for('dashboard'))
         else :

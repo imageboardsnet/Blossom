@@ -6,3 +6,4 @@ argon2-cffi
 dnspython
 gunicorn
 requests
+yarl

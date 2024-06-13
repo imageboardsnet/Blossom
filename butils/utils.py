@@ -1,6 +1,7 @@
 import requests
 import dns.resolver
 import time
+from yarl import URL
 from var.sitevar import hcaptcha_secret_key
 from obj.imageboards import imageboardsb
 
@@ -13,12 +14,26 @@ def download_favicon(url, path):
         pass
     return path
 
-def check_dns_txtrecord(url):
+def clean_url(url):
+    parsed_url = URL(url)
+    clean_netloc = parsed_url.host
+    return clean_netloc
+
+def query_txt_records(domain):
+    txt_records = []
+    resolver = dns.resolver.Resolver()
+    resolver.nameservers = ['8.8.8.8']
+    domain = clean_url(domain)
     try:
-        answers = dns.resolver.resolve(url, 'TXT')
-        return answers
+        answers = resolver.resolve(domain, 'TXT')
+        for rdata in answers:
+            for txt_string in rdata.strings:
+                decoded_string = txt_string.decode('utf-8')
+                txt_records.append(decoded_string)
     except:
         return False
+    
+    return txt_records
 
 def time_elapsed_str(last_check_time):
     time_elapsed = int(time.time()) - int(last_check_time)
@@ -53,11 +68,11 @@ def check_claimed_imageboard(user_uuid, ib_id):
     if imageboard is None:
         return False
     ib_url = imageboard['url']
-    txtrecords = check_dns_txtrecord(ib_url)
+    txtrecords = query_txt_records(ib_url)
     if txtrecords is False:
         return False
     for txtrecord in txtrecords:
-        if txtrecord.to_text() == "ibclaim-" + user_uuid:
+        if txtrecord == "ibclaim-" + user_uuid:
             return True
     return False
 
