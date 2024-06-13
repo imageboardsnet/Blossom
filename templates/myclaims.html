@@ -1,14 +1,15 @@
   <h2 class="ui center aligned icon header inverted">
-    <i class="circular comments icon inverted"></i>
-    My Imageboards List
+    <i class="circular fist raised icon inverted"></i>
+    My Claimed Imageboards
     <div class="sub header inverted"><a href="/dashboard/add" class="ui button inverted">Add Imageboard</a> <a href="/dashboard/claim" class="ui button inverted">Claim Imageboard</a></div>
   </h2>
 <div class="ui fluid container inverted">
 
-    <div class="ui inverted message about"> 
-        <p>To begin, you have two options: add a new imageboard to the database or claim an existing one. </p> 
-        <p>Note that manual validation is necessary for it to appear in the public database.</p>
+    <div class="ui message red about">
+        <p> To validate the claim, you need to add the following TXT record to your DNS :</p>
+        <p> <b>ibclaim-{{ useruuid }}</b> </p>
     </div>
+    
 
     <table class="ui striped collapsing table list sortable inverted">
     <thead>
@@ -68,10 +69,14 @@
             {% endif %}
         </td>
         <td>
-            <a href="/dashboard/edit/{{ imb.id }}" class="ui button inverted"><i class="edit icon"></i> Edit</a>
-            <a href="/dashboard/delete/{{ imb.id }}" class="ui button red  inverted"><i class="trash icon"></i> Delete</a>
+            <a href="/dashboard/claim/{{ imb.id }}" class="ui button blue inverted"><i class="refresh icon"></i> Check</a>
+            <a href="/dashboard/unclaim/{{ imb.id }}" class="ui button red inverted"><i class="trash icon"></i> Unclaim</a>
         </td>
     </tr>
     {% endfor %}
+
 </table>
+
+
+
 </div>

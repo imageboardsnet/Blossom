@@ -5,7 +5,7 @@ from obj.users import usersb
 from obj.imageboards import imageboardsb
 from butils.sauron import check_imageboards, get_status_state, get_status_time, set_status_state
 from butils.endpoints import build_endpoints, get_build_date, get_endpoints
-from butils.utils import time_elapsed_str, verify_hcaptcha
+from butils.utils import time_elapsed_str, verify_hcaptcha, check_claimed_imageboard
 from var.sitevar import hcaptcha_sitekey, secret_key
 import secrets
 import threading
@@ -26,11 +26,12 @@ login_manager.login_view = 'login'
 thread_event = threading.Event()
 
 class User(UserMixin):
-    def __init__(self, id, username, role, imageboards, uuid):
+    def __init__(self, id, username, role, imageboards, claim, uuid):
         self.id = id
         self.username = username
         self.role = role
         self.imageboards = imageboards
+        self.claim = claim
         self.uuid = uuid
 
 @login_manager.user_loader
@@ -38,7 +39,7 @@ def user_loader(user_id):
     usersl = usersb()
     user = next((user for user in usersl if str(user['id']) == user_id), None)
     if user:
-        loaded_user = User(id=str(user['id']), username=user['username'], role=user['role'], imageboards=user['imageboards'], uuid=user['uuid'])
+        loaded_user = User(id=str(user['id']), username=user['username'], role=user['role'], imageboards=user['imageboards'],claim=user["claim"] ,uuid=user['uuid'])
         return loaded_user
     return None
 
@@ -89,8 +90,6 @@ def add():
             imageboardsl.add_imageboard(newib)
             if current_user.role == "user":
                 userl = usersb()
-                print (str(len(imageboardsl)))
-                print (current_user.id)
                 userl.add_imageboard(current_user.id, str(len(imageboardsl)))
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
@@ -107,10 +106,33 @@ def claim():
                 return render_page("Blossom | Claim imageboard", render_template('forms/ibclaim.html', form=form, imageboard = imageboardsl))
             if current_user.role == "user":
                 userl = usersb()
-                userl.add_imageboard(current_user.id, getattr(form, 'id').data)
-            return redirect(url_for('dashboard'))
+                userl.add_claim(current_user.id, getattr(form, 'id').data)
+            return redirect(url_for('myclaim'))
     return render_page("Blossom | Claim imageboard", render_template('forms/ibclaim.html', form=form, useruuid=current_user.uuid, imageboards=imageboardsl))
 
+@app.route('/dashboard/unclaim/<int:imageboard_id>', methods=['GET'])
+@login_required
+def unclaim(imageboard_id):
+    if current_user.role == "user":
+        userl = usersb()
+        userl.remove_claim(current_user.id, str(imageboard_id))
+    return redirect(url_for('myclaim'))
+
+@app.route('/dashboard/claim/<int:imageboard_id>', methods=['GET'])
+@login_required
+def claim_ib(imageboard_id):
+    if current_user.role == "user":
+        if (check_claimed_imageboard(current_user.uuid, imageboard_id)):
+            userl = usersb()
+            userl.add_imageboard(current_user.id, str(imageboard_id))
+    return redirect(url_for('myclaim'))
+
+@app.route('/dashboard/myclaim', methods=['GET'])
+@login_required
+def myclaim():
+    imageboardsl = imageboardsb()
+    userib = [ib for ib in imageboardsl if str(ib['id']) in current_user.claim]
+    return render_page("Blosson | My Claimed imageboards", render_template('myclaims.html', imageboards=userib, useruuid=current_user.uuid))
 
 @app.route('/dashboard/delete/<int:imageboard_id>')
 @login_required
@@ -161,7 +183,6 @@ def users():
         return redirect(url_for('dashboard'))
     usersl = usersb()
     return render_page("Blossom | Users", render_template('users.html', users=usersl))
-
 
 @app.route('/users/add', methods=['GET', 'POST'])
 @login_required
@@ -299,7 +320,7 @@ def register():
             username = secrets.token_urlsafe(3)
             password = secrets.token_urlsafe(16)
             usersl = usersb()
-            usersl.add_user(username, password, "user", [])
+            usersl.add_user(username, password, "user", [],[])
             return render_page("Blossom | Register", render_template('forms/register2.html', username=username, password=password))
     return render_page("Blossom | Register", render_template('forms/register1.html', form=form))
 

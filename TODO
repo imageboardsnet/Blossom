@@ -14,5 +14,5 @@ Like to have
 Need to have
 - [X] In claim imageboards, make the button, show all work
 - [X] Make form fields more human-friendly and less technical
-- [ ] Link acounts to imageboard via DNS records (Claim ownership)
+- [X] Link acounts to imageboard via DNS records (Claim ownership)
 - [X] Find a way to keep user data safe with docker

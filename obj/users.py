@@ -42,7 +42,7 @@ class usersb:
                 return user['username']
         return False
     
-    def add_user(self, username, password, role, imageboards):
+    def add_user(self, username, password, role, imageboards, claim):
         password = ph.hash(password)
         useruuid = str(uuid.uuid4())
         user = {
@@ -51,6 +51,7 @@ class usersb:
             'password': password,
             'role': role,
             'imageboards': imageboards,
+            'claim': claim,
             'uuid': useruuid
         }
         self.users.append(user)
@@ -73,6 +74,20 @@ class usersb:
         for user in self.users:
             if user['id'] == int(user_id):
                 user['imageboards'].append(imageboard_id)
+                self.save_users()
+                break
+    
+    def add_claim(self, user_id, imageboard_id):
+        for user in self.users:
+            if user['id'] == int(user_id):
+                user['claim'].append(imageboard_id)
+                self.save_users()
+                break
+
+    def remove_claim(self, user_id, imageboard_id):
+        for user in self.users:
+            if user['id'] == int(user_id):
+                user['claim'].remove(imageboard_id)
                 self.save_users()
                 break
 
