@@ -20,17 +20,36 @@
         {{ form.hidden_tag() }}
         
         <div class="field">
-            <label>Show All Imageboards</label>
-            <button class="ui button blue inverted" onclick="showAllImageboards()">Show All</button>
+            
+            <table class="ui compact unstackable celled scrolling table inverted">
+                <thead>
+                
+                  <tr>
+                    <th class="one wide">ID</th>
+                    <th class="two wide">name</th>
+                    <th class="five wide">url</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for imb in imageboards %}
+                    <tr>
+                    <td class="one wide" >{{ imb.id }}</td>
+                    <td class="two wide">{{ imb.name }}</td>
+                    <td class="five wide"><a href="{{ imb.url }}">{{ imb.url }}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+
         </div>
 
         <div class="field">
             <label>ID</label>
             {{ form.id(placeholder="Enter Imageboard ID") }}
         </div>
-        <p> To validate the claim, on need to add the following TXT record</p>
+        <p> To validate the claim, you need to add the following TXT record</p>
         <p> <b>ibclaim-{{ useruuid }}</b> </p>
-        <div class="h-captcha" data-sitekey="27abfb38-cb86-429c-8790-cb359f77454f"></div>
+        <div class="h-captcha" data-sitekey="{{ sitekey }}"></div>
             {{ form.submit(class="ui button green inverted") }}
             <a href="/" class="ui button inverted">Cancel</a>
     </form>

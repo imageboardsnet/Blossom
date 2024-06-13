@@ -18,10 +18,6 @@
         {% endwith %}
 
         {{ form.hidden_tag() }}
-            <div class="field three wide">
-                <label>Activity</label>
-                {{ form.activity(placeholder="Number of post") }}
-            </div>
         <div class="field">
             <label>Name</label>
             {{ form.name(placeholder="Enter name") }}
@@ -31,7 +27,7 @@
             {{ form.url(placeholder="Enter URL") }}
         </div>
         <div class="field">
-            <label>Mirrors</label>
+            <label>Mirrors (Ex: myboard.net,myboard.fun)</label>
             {{ form.mirrors(placeholder="Enter mirrors") }}
         </div>
         <div class="two fields">
@@ -40,7 +36,7 @@
                 {{ form.language(placeholder="Enter language") }}
             </div>
             <div class="field">
-                <label>Software</label>
+                <label>Software (Ex: tinyboard,vichan,jschan)</label>
                 {{ form.software(placeholder="Enter software") }}
             </div>
         </div>
@@ -49,14 +45,14 @@
             {{ form.favicon(placeholder="Enter favicon URL") }}
         </div>
         <div class="field">
-            <label>Boards</label>
+            <label>Boards (Ex: \b\ Random, \g\ Computer)</label>
             {{ form.boards(placeholder="Enter boards") }}
         </div>
         <div class="field">
-            <label>Description</label>
+            <label>Description, A small description of your imageboard.</label>
             {{ form.description() }}
         </div>
-        <div class="h-captcha" data-sitekey="27abfb38-cb86-429c-8790-cb359f77454f"></div>
+        <div class="h-captcha" data-sitekey="{{ sitekey }}"></div>
             {{ form.submit(class="ui button green inverted") }}
             <a href="/" class="ui button inverted">Cancel</a>
     </form>

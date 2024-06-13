@@ -31,7 +31,7 @@
                 {{ form.password.label }}<br>
                 {{ form.password(size=32) }}<br>
             </p>
-            <div class="h-captcha" data-sitekey="27abfb38-cb86-429c-8790-cb359f77454f"></div>
+            <div class="h-captcha" data-sitekey="{{ sitekey }}"></div>
             <p>{{ form.submit(class="ui button inverted") }}
                 <a href="/register" class="ui button inverted">Register</a>
             </p>

@@ -1,7 +1,7 @@
 import requests
 import dns.resolver
 import time
-from var.auth import secret_key
+from var.sitevar import hcaptcha_secret_key
 from obj.imageboards import imageboardsb
 
 def download_favicon(url, path):
@@ -37,7 +37,7 @@ def verify_hcaptcha(token):
     """ Verify hCaptcha token. """
     data = {
         'response': token,
-        'secret': secret_key
+        'secret': hcaptcha_secret_key
     }
     r = requests.post('https://hcaptcha.com/siteverify', data=data)
     if r.status_code != 200:

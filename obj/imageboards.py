@@ -68,7 +68,6 @@ class imageboardsb:
             id_counter += 1
             imageboard['favicon'] = ""
             imageboard['description'] = ""
-            imageboard['activity'] = 0
             imageboard['boards'] = []
             imageboard['status'] = "offline"
             if 'mirrors' not in imageboard:

@@ -6,12 +6,17 @@ from obj.imageboards import imageboardsb
 from butils.sauron import check_imageboards, get_status_state, get_status_time, set_status_state
 from butils.endpoints import build_endpoints, get_build_date, get_endpoints
 from butils.utils import time_elapsed_str, verify_hcaptcha
+from var.sitevar import hcaptcha_sitekey, secret_key
 import secrets
 import threading
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = "blossom_secret_key"
+app.config['SECRET_KEY'] = secret_key
+
+@app.context_processor
+def inject_global_vars():
+    return {'sitekey': hcaptcha_sitekey}
 
 
 login_manager = LoginManager()
@@ -77,7 +82,7 @@ def add():
             imageboardsl = imageboardsb()
             newib = {}
             newib['status'] = "pending"
-            for field in ["activity", "name", "url", "favicon", "description"]:
+            for field in ["name", "url", "favicon", "description"]:
                 newib[field] = getattr(form, field).data
             for field in ["mirrors", "language", "software", "boards"]:
                 newib[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
@@ -94,16 +99,17 @@ def add():
 @login_required
 def claim():
     form = ibClaimForm()
+    imageboardsl = imageboardsb()
     if request.method == 'POST':
         if form.validate_on_submit():
             if not verify_hcaptcha(request.form.get('h-captcha-response')):
                 flash('hCaptcha verification failed')
-                return render_page("Blossom | Claim imageboard", render_template('forms/ibclaim.html', form=form))
+                return render_page("Blossom | Claim imageboard", render_template('forms/ibclaim.html', form=form, imageboard = imageboardsl))
             if current_user.role == "user":
                 userl = usersb()
                 userl.add_imageboard(current_user.id, getattr(form, 'id').data)
             return redirect(url_for('dashboard'))
-    return render_page("Blossom | Claim imageboard", render_template('forms/ibclaim.html', form=form, useruuid=current_user.uuid))
+    return render_page("Blossom | Claim imageboard", render_template('forms/ibclaim.html', form=form, useruuid=current_user.uuid, imageboards=imageboardsl))
 
 
 @app.route('/dashboard/delete/<int:imageboard_id>')
@@ -131,14 +137,14 @@ def edit(imageboard_id):
     imageboard = imageboardsl.get_imageboard(imageboard_id)
     form = ibEditForm()
     if request.method == 'GET':
-        for field in ["id","activity", "status", "name", "url", "favicon", "description"]:
+        for field in ["id", "status", "name", "url", "favicon", "description"]:
             form[field].data = imageboard[field]
         for field in ["mirrors", "language", "software", "boards"]:
             form[field].data = ','.join(imageboard[field])
     if request.method == 'POST':
         if form.validate_on_submit():
             updates = {}
-            for field in ["activity", "status", "name", "url", "favicon", "description"]:
+            for field in ["status", "name", "url", "favicon", "description"]:
                 updates[field] = getattr(form, field).data
             for field in ["mirrors", "language", "software", "boards"]:
                 updates[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]

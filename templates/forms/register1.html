@@ -27,7 +27,7 @@
           </div>
         <form method="post">
             {{ form.hidden_tag() }} 
-            <div class="h-captcha" data-sitekey="27abfb38-cb86-429c-8790-cb359f77454f"></div>
+            <div class="h-captcha" data-sitekey="{{ sitekey }}"></div>
             <p>{{ form.submit(class="ui button green inverted") }}
         </form>
     </div>
