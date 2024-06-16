@@ -26,13 +26,12 @@ def get_build_date():
     return str(status['build_date'])
 
 def build_endpoint(legacy=False):
-    timestap = get_build_date()
     imageboards = imageboardsb()
-    clean_imageboards = ["timestamp", timestap]
+    clean_imageboards = []
     for imageboard in imageboards:
         if imageboard['status'] == 'active':
             if legacy:
-                modified_imageboard = {key: value for key, value in imageboard.items() if key not in ('id', 'status', 'activity', 'description', 'favicon', 'boards')}
+                modified_imageboard = {key: value for key, value in imageboard.items() if key not in ('id', 'status', 'description', 'favicon', 'boards')}
             else:
                 modified_imageboard = imageboard.copy()
             clean_imageboards.append(modified_imageboard)
