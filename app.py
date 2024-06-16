@@ -78,9 +78,10 @@ def add():
     form = ibAddForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            if not verify_hcaptcha(request.form.get('h-captcha-response')):
-                flash('hCaptcha verification failed')
-                return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
+            if current_user.role == "user":
+                if not verify_hcaptcha(request.form.get('h-captcha-response')):
+                    flash('hCaptcha verification failed')
+                    return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
             imageboardsl = imageboardsb()
             newib = {}
             newib['status'] = "pending"
