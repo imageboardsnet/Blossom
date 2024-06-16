@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash, send_from_directory
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from obj.forms import LoginForm, RegisterForm, ibEditForm, ibAddForm, ibClaimForm, UserEditForm, UserAddForm
 from obj.users import usersb
@@ -9,6 +9,7 @@ from butils.utils import time_elapsed_str, verify_hcaptcha, check_claimed_imageb
 from var.sitevar import hcaptcha_sitekey, secret_key
 import secrets
 import threading
+import os
 
 app = Flask(__name__)
 
@@ -344,6 +345,11 @@ def login():
         else :
             flash('Invalid username or password')
     return render_page("Blosson | Login", render_template('forms/login.html', form=form))
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/logout')
 @login_required
