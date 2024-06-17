@@ -34,9 +34,9 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if user.claims %}
+                    {% if user.claim %}
                     <ul>
-                        {% for claim in user.claims %}
+                        {% for claim in user.claim %}
                         <li>{{ claim }}</li>
                         {% endfor %}
                     </ul>
