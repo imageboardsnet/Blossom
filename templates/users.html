@@ -12,6 +12,7 @@
                 <th>Username</th>
                 <th>Role</th>
                 <th>Imageboards</th>
+                <th>Claims</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -32,6 +33,16 @@
                     N/A
                     {% endif %}
                 </td>
+                <td>
+                    {% if user.claims %}
+                    <ul>
+                        {% for claim in user.claims %}
+                        <li>{{ claim }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    N/A
+                    {% endif %}
                 <td>
                     <a href="/users/edit/{{ user.id }}" class="ui button inverted"><i class="edit icon"></i> Edit</a>
                     <a href="/users/reset/{{ user.id }}" class="ui button inverted"><i class="key icon"></i> Reset password</a>
