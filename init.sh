@@ -1,3 +1,3 @@
-cp -r data_example data
-cp -r endpoints_example endpoints
-cp -r var_example var
+cp -r example/data data
+cp -r example/endpoints endpoints
+cp -r example/var var

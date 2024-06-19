@@ -298,15 +298,6 @@ def imageboards_json():
 def imageboards_legacy_json():
     return get_endpoints(legacy=True)
 
-# @app.route('/initib')
-# @login_required
-# def initib():
-#     if current_user.role != "admin":
-#         return redirect(url_for('dashboard'))
-#     imageboardsl = imageboardsb()
-#     imageboardsl.assign_fields()
-#     return redirect(url_for('dashboard'))
-
 @app.route('/about')
 def about():
     return render_page("Blossom | About", render_template('about.html'))
