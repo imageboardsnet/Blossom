@@ -16,7 +16,6 @@
             <th class="sorted descending">ID</th>
             <th class="">name</th>
             <th class="">description</th>
-            <th class="">url</th>
             <th class="">mirrors</th>
             <th class="">software</th>
             <th class="">language</th>
@@ -27,9 +26,8 @@
     {% for imb in imageboards %}
     <tr>
         <td>{{ imb.id }}</td>
-        <td>{{ imb.name }}</td>
+        <td><a href="{{ imb.url }}">{{ imb.name }}</a></td>
         <td>{{ imb.description }}</td>
-        <td><a href="{{ imb.url }}">{{ imb.url }}</a></td>
         <td>
             {% if imb.mirrors is defined and imb.mirrors | length > 0  %}
                 Yes
