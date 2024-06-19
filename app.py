@@ -28,7 +28,7 @@ login_manager.login_view = 'login'
 thread_event = threading.Event()
 
 class User(UserMixin):
-    def __init__(self, id, username, role, imageboards, claim, uuid, date = None):
+    def __init__(self, id, username, role, imageboards, claim, uuid, date):
         self.id = id
         self.username = username
         self.role = role
