@@ -14,32 +14,25 @@
     <table class="ui striped collapsing table list sortable inverted">
     <thead>
         <tr>
-            <th class="sorted descending">ID</th>
-            <th class="">name</th>
-            <th class="">description</th>
-            <th class="">url</th>
-            <th class="">boards</th>
-            <th class="">activity</th>
-            <th class="">mirrors</th>
-            <th class="">software</th>
-            <th class="">language</th>
-            <th class="">status</th>
-            <th class="">actions</th>
+            <th class="sorted descending one wide">ID</th>
+            <th class="two wide">name</th>
+            <th class="three wide">url</th>
+            <th class="two wide">description</th>
+            <th class="one wide">mirrors</th>
+            <th class="two wide">software</th>
+            <th class="one wide">language</th>
+            <th class="one wide">status</th>
+            <th class="two wide">actions</th>
         </tr>
     </thead>
     {% for imb in imageboards %}
     <tr>
         <td>{{ imb.id }}</td>
         <td>{{ imb.name }}</td>
-        <td>{{ imb.description }}</td>
         <td><a href="{{ imb.url }}">{{ imb.url }}</a></td>
-        <td>{% for board in imb.boards %}
-            {{ board }}
-            {% endfor %}
-        </td>
-        <td>{{ imb.activity }}</td>
+        <td>{{ imb.description }}</td>
         <td>
-            {% if imb.mirrors is defined %}
+            {% if imb.mirrors is defined and imb.mirrors | length > 0  %}
                 Yes
             {% else %}
                 No
