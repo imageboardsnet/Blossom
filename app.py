@@ -42,7 +42,12 @@ def user_loader(user_id):
     usersl = usersb()
     user = next((user for user in usersl if str(user['id']) == user_id), None)
     if user:
-        loaded_user = User(id=str(user['id']), username=user['username'], role=user['role'], imageboards=user['imageboards'],claim=user["claim"] ,uuid=user['uuid'], date=user['creation_date'])
+        creation_date = 0
+        try :
+            creation_date = usersl.get_user(id)['creation_date']
+        except:
+            pass 
+        loaded_user = User(id=str(user['id']), username=user['username'], role=user['role'], imageboards=user['imageboards'],claim=user["claim"] ,uuid=user['uuid'], date=creation_date)
         return loaded_user
     return None
 
