@@ -42,12 +42,7 @@ def user_loader(user_id):
     usersl = usersb()
     user = next((user for user in usersl if str(user['id']) == user_id), None)
     if user:
-        creation_date = 0
-        try :
-            creation_date = usersl.get_user(id)['creation_date']
-        except:
-            pass 
-        loaded_user = User(id=str(user['id']), username=user['username'], role=user['role'], imageboards=user['imageboards'],claim=user["claim"] ,uuid=user['uuid'], date=creation_date)
+        loaded_user = User(id=str(user['id']), username=user['username'], role=user['role'], imageboards=user['imageboards'],claim=user["claim"] ,uuid=user['uuid'], date=user['creation_date'])
         return loaded_user
     return None
 
@@ -344,12 +339,7 @@ def login():
         usersl = usersb()
         id = usersl.check_user(form.username.data, form.password.data)
         if id != False:
-            creation_date = 0
-            try :
-                creation_date = usersl.get_user(id)['creation_date']
-            except:
-                pass 
-            user_obj = User(id, form.username.data, usersl.get_user(id)['role'], usersl.get_user(id)['imageboards'],usersl.get_user(id)['claim'] , usersl.get_user(id)['uuid'],  creation_date)
+            user_obj = User(id, form.username.data, usersl.get_user(id)['role'], usersl.get_user(id)['imageboards'],usersl.get_user(id)['claim'] , usersl.get_user(id)['uuid'],  usersl.get_user(id)['creation_date']
             login_user(user_obj)
             return redirect(url_for('dashboard'))
         else :
