@@ -22,7 +22,7 @@
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.date | humane_date(default=0) }}</td>
+                <td>{{ user.date | humane_date }}</td>
                 <td>{{ user.role }}</td>
                 <td>
                     {% if user.imageboards %}
