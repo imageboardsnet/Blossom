@@ -1,7 +1,7 @@
   <h2 class="ui center aligned icon header inverted">
     <i class="circular comments icon inverted"></i>
     My Imageboards List
-    <div class="sub header inverted"><a href="/dashboard/add" class="ui button inverted">Add Imageboard</a> <a href="/dashboard/claim" class="ui button inverted">Claim Imageboard</a></div>
+    <div class="sub header inverted"><a href="/imageboard/add" class="ui button inverted">Add Imageboard</a> <a href="/imageboard/claim" class="ui button inverted">Claim Imageboard</a></div>
   </h2>
 <div class="ui fluid container inverted">
 
@@ -17,8 +17,6 @@
             <th class="">name</th>
             <th class="">description</th>
             <th class="">url</th>
-            <th class="">boards</th>
-            <th class="">activity</th>
             <th class="">mirrors</th>
             <th class="">software</th>
             <th class="">language</th>
@@ -32,13 +30,8 @@
         <td>{{ imb.name }}</td>
         <td>{{ imb.description }}</td>
         <td><a href="{{ imb.url }}">{{ imb.url }}</a></td>
-        <td>{% for board in imb.boards %}
-            {{ board }}
-            {% endfor %}
-        </td>
-        <td>{{ imb.activity }}</td>
         <td>
-            {% if imb.mirrors is defined %}
+            {% if imb.mirrors is defined and imb.mirrors | length > 0  %}
                 Yes
             {% else %}
                 No
@@ -68,8 +61,8 @@
             {% endif %}
         </td>
         <td>
-            <a href="/dashboard/edit/{{ imb.id }}" class="ui button inverted"><i class="edit icon"></i> Edit</a>
-            <a href="/dashboard/delete/{{ imb.id }}" class="ui button red  inverted"><i class="trash icon"></i> Delete</a>
+            <a href="/imageboard/edit/{{ imb.id }}" class="ui button inverted"><i class="edit icon"></i> Edit</a>
+            <a href="/imageboard/delete/{{ imb.id }}" class="ui button red  inverted"><i class="trash icon"></i> Delete</a>
         </td>
     </tr>
     {% endfor %}

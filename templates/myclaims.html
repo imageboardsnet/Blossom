@@ -1,7 +1,7 @@
   <h2 class="ui center aligned icon header inverted">
     <i class="circular fist raised icon inverted"></i>
     My Claimed Imageboards
-    <div class="sub header inverted"><a href="/dashboard/add" class="ui button inverted">Add Imageboard</a> <a href="/dashboard/claim" class="ui button inverted">Claim Imageboard</a></div>
+    <div class="sub header inverted"><a href="/imageboard/add" class="ui button inverted">Add Imageboard</a> <a href="/imageboard/claim" class="ui button inverted">Claim Imageboard</a></div>
   </h2>
 <div class="ui fluid container inverted">
 
@@ -69,8 +69,8 @@
             {% endif %}
         </td>
         <td>
-            <a href="/dashboard/claim/{{ imb.id }}" class="ui button blue inverted"><i class="refresh icon"></i> Check</a>
-            <a href="/dashboard/unclaim/{{ imb.id }}" class="ui button red inverted"><i class="trash icon"></i> Unclaim</a>
+            <a href="/imageboard/claim/{{ imb.id }}" class="ui button blue inverted"><i class="refresh icon"></i> Check</a>
+            <a href="/imageboard/unclaim/{{ imb.id }}" class="ui button red inverted"><i class="trash icon"></i> Unclaim</a>
         </td>
     </tr>
     {% endfor %}

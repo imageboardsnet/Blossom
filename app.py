@@ -71,9 +71,9 @@ def dashboard():
                     userib.append(ib)
         return render_page("Blosson | Dashboard", render_template('boards.html', imageboards=userib))
 
-@app.route('/dashboard/claim', methods=['GET', 'POST'])
+@app.route('/imageboard/claim', methods=['GET', 'POST'])
 @login_required
-def claim():
+def imageboard_claim():
     form = ibClaimForm()
     imageboardsl = imageboardsb()
     if request.method == 'POST':
@@ -84,38 +84,38 @@ def claim():
             if current_user.role == "user":
                 userl = usersb()
                 userl.add_claim(current_user.id, getattr(form, 'id').data)
-            return redirect(url_for('myclaim'))
+            return redirect(url_for('myclaims'))
     return render_page("Blossom | Claim imageboard", render_template('forms/ibclaim.html', form=form, useruuid=current_user.uuid, imageboards=imageboardsl))
 
-@app.route('/dashboard/unclaim/<int:imageboard_id>', methods=['GET'])
+@app.route('/imageboard/unclaim/<int:imageboard_id>', methods=['GET'])
 @login_required
-def unclaim(imageboard_id):
+def imageboard_unclaim(imageboard_id):
     if current_user.role == "user":
         userl = usersb()
         userl.remove_claim(current_user.id, str(imageboard_id))
-    return redirect(url_for('myclaim'))
+    return redirect(url_for('myclaims'))
 
-@app.route('/dashboard/claim/<int:imageboard_id>', methods=['GET'])
+@app.route('/imageboard/claim/<int:imageboard_id>', methods=['GET'])
 @login_required
-def claim_ib(imageboard_id):
+def imageboard_claim_ib(imageboard_id):
     if current_user.role == "user":
         if (check_claimed_imageboard(current_user.uuid, imageboard_id)) == True: 
             userl = usersb()
             userl.remove_claim(current_user.id, str(imageboard_id))
             userl.add_imageboard(current_user.id, str(imageboard_id))
             return redirect(url_for('dashboard'))
-    return redirect(url_for('myclaim'))
+    return redirect(url_for('myclaims'))
 
-@app.route('/dashboard/myclaim', methods=['GET'])
+@app.route('/myclaims', methods=['GET'])
 @login_required
-def myclaim():
+def myclaims():
     imageboardsl = imageboardsb()
     userib = [ib for ib in imageboardsl if str(ib['id']) in current_user.claim]
     return render_page("Blosson | My Claimed imageboards", render_template('myclaims.html', imageboards=userib, useruuid=current_user.uuid))
 
-@app.route('/dashboard/add', methods=['GET', 'POST'])
+@app.route('/imageboard/add', methods=['GET', 'POST'])
 @login_required
-def add():
+def imageboard_add():
     form = ibAddForm()
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -140,9 +140,9 @@ def add():
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
 
-@app.route('/dashboard/edit/<int:imageboard_id>', methods=['GET', 'POST'])
+@app.route('/imageboard/edit/<int:imageboard_id>', methods=['GET', 'POST'])
 @login_required
-def edit(imageboard_id):
+def imageboard_edit(imageboard_id):
     if current_user.role == "user":
         if str(imageboard_id) not in current_user.imageboards:
             return redirect(url_for('dashboard'))
@@ -170,9 +170,9 @@ def edit(imageboard_id):
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Edit imageboard", render_template('forms/ibedit.html', id=imageboard_id, form=form))
 
-@app.route('/dashboard/delete/<int:imageboard_id>')
+@app.route('/imageboard/delete/<int:imageboard_id>')
 @login_required
-def delete(imageboard_id):
+def imageboard_delete(imageboard_id):
     if current_user.role == "admin":
         imageboardsl = imageboardsb()
         imageboardsl.delete_imageboard(imageboard_id)
@@ -193,9 +193,9 @@ def users():
     usersl = usersb()
     return render_page("Blossom | Users", render_template('users.html', users=usersl))
 
-@app.route('/users/add', methods=['GET', 'POST'])
+@app.route('/user/add', methods=['GET', 'POST'])
 @login_required
-def useradd():
+def user_add():
     if current_user.role != "admin":
         return redirect(url_for('users'))
     form = UserAddForm()
@@ -206,9 +206,9 @@ def useradd():
             return redirect(url_for('users'))
     return render_page("Blossom | Add User", render_template('forms/useradd.html', form=form))
 
-@app.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
+@app.route('/user/edit/<int:user_id>', methods=['GET', 'POST'])
 @login_required
-def useredit(user_id):
+def user_edit(user_id):
     if current_user.role != "admin":
         return redirect(url_for('users'))
     usersl = usersb()
@@ -230,18 +230,18 @@ def useredit(user_id):
             return redirect(url_for('users'))
     return render_page("Blossom | Edit User", render_template('forms/useredit.html', id=user_id, form=form))
 
-@app.route('/users/delete/<int:user_id>')
+@app.route('/user/delete/<int:user_id>')
 @login_required
-def userdelete(user_id):
+def user_delete(user_id):
     if current_user.role != "admin":
         return redirect(url_for('users'))
     usersl = usersb()
     usersl.remove_user(user_id)
     return redirect(url_for('users'))
 
-@app.route('/users/reset/<int:user_id>')
+@app.route('/user/reset/<int:user_id>')
 @login_required
-def userreset(user_id):
+def user_reset(user_id):
     if current_user.role != "admin":
         return redirect(url_for('users'))
     new_password = secrets.token_urlsafe(16)
@@ -266,7 +266,7 @@ def sauron():
 
 @app.route('/sauron/run')
 @login_required
-def sauron_check():
+def sauron_run():
     if current_user.role != "admin":
         return redirect(url_for('dashboard'))
     try:
