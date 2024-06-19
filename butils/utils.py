@@ -49,14 +49,9 @@ def time_elapsed_str(last_check_time):
         time_elapsed_str = f"{hours} hours ago"
     return time_elapsed_str
 
-def timestamp_to_humane(value, format='%Y-%m-%d %H:%M:%S'):
-    if value is None:
-        return "N/A"  # or some default value representing an undefined timestamp
-    try:
-        value = int(value)
-        return datetime.datetime.utcfromtimestamp(value).strftime(format)
-    except (ValueError, TypeError):
-        return "Invalid date"  # or some appropriate fallback
+def timestamp_to_humane(value, format='%d %B %Y'):
+    value = int(value)
+    return datetime.datetime.utcfromtimestamp(value).strftime(format)
 
 def verify_hcaptcha(token):
     """ Verify hCaptcha token. """
