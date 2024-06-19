@@ -4,7 +4,7 @@ To have
 - [ ] Add proxy to status bot
 - [ ] Use Webring API to get imageboard status
 - [ ] Add caching to endpoints
-- [ ] Replace about page with proper text
+- [x] Replace about page with proper text
 
 Like to have
 - [~] Clean up code 
