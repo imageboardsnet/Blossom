@@ -4,6 +4,7 @@ import time
 from yarl import URL
 from var.sitevar import hcaptcha_secret_key
 from obj.imageboards import imageboardsb
+import datetime
 
 def download_favicon(url, path):
     try:
@@ -47,6 +48,9 @@ def time_elapsed_str(last_check_time):
         hours = time_elapsed // 3600
         time_elapsed_str = f"{hours} hours ago"
     return time_elapsed_str
+
+def timestamp_to_humane(value, format="%Y-%m-%d %H:%M:%S"):
+    return datetime.datetime.utcfromtimestamp(value).strftime(format)
 
 def verify_hcaptcha(token):
     """ Verify hCaptcha token. """
