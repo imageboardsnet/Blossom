@@ -339,7 +339,7 @@ def login():
         usersl = usersb()
         id = usersl.check_user(form.username.data, form.password.data)
         if id != False:
-            user_obj = User(id, form.username.data, usersl.get_user(id)['role'], usersl.get_user(id)['imageboards'],usersl.get_user(id)['claim'] , usersl.get_user(id)['uuid'],  usersl.get_user(id)['creation_date']
+            user_obj = User(id, form.username.data, usersl.get_user(id)['role'], usersl.get_user(id)['imageboards'],usersl.get_user(id)['claim'] , usersl.get_user(id)['uuid'],  usersl.get_user(id)['creation_date'])
             login_user(user_obj)
             return redirect(url_for('dashboard'))
         else :
