@@ -19,7 +19,6 @@ app.config['SECRET_KEY'] = secret_key
 def inject_global_vars():
     return {'sitekey': hcaptcha_sitekey}
 
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -72,30 +71,6 @@ def dashboard():
                     userib.append(ib)
         return render_page("Blosson | Dashboard", render_template('boards.html', imageboards=userib))
 
-@app.route('/dashboard/add', methods=['GET', 'POST'])
-@login_required
-def add():
-    form = ibAddForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            if current_user.role == "user":
-                if not verify_hcaptcha(request.form.get('h-captcha-response')):
-                    flash('hCaptcha verification failed')
-                    return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
-            imageboardsl = imageboardsb()
-            newib = {}
-            newib['status'] = "pending"
-            for field in ["name", "url", "favicon", "description"]:
-                newib[field] = getattr(form, field).data
-            for field in ["mirrors", "language", "software", "boards"]:
-                newib[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
-            imageboardsl.add_imageboard(newib)
-            if current_user.role == "user":
-                userl = usersb()
-                userl.add_imageboard(current_user.id, str(len(imageboardsl)))
-            return redirect(url_for('dashboard'))
-    return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
-
 @app.route('/dashboard/claim', methods=['GET', 'POST'])
 @login_required
 def claim():
@@ -138,20 +113,32 @@ def myclaim():
     userib = [ib for ib in imageboardsl if str(ib['id']) in current_user.claim]
     return render_page("Blosson | My Claimed imageboards", render_template('myclaims.html', imageboards=userib, useruuid=current_user.uuid))
 
-@app.route('/dashboard/delete/<int:imageboard_id>')
+@app.route('/dashboard/add', methods=['GET', 'POST'])
 @login_required
-def delete(imageboard_id):
-    if current_user.role == "admin":
-        imageboardsl = imageboardsb()
-        imageboardsl.delete_imageboard(imageboard_id)
-        return dashboard()
-    if current_user.role == "user":
-        if str(imageboard_id) in current_user.imageboards:
+def add():
+    form = ibAddForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            if current_user.role == "user":
+                if not verify_hcaptcha(request.form.get('h-captcha-response')):
+                    flash('hCaptcha verification failed')
+                    return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
             imageboardsl = imageboardsb()
-            update = imageboardsl.get_imageboard(imageboard_id)
-            update['status'] = "deleted"
-            imageboardsl.update_imageboard(imageboard_id, update)
-            return dashboard()
+            newib = {}
+            newib['status'] = "pending"
+            for field in ["name", "url", "favicon", "description"]:
+                newib[field] = getattr(form, field).data
+            for field in ["mirrors", "language", "software", "boards"]:
+                if getattr(form, field).data == "":
+                    newib[field] = []
+                else:
+                    newib[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
+            imageboardsl.add_imageboard(newib)
+            if current_user.role == "user":
+                userl = usersb()
+                userl.add_imageboard(current_user.id, str(len(imageboardsl)))
+            return redirect(url_for('dashboard'))
+    return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
 
 @app.route('/dashboard/edit/<int:imageboard_id>', methods=['GET', 'POST'])
 @login_required
@@ -173,12 +160,30 @@ def edit(imageboard_id):
             for field in ["status", "name", "url", "favicon", "description"]:
                 updates[field] = getattr(form, field).data
             for field in ["mirrors", "language", "software", "boards"]:
-                updates[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
+                if getattr(form, field).data == "":
+                    updates[field] = []
+                else:
+                    updates[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
             if current_user.role == "user":
                 updates['status'] = "pending"
             imageboardsl.update_imageboard(imageboard_id, updates)
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Edit imageboard", render_template('forms/ibedit.html', id=imageboard_id, form=form))
+
+@app.route('/dashboard/delete/<int:imageboard_id>')
+@login_required
+def delete(imageboard_id):
+    if current_user.role == "admin":
+        imageboardsl = imageboardsb()
+        imageboardsl.delete_imageboard(imageboard_id)
+        return dashboard()
+    if current_user.role == "user":
+        if str(imageboard_id) in current_user.imageboards:
+            imageboardsl = imageboardsb()
+            update = imageboardsl.get_imageboard(imageboard_id)
+            update['status'] = "deleted"
+            imageboardsl.update_imageboard(imageboard_id, update)
+            return dashboard()
 
 @app.route('/users', methods=['GET', 'POST'])
 @login_required
@@ -337,7 +342,6 @@ def login():
         else :
             flash('Invalid username or password')
     return render_page("Blosson | Login", render_template('forms/login.html', form=form))
-
 
 @app.route('/favicon.ico')
 def favicon():
