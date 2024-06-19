@@ -46,7 +46,7 @@ class usersb:
     def add_user(self, username, password, role, imageboards, claim):
         password = ph.hash(password)
         useruuid = str(uuid.uuid4())
-        date = int(time.time())
+        creation_date = int(time.time())
         user = {
             'id': len(self.users) + 1,
             'username': username,
@@ -55,7 +55,7 @@ class usersb:
             'imageboards': imageboards,
             'claim': claim,
             'uuid': useruuid,
-            'creation_date' : date
+            'creation_date' : creation_date
         }
         self.users.append(user)
         self.save_users()

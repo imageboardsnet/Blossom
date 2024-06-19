@@ -28,7 +28,7 @@
                     {% if user.imageboards %}
                     <ul>
                         {% for imageboard in user.imageboards %}
-                        <li>{{ imageboard }}</li>
+                        <li><a href="/imageboard/edit/{{ imageboard }}">{{ imageboard }}</a></li>
                         {% endfor %}
                     </ul>
                     {% else %}

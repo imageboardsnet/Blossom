@@ -28,21 +28,21 @@ login_manager.login_view = 'login'
 thread_event = threading.Event()
 
 class User(UserMixin):
-    def __init__(self, id, username, role, imageboards, claim, uuid, date):
+    def __init__(self, id, username, role, imageboards, claim, uuid, creation_date):
         self.id = id
         self.username = username
         self.role = role
         self.imageboards = imageboards
         self.claim = claim
         self.uuid = uuid
-        self.date = date
+        self.creation_date = creation_date
 
 @login_manager.user_loader
 def user_loader(user_id):
     usersl = usersb()
     user = next((user for user in usersl if str(user['id']) == user_id), None)
     if user:
-        loaded_user = User(id=str(user['id']), username=user['username'], role=user['role'], imageboards=user['imageboards'],claim=user["claim"] ,uuid=user['uuid'], date=user['creation_date'])
+        loaded_user = User(id=str(user['id']), username=user['username'], role=user['role'], imageboards=user['imageboards'],claim=user["claim"] ,uuid=user['uuid'], creation_date=user['creation_date'])
         return loaded_user
     return None
 
