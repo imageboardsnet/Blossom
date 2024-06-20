@@ -2,7 +2,7 @@ services:
   web:
     build: .
     ports:
-      - "7070:7000"
+      - "127.0.0.1:7070:7000"
     volumes:
       - ./data:/code/data
       - ./endpoints:/code/endspoints
