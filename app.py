@@ -27,6 +27,8 @@ login_manager.login_view = 'login'
 
 thread_event = threading.Event()
 
+build_endpoints()
+
 class User(UserMixin):
     def __init__(self, id, username, role, imageboards, claim, uuid, creation_date):
         self.id = id
@@ -177,6 +179,10 @@ def imageboard_edit(imageboard_id):
 @login_required
 def imageboard_delete(imageboard_id):
     if current_user.role == "admin":
+        usersl = usersb()
+        for user in usersl:
+            if str(imageboard_id) in user['imageboards']:
+                usersl.remove_imageboard(user['id'], imageboard_id)
         imageboardsl = imageboardsb()
         imageboardsl.delete_imageboard(imageboard_id)
         return dashboard()

@@ -79,6 +79,13 @@ class usersb:
                 user['imageboards'].append(imageboard_id)
                 self.save_users()
                 break
+
+    def remove_imageboard(self, user_id, imageboard_id):
+        for user in self.users:
+            if user['id'] == int(user_id):
+                user['imageboards'].remove(str(imageboard_id))
+                self.save_users()
+                break
     
     def add_claim(self, user_id, imageboard_id):
         for user in self.users:

@@ -1,6 +1,8 @@
 TODO list for 1.1.0
 
 To have
+- [ ] remove imageboard for user when imageboard is deleted
+- [ ] build endpoint at startup
 - [ ] Add proxy to status bot
 - [ ] Use Webring API to get imageboard status
 - [ ] Add caching to endpoints
