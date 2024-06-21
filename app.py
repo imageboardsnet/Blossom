@@ -141,7 +141,7 @@ def imageboard_add():
             imageboardsl.add_imageboard(newib)
             if current_user.role == "user":
                 userl = usersb()
-                userl.add_imageboard(current_user.id, str(len(imageboardsl)))
+                userl.add_imageboard(current_user.id, str(imageboardsl.get_last_id()))
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Add imageboard", render_template('forms/ibadd.html', form=form))
 
@@ -170,7 +170,7 @@ def imageboard_edit(imageboard_id):
                 else:
                     updates[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
             if current_user.role == "user":
-                updates['status'] = "pending"
+                updates['status'] = "pending-" + getattr(form, 'status').data
             imageboardsl.update_imageboard(imageboard_id, updates)
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Edit imageboard", render_template('forms/ibedit.html', id=imageboard_id, form=form))
