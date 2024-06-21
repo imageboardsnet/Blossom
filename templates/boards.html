@@ -14,14 +14,14 @@
     <thead>
         <tr>
             <th class="sorted descending one wide">ID</th>
-            <th class="two wide">name</th>
-            <th class="three wide">url</th>
-            <th class="two wide">description</th>
-            <th class="one wide">mirrors</th>
-            <th class="two wide">software</th>
-            <th class="one wide">language</th>
-            <th class="one wide">status</th>
-            <th class="two wide">actions</th>
+            <th class="two wide">Name</th>
+            <th class="three wide">Url</th>
+            <th class="two wide">Description</th>
+            <th class="one wide">Mirror(s)</th>
+            <th class="two wide">Software(s)</th>
+            <th class="one wide">Language(s)</th>
+            <th class="one wide">Status</th>
+            <th class="two wide">Sctions</th>
         </tr>
     </thead>
     {% for imb in imageboards %}
@@ -49,15 +49,23 @@
         </td>
         <td>
             {% if imb.status == 'active' %}
-                <div class="ui green label inverted">Active</div>
-            {% elif imb.status == 'inactive' %}
-                <div class="ui yellow label inverted">Inactive</div>
+                <div class="ui green fluid label inverted"><i class="bolt icon"></i>Active</div>
+            {% elif imb.status == 'archive' %}
+                <div class="ui yellow fluid label inverted"><i class="history icon"></i>Archive</div>
             {% elif imb.status == 'pending' %}
-                <div class="ui grey label inverted">Pending</div>
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Pending</div>
             {% elif imb.status == 'offline' %}
-                <div class="ui red label inverted">Offline</div>
+                <div class="ui red fluid label inverted"><i class="ghost icon"></i>Offline</div>
             {% elif imb.status == 'deleted' %}
-                <div class="ui black label inverted">Deleted</div>
+                <div class="ui black fluid label inverted"><i class="trash icon"></i>Deleted</div>
+            {% elif imb.status == 'pending-offline' %}
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Offline</div>
+            {% elif imb.status == 'pending-deleted' %}
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Deleted</div>
+            {% elif imb.status == 'pending-active' %}
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Active</div>
+            {% elif imb.status == 'pending-inactive' %}
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Inactive</div>
             {% endif %}
         </td>
         <td>

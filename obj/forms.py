@@ -14,7 +14,7 @@ class RegisterForm(FlaskForm):
 
 class ibEditForm(FlaskForm):
     id = StringField('ID')
-    status = SelectField('Status', choices=[('active', 'Active'), ('inactive', 'Inactive',), ('offline', 'Offline'),('pending','Pending'),('deleted','Deleted') ], validators=[DataRequired()])
+    status = SelectField('Status', choices=[('active', 'Active'), ('archive', 'Archive',), ('offline', 'Offline'),('pending','Pending'),('deleted','Deleted') ], validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     url = StringField('URL', validators=[DataRequired()])
     mirrors = StringField('Mirrors', validators=[Optional()])

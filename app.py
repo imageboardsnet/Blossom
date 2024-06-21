@@ -170,7 +170,10 @@ def imageboard_edit(imageboard_id):
                 else:
                     updates[field] = [ib.strip() for ib in getattr(form, field).data.split(',')]
             if current_user.role == "user":
-                updates['status'] = "pending-" + getattr(form, 'status').data
+                if getattr(form, 'status').data == "pending":
+                    updates['status'] = "pending"
+                else:
+                    updates['status'] = "pending-" + getattr(form, 'status').data
             imageboardsl.update_imageboard(imageboard_id, updates)
             return redirect(url_for('dashboard'))
     return render_page("Blossom | Edit imageboard", render_template('forms/ibedit.html', id=imageboard_id, form=form))
