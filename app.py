@@ -67,14 +67,14 @@ def index():
 def dashboard():
     imageboardsl = imageboardsb()
     if current_user.role == "admin":
-        return render_page("Dashboard | Blosson", render_template('boards.html', imageboards=imageboardsl))
+        return render_page("Dashboard | Blossom", render_template('boards.html', imageboards=imageboardsl))
     elif current_user.role == "user":
         userib = [ib for ib in imageboardsl if ib['id'] in current_user.imageboards]
         for ib in imageboardsl:
             for uib in current_user.imageboards:
                 if ib['id'] == int(uib):
                     userib.append(ib)
-        return render_page("Blosson | Dashboard | Blosson", render_template('boards.html', imageboards=userib))
+        return render_page("Blosson | Dashboard | Blossom", render_template('boards.html', imageboards=userib))
 
 @app.route('/imageboard/claim', methods=['GET', 'POST'])
 @login_required
@@ -85,12 +85,12 @@ def imageboard_claim():
         if form.validate_on_submit():
             if not verify_hcaptcha(request.form.get('h-captcha-response')):
                 flash('hCaptcha verification failed')
-                return render_page("Claim imageboard | Blosson", render_template('forms/ibclaim.html', form=form, imageboard = imageboardsl))
+                return render_page("Claim imageboard | Blossom", render_template('forms/ibclaim.html', form=form, imageboard = imageboardsl))
             if current_user.role == "user":
                 userl = usersb()
                 userl.add_claim(current_user.id, getattr(form, 'id').data)
             return redirect(url_for('myclaims'))
-    return render_page("Claim imageboard | Blosson", render_template('forms/ibclaim.html', form=form, useruuid=current_user.uuid, imageboards=imageboardsl))
+    return render_page("Claim imageboard | Blossom", render_template('forms/ibclaim.html', form=form, useruuid=current_user.uuid, imageboards=imageboardsl))
 
 @app.route('/imageboard/unclaim/<int:imageboard_id>', methods=['GET'])
 @login_required
@@ -116,7 +116,7 @@ def imageboard_claim_ib(imageboard_id):
 def myclaims():
     imageboardsl = imageboardsb()
     userib = [ib for ib in imageboardsl if str(ib['id']) in current_user.claim]
-    return render_page("Blosson | My Claimed imageboards | Blosson", render_template('myclaims.html', imageboards=userib, useruuid=current_user.uuid))
+    return render_page("Blosson | My Claimed imageboards | Blossom", render_template('myclaims.html', imageboards=userib, useruuid=current_user.uuid))
 
 @app.route('/imageboard/add', methods=['GET', 'POST'])
 @login_required
@@ -127,7 +127,7 @@ def imageboard_add():
             if current_user.role == "user":
                 if not verify_hcaptcha(request.form.get('h-captcha-response')):
                     flash('hCaptcha verification failed')
-                    return render_page("Add imageboard | Blosson", render_template('forms/ibadd.html', form=form))
+                    return render_page("Add imageboard | Blossom", render_template('forms/ibadd.html', form=form))
             imageboardsl = imageboardsb()
             newib = {}
             newib['status'] = "pending"
@@ -143,7 +143,7 @@ def imageboard_add():
                 userl = usersb()
                 userl.add_imageboard(current_user.id, str(imageboardsl.get_last_id()))
             return redirect(url_for('dashboard'))
-    return render_page("Add imageboard | Blosson", render_template('forms/ibadd.html', form=form))
+    return render_page("Add imageboard | Blossom", render_template('forms/ibadd.html', form=form))
 
 @app.route('/imageboard/edit/<int:imageboard_id>', methods=['GET', 'POST'])
 @login_required
@@ -176,7 +176,7 @@ def imageboard_edit(imageboard_id):
                     updates['status'] = "pending-" + getattr(form, 'status').data
             imageboardsl.update_imageboard(imageboard_id, updates)
             return redirect(url_for('dashboard'))
-    return render_page("Edit imageboard | Blosson", render_template('forms/ibedit.html', id=imageboard_id, form=form))
+    return render_page("Edit imageboard | Blossom", render_template('forms/ibedit.html', id=imageboard_id, form=form))
 
 @app.route('/imageboard/delete/<int:imageboard_id>')
 @login_required
@@ -203,7 +203,7 @@ def users():
     if current_user.role != "admin":
         return redirect(url_for('dashboard'))
     usersl = usersb()
-    return render_page("Users | Blosson", render_template('users.html', users=usersl))
+    return render_page("Users | Blossom", render_template('users.html', users=usersl))
 
 @app.route('/user/add', methods=['GET', 'POST'])
 @login_required
@@ -216,7 +216,7 @@ def user_add():
             usersl = usersb()
             usersl.add_user(form.data['username'], form.data['password'], form.data['role'], form.data['imageboards'])
             return redirect(url_for('users'))
-    return render_page("Add User | Blosson", render_template('forms/useradd.html', form=form))
+    return render_page("Add User | Blossom", render_template('forms/useradd.html', form=form))
 
 @app.route('/user/edit/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -240,7 +240,7 @@ def user_edit(user_id):
             updates['imageboards'] = [ib.strip() for ib in imageboards_str.split(',')]
             usersl.add_imageboard(user_id, updates['imageboards'])
             return redirect(url_for('users'))
-    return render_page("Edit User | Blosson", render_template('forms/useredit.html', id=user_id, form=form))
+    return render_page("Edit User | Blossom", render_template('forms/useredit.html', id=user_id, form=form))
 
 @app.route('/user/delete/<int:user_id>')
 @login_required
@@ -259,7 +259,7 @@ def user_reset(user_id):
     new_password = secrets.token_urlsafe(16)
     usersl = usersb()
     usersl.set_password(user_id, new_password)
-    return render_page("Reset Password | Blosson", render_template('forms/userreset.html',username=usersl.get_username(user_id) , password=new_password))
+    return render_page("Reset Password | Blossom", render_template('forms/userreset.html',username=usersl.get_username(user_id) , password=new_password))
 
 @app.route('/sauron')
 @login_required
@@ -274,7 +274,7 @@ def sauron():
     state = get_status_state()
     time_elapsed_status = time_elapsed_str(last_check_time)
     time_elapsed_build = time_elapsed_str(get_build_date())
-    return render_page("Sauron | Blosson", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_status , state=state, build_date=time_elapsed_build))
+    return render_page("Sauron | Blossom", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_status , state=state, build_date=time_elapsed_build))
 
 @app.route('/sauron/run')
 @login_required
@@ -317,7 +317,7 @@ def imageboards_legacy_json():
 
 @app.route('/about')
 def about():
-    return render_page("About | Blosson", render_template('about.html'))
+    return render_page("About | Blossom", render_template('about.html'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -328,13 +328,13 @@ def register():
         if form.validate_on_submit():
             if not verify_hcaptcha(request.form.get('h-captcha-response')):
                 flash('hCaptcha verification failed')
-                return render_page("Register | Blosson", render_template('forms/register1.html', form=form))
+                return render_page("Register | Blossom", render_template('forms/register1.html', form=form))
             username = secrets.token_urlsafe(3)
             password = secrets.token_urlsafe(16)
             usersl = usersb()
             usersl.add_user(username, password, "user", [],[])
-            return render_page("Register | Blosson", render_template('forms/register2.html', username=username, password=password))
-    return render_page("Register | Blosson", render_template('forms/register1.html', form=form))
+            return render_page("Register | Blossom", render_template('forms/register2.html', username=username, password=password))
+    return render_page("Register | Blossom", render_template('forms/register1.html', form=form))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -344,7 +344,7 @@ def login():
     if form.validate_on_submit():
         if not verify_hcaptcha(request.form.get('h-captcha-response')):
             flash('hCaptcha verification failed')
-            return render_page("Blosson | Login | Blosson", render_template('forms/login.html', form=form))
+            return render_page("Blosson | Login | Blossom", render_template('forms/login.html', form=form))
         usersl = usersb()
         id = usersl.check_user(form.username.data, form.password.data)
         if id != False:
@@ -353,7 +353,7 @@ def login():
             return redirect(url_for('dashboard'))
         else :
             flash('Invalid username or password')
-    return render_page("Blosson | Login | Blosson", render_template('forms/login.html', form=form))
+    return render_page("Blosson | Login | Blossom", render_template('forms/login.html', form=form))
 
 @app.route('/favicon.ico')
 def favicon():
@@ -367,11 +367,11 @@ def logout():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_page("404 | Blosson", render_template('error.html')), 404
+    return render_page("404 | Blossom", render_template('error.html')), 404
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    return render_page("500 | Blosson", render_template('error.html')), 500
+    return render_page("500 | Blossom", render_template('error.html')), 500
 
 if __name__ == '__main__':
     app.run() 
