@@ -1,15 +1,14 @@
 <div class="ui menu fixed navbar inverted">
-    <a class="item" href='/dashboard'><i class="teal comments icon"></i>My Imageboards</a>
-    <a class="item" href='/myclaims'><i class="teal fist raised icon"></i>My Claims</a>
-    <a class="item" href='/imageboard/add'><i class="teal plus icon"></i>Add Imageboard</a>
-    <a class="item" href='/imageboard/claim'><i class="teal exclamation icon"></i>Claim Imageboard</a>
+    <a class="item" href='/dashboard'><i class="teal comments icon inverted"></i>My Imageboards</a>
+    <a class="item" href='/myclaims'><i class="teal fist raised icon inverted"></i>My Claims</a>
+    <a class="item" href='/imageboard/add'><i class="teal plus icon inverted"></i>Add Imageboard</a>
+    <a class="item" href='/imageboard/claim'><i class="teal exclamation icon inverted"></i>Claim Imageboard</a>
     {% if admin == True %}
-        <a class="item" href='/users'><i class="teal users icon"></i>Users</a>
-        <a class="item" href='/user/add'><i class="teal plus icon"></i>Add User</a>
-        <a class="item" href='/sauron'><i class="teal eye icon"></i>Sauron</a>
+        <a class="item" href='/users'><i class="teal users icon inverted"></i>Users</a>
+        <a class="item" href='/sauron'><i class="teal eye icon inverted"></i>Sauron</a>
     {% endif %}
-    <a class="item" href='/about'><i class="teal info icon"></i>About</a>
+    <a class="item" href='/about'><i class="teal info icon inverted"></i>About</a>
     <div class="right menu">
-        <a class="item" href='/logout'><i class="teal user icon"></i>{{ user }} | Logout</a>
+        <a class="item" href='/logout'><i class="teal user icon inverted"></i>{{ user }} | Logout</a>
     </div>
 </div>

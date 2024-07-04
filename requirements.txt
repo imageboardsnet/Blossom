@@ -7,3 +7,4 @@ dnspython
 gunicorn
 requests
 yarl
+python-whois

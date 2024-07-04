@@ -1,6 +1,6 @@
 <h2 class="ui center aligned icon header inverted">
     <i class="circular user icon inverted"></i>
-    Blossom | Register
+    Register
   </h2>
 <div class="loginform">
     <div class="ui attached message inverted">
@@ -27,8 +27,9 @@
           </div>
         <form method="post">
             {{ form.hidden_tag() }} 
-            <div class="h-captcha" data-sitekey="{{ sitekey }}"></div>
+            <div class="h-captcha" data-sitekey="{{ sitekey }}" data-theme="dark"></div>
             <p>{{ form.submit(class="ui button teal inverted") }}
+            <a href="/login" class="ui button inverted">Login</a></p>
         </form>
     </div>
 </div>

@@ -10,7 +10,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
     
 class RegisterForm(FlaskForm):
-    submit = SubmitField('Register me!')
+    submit = SubmitField('Register')
 
 class ibEditForm(FlaskForm):
     id = StringField('ID')
@@ -46,10 +46,3 @@ class UserEditForm(FlaskForm):
     role = StringField('Role', validators=[DataRequired()])
     imageboards = StringField('Imageboards', validators=[Optional()])
     submit = SubmitField('Save')
-
-class UserAddForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    role = StringField('Role', validators=[DataRequired()])
-    imageboards = StringField('Imageboards', validators=[Optional()])
-    submit = SubmitField('Add')

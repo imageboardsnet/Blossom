@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, send_from_directory
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from obj.forms import LoginForm, RegisterForm, ibEditForm, ibAddForm, ibClaimForm, UserEditForm, UserAddForm
+from obj.forms import LoginForm, RegisterForm, ibEditForm, ibAddForm, ibClaimForm, UserEditForm
 from obj.users import usersb
 from obj.imageboards import imageboardsb
 from butils.sauron import check_imageboards, get_status_state, get_status_time, set_status_state
@@ -204,19 +204,6 @@ def users():
         return redirect(url_for('dashboard'))
     usersl = usersb()
     return render_page("Users | Blossom", render_template('users.html', users=usersl))
-
-@app.route('/user/add', methods=['GET', 'POST'])
-@login_required
-def user_add():
-    if current_user.role != "admin":
-        return redirect(url_for('users'))
-    form = UserAddForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            usersl = usersb()
-            usersl.add_user(form.data['username'], form.data['password'], form.data['role'], form.data['imageboards'])
-            return redirect(url_for('users'))
-    return render_page("Add User | Blossom", render_template('forms/useradd.html', form=form))
 
 @app.route('/user/edit/<int:user_id>', methods=['GET', 'POST'])
 @login_required

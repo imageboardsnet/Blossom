@@ -2,6 +2,7 @@ import requests
 import dns.resolver
 import time
 from yarl import URL
+import whois
 from var.sitevar import hcaptcha_secret_key
 from obj.imageboards import imageboardsb
 import datetime
@@ -20,6 +21,7 @@ def clean_url(url):
     clean_netloc = parsed_url.host
     return clean_netloc
 
+
 def query_txt_records(domain):
     txt_records = []
     resolver = dns.resolver.Resolver()
@@ -33,9 +35,18 @@ def query_txt_records(domain):
                 txt_records.append(decoded_string)
     except:
         return False
-    
     return txt_records
 
+def get_domain_creation_date(domain):
+    try:
+        domain_info = whois.whois(domain)
+        creation_date = domain_info.creation_date
+        if isinstance(creation_date, list):
+            creation_date = creation_date[0]
+        return creation_date
+    except Exception as e:
+        return None
+    
 def time_elapsed_str(last_check_time):
     time_elapsed = int(time.time()) - int(last_check_time)
     time_elapsed_str = ""

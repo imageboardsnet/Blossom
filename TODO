@@ -1,15 +1,22 @@
 TODO list for 1.1.0
 
-To have
-- [ ] remove imageboard for user when imageboard is deleted
-- [ ] build endpoint at startup
-- [ ] Add proxy to status bot
-- [ ] Use Webring API to get imageboard status
-- [ ] Add caching to endpoints
+- [X] remove imageboard for user when imageboard is deleted
+- [X] build endpoint at startup
 - [x] Replace about page with proper text
-
-Like to have
 - [~] Clean up code 
-- [ ] Ad manager ? (Maybe)
+
+TODO list for 1.2.0
+
+- [ ] Add caching to endpoints
+- [ ] website ranking
+
+TODO list for next releases
+
+- [ ] Ads manager ? (Maybe)
 - [ ] Add tool to download website screenshot
 - [ ] Add tool to download favicon
+
+Stil needed ?
+
+- [ ] Add proxy to status bot
+- [ ] Use Webring API to get imageboard status
