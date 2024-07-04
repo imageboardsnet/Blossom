@@ -13,7 +13,6 @@ class imageboardsb:
                 self.imageboards = json.load(f)
 
     def get_last_id(self):
-        print (self.imageboards)
         if self.imageboards == []:
             return 0
         return max([imageboard['id'] for imageboard in self.imageboards])

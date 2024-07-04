@@ -43,12 +43,17 @@ class usersb:
                 return user['username']
         return False
     
+    def get_last_id(self):
+        if self.users == []:
+            return 0
+        return max([user['id'] for user in self.users])
+    
     def add_user(self, username, password, role, imageboards, claim):
         password = ph.hash(password)
         useruuid = str(uuid.uuid4())
         creation_date = int(time.time())
         user = {
-            'id': len(self.users) + 1,
+            'id': self.get_last_id() + 1,
             'username': username,
             'password': password,
             'role': role,
