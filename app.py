@@ -74,7 +74,7 @@ def dashboard():
             for uib in current_user.imageboards:
                 if ib['id'] == int(uib):
                     userib.append(ib)
-        return render_page("Blosson | Dashboard | Blossom", render_template('boards.html', imageboards=userib))
+        return render_page("Dashboard | Blossom", render_template('boards.html', imageboards=userib))
 
 @app.route('/imageboard/claim', methods=['GET', 'POST'])
 @login_required
@@ -116,7 +116,7 @@ def imageboard_claim_ib(imageboard_id):
 def myclaims():
     imageboardsl = imageboardsb()
     userib = [ib for ib in imageboardsl if str(ib['id']) in current_user.claim]
-    return render_page("Blosson | My Claimed imageboards | Blossom", render_template('myclaims.html', imageboards=userib, useruuid=current_user.uuid))
+    return render_page("My Claimed imageboards | Blossom", render_template('myclaims.html', imageboards=userib, useruuid=current_user.uuid))
 
 @app.route('/imageboard/add', methods=['GET', 'POST'])
 @login_required
@@ -331,7 +331,7 @@ def login():
     if form.validate_on_submit():
         if not verify_hcaptcha(request.form.get('h-captcha-response')):
             flash('hCaptcha verification failed')
-            return render_page("Blosson | Login | Blossom", render_template('forms/login.html', form=form))
+            return render_page("Login | Blossom", render_template('forms/login.html', form=form))
         usersl = usersb()
         id = usersl.check_user(form.username.data, form.password.data)
         if id != False:
@@ -340,7 +340,7 @@ def login():
             return redirect(url_for('dashboard'))
         else :
             flash('Invalid username or password')
-    return render_page("Blosson | Login | Blossom", render_template('forms/login.html', form=form))
+    return render_page("Login | Blossom", render_template('forms/login.html', form=form))
 
 @app.route('/favicon.ico')
 def favicon():
