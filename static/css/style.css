@@ -17,6 +17,10 @@ a {
     box-shadow: 0 0 0 1px #fff inset;
 }
 
+.ui.inverted.red.button, .ui.inverted.red.buttons .button {
+    box-shadow: 0 0 0 1px #ff695e inset;
+}
+
 .editform,.loginform{
     width: 50vw;
     margin-left: auto!important;
