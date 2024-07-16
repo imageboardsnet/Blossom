@@ -4,21 +4,18 @@ body {
     margin: 0;
     padding: 0;
 }
+
 a {
     color: #6dffff;
 }
-/* .navbar {
-    border-bottom: solid!important;
-    border-bottom-width: 2px!important;
-    border-bottom-color: #6dffff!important;
-} */
 
-/* .table {
-    border: solid!important;
-    border-color: #6dffff!important;
-    border-radius: 4px!important;
-    border-width: 2px 2px!important;
-} */
+.ui.inverted.teal.button, .ui.inverted.teal.buttons .button {
+    box-shadow: 0 0 0 1px #6dffff inset;
+}
+
+.ui.inverted.button {
+    box-shadow: 0 0 0 1px #fff inset;
+}
 
 .editform,.loginform{
     width: 50vw;
@@ -26,8 +23,8 @@ a {
     margin-right: auto!important;
     border: solid;
     border-color: #6dffff;
-    border-radius: 4px;
-    border-width: 2px 3px;
+    border-radius: 3px;
+    border-width: 1px 2px;
 }
 
 .about {
@@ -37,7 +34,7 @@ a {
     border: solid;
     border-color: #6dffff;
     border-radius: 4px;
-    border-width: 2px 2px;
+    border-width: 1px;
 }
 
 .centered {
@@ -49,7 +46,7 @@ a {
     width: 100%;
     height: 3.3rem;
     border-top: solid !important;
-    border-top-width: 2px !important;
+    border-top-width: 1px !important;
     border-top-color: #6dffff !important;
     border-top-left-radius: 0px !important;
     border-top-right-radius: 0px !important;
