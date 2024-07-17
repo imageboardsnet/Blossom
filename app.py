@@ -6,6 +6,7 @@ from obj.imageboards import imageboardsb
 from butils.sauron import check_imageboards, get_status_state, get_status_time, set_status_state
 from butils.endpoints import build_endpoints, get_build_date, get_endpoints
 from butils.utils import time_elapsed_str, verify_hcaptcha, check_claimed_imageboard, timestamp_to_humane
+from butils.favicons import download_favicons, favicon_get_build_date
 from var.sitevar import hcaptcha_sitekey, secret_key
 import secrets
 import threading
@@ -131,7 +132,7 @@ def imageboard_add():
             imageboardsl = imageboardsb()
             newib = {}
             newib['status'] = "pending"
-            for field in ["name", "url", "favicon", "description"]:
+            for field in ["name", "url", "description"]:
                 newib[field] = getattr(form, field).data
             for field in ["mirrors", "language", "software", "boards"]:
                 if getattr(form, field).data == "":
@@ -155,14 +156,14 @@ def imageboard_edit(imageboard_id):
     imageboard = imageboardsl.get_imageboard(imageboard_id)
     form = ibEditForm()
     if request.method == 'GET':
-        for field in ["id", "status", "name", "url", "favicon", "description"]:
+        for field in ["id", "status", "name", "url", "description"]:
             form[field].data = imageboard[field]
         for field in ["mirrors", "language", "software", "boards"]:
             form[field].data = ','.join(imageboard[field])
     if request.method == 'POST':
         if form.validate_on_submit():
             updates = {}
-            for field in ["status", "name", "url", "favicon", "description"]:
+            for field in ["status", "name", "url", "description"]:
                 updates[field] = getattr(form, field).data
             for field in ["mirrors", "language", "software", "boards"]:
                 if getattr(form, field).data == "":
@@ -259,9 +260,11 @@ def sauron():
     offline_boards = [ib for ib in imageboardsl if ib['status'] == "offline"]
     last_check_time = get_status_time()
     state = get_status_state()
+    download_time = favicon_get_build_date()
     time_elapsed_status = time_elapsed_str(last_check_time)
     time_elapsed_build = time_elapsed_str(get_build_date())
-    return render_page("Sauron | Blossom", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_status , state=state, build_date=time_elapsed_build))
+    download_time = time_elapsed_str(download_time)
+    return render_page("Sauron | Blossom", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_status , state=state, build_date=time_elapsed_build, download_date=download_time))
 
 @app.route('/sauron/run')
 @login_required
@@ -293,6 +296,20 @@ def endpoints_build():
         return redirect(url_for('dashboard'))
     build_endpoints()
     return redirect(url_for('sauron'))
+
+@app.route('/favicons/download')
+@login_required
+def favicons_download():
+    if current_user.role != "admin":
+        return redirect(url_for('dashboard'))
+    download_favicons()
+    return redirect(url_for('sauron'))
+
+@app.route('/favicons/<int:ib_id>')
+def get_favicon(ib_id):
+    if not os.path.exists(os.path.join(app.root_path, 'data/favicons', str(ib_id) + '.ico')):
+        return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(os.path.join(app.root_path, 'data/favicons'), str(ib_id) + '.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/imageboards.json')
 def imageboards_json():

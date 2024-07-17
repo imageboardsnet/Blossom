@@ -65,7 +65,6 @@ class imageboardsb:
         for imageboard in self.imageboards:
             imageboard['id'] = id_counter
             id_counter += 1
-            imageboard['favicon'] = ""
             imageboard['description'] = ""
             imageboard['boards'] = []
             imageboard['status'] = "offline"
