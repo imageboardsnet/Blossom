@@ -1,0 +1,9 @@
+{
+    "app_secret_key": "blossom_secret_key",
+    "hcaptcha_sitekey": "changeme",
+    "hcaptcha_secret_key": "changeme",
+    "favicon_download_date": 1721224897,
+    "endpoint_build_date": 1719665855,
+    "sauron_last_check": 1709635624,
+    "sauron_state": "idle"
+}
