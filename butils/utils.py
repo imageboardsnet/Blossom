@@ -3,20 +3,10 @@ import dns.resolver
 import time
 from yarl import URL
 import whois
-from var.sitevar import hcaptcha_secret_key
+from butils.config import get_var
 from obj.imageboards import imageboardsb
 import datetime
-import json
-import os
 
-def get_content(file_path):
-    if os.path.exists(file_path):
-        with open(file_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-        
-def save_content(file_path, content):
-    with open(file_path, 'w') as f:
-        json.dump(content, f)
 
 def clean_url(url):
     parsed_url = URL(url)
@@ -69,7 +59,7 @@ def verify_hcaptcha(token):
     """ Verify hCaptcha token. """
     data = {
         'response': token,
-        'secret': hcaptcha_secret_key
+        'secret': get_var('hcaptcha_secret_key')
     }
     r = requests.post('https://hcaptcha.com/siteverify', data=data)
     if r.status_code != 200:
@@ -92,4 +82,3 @@ def check_claimed_imageboard(user_uuid, ib_id):
         if txtrecord == "ibclaim-" + user_uuid:
             return True
     return False
-

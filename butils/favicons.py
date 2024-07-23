@@ -1,23 +1,10 @@
 from obj.imageboards import imageboardsb
 import requests
-from butils.utils import get_content, save_content
+from butils.config import set_date
 import time
 
-status_path = 'data/favicons.json'
-
-def favicon_set_build_date():
-    status = {}
-    status = get_content(status_path)
-    status['download_date'] = int(time.time())
-    save_content(status_path,status)
-
-def favicon_get_build_date():
-    status = {}
-    status = get_content(status_path)
-    return str(status['download_date'])
-
 def download_favicons():
-    favicon_set_build_date()
+    set_date('favicon_download_date')
     imageboards = imageboardsb()
     for imageboard in imageboards.imageboards:
         if imageboard['status'] == 'active':

@@ -70,3 +70,12 @@ table {
     margin-left: auto!important;
     margin-right: auto!important;
 }
+
+@media screen and (max-width: 800px) {
+    .ui.collapsing.table,.about,.editform,.loginform{
+        width: 96vw!important;
+    }
+    #page-container {
+    padding-top: 13em;
+    }
+}

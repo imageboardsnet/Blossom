@@ -1,21 +1,6 @@
 import json
-import os
-import time
 from obj.imageboards import imageboardsb
-from butils.utils import get_content, save_content
-
-status_path = 'data/endpoints.json'
-
-def set_build_date():
-    status = {}
-    status = get_content(status_path)
-    status['build_date'] = int(time.time())
-    save_content(status_path,status)
-
-def get_build_date():
-    status = {}
-    status = get_content(status_path)
-    return str(status['build_date'])
+from butils.config import set_date
 
 def build_endpoint(legacy=False):
     imageboards = imageboardsb()
@@ -30,7 +15,7 @@ def build_endpoint(legacy=False):
     return clean_imageboards
 
 def build_endpoints():
-    set_build_date()
+    set_date('endpoint_build_date')
     endpoint = build_endpoint()
     endpoint_legacy = build_endpoint(legacy=True)
     with open('endpoints/imageboards.json', 'w') as f:

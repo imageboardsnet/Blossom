@@ -3,11 +3,11 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from obj.forms import LoginForm, RegisterForm, ibEditForm, ibAddForm, ibClaimForm, UserEditForm
 from obj.users import usersb
 from obj.imageboards import imageboardsb
-from butils.sauron import check_imageboards, get_status_state, get_status_time, set_status_state
-from butils.endpoints import build_endpoints, get_build_date, get_endpoints
+from butils.sauron import check_imageboards
+from butils.endpoints import build_endpoints, get_endpoints
 from butils.utils import time_elapsed_str, verify_hcaptcha, check_claimed_imageboard, timestamp_to_humane
-from butils.favicons import download_favicons, favicon_get_build_date
-from var.sitevar import hcaptcha_sitekey, secret_key
+from butils.favicons import download_favicons
+from butils.config import get_var, set_var
 import secrets
 import threading
 import os
@@ -16,11 +16,11 @@ app = Flask(__name__)
 
 app.jinja_env.filters['humane_date'] = timestamp_to_humane
 
-app.config['SECRET_KEY'] = secret_key
+app.config['SECRET_KEY'] = get_var('app_secret_key')
 
 @app.context_processor
 def inject_global_vars():
-    return {'sitekey': hcaptcha_sitekey}
+    return {'sitekey': get_var('hcaptcha_sitekey')}
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -258,13 +258,11 @@ def sauron():
     active_boards = [ib for ib in imageboardsl if ib['status'] == "active"]
     pending_boards = [ib for ib in imageboardsl if ib['status'] == "pending"]
     offline_boards = [ib for ib in imageboardsl if ib['status'] == "offline"]
-    last_check_time = get_status_time()
-    state = get_status_state()
-    download_time = favicon_get_build_date()
-    time_elapsed_status = time_elapsed_str(last_check_time)
-    time_elapsed_build = time_elapsed_str(get_build_date())
-    download_time = time_elapsed_str(download_time)
-    return render_page("Sauron | Blossom", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), last_check_time=time_elapsed_status , state=state, build_date=time_elapsed_build, download_date=download_time))
+    sauron_state = get_var('sauron_state')
+    sauron_last_check = time_elapsed_str(get_var('sauron_last_check'))
+    favicon_download_date = time_elapsed_str(get_var('favicon_download_date'))
+    endpoints_build_date = time_elapsed_str(get_var('endpoint_build_date'))
+    return render_page("Sauron | Blossom", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), sauron_last_check=sauron_last_check , sauron_state=sauron_state, endpoints_build_date=endpoints_build_date, favicon_download_date=favicon_download_date))
 
 @app.route('/sauron/run')
 @login_required
@@ -285,8 +283,8 @@ def sauron_stop():
     if current_user.role != "admin":
         return redirect(url_for('dashboard'))
     thread_event.clear()
-    if get_status_state() == "checking":
-        set_status_state("canceled")
+    if get_var('sauron_state') == "checking":
+        set_var('sauron_state','canceled')
     return redirect(url_for('sauron'))
 
 @app.route('/endpoints/build')
