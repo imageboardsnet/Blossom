@@ -1,4 +1,5 @@
 <div class="ui menu stackable fixed navbar inverted">
+    <a class="item" href='https://imageboards.net'><img src="{{ url_for('static', filename='favicon.ico') }}" style="margin-right: 13px; height: 16px; width: 16px;">Home</a>
     <a class="item" href='/dashboard'><i class="teal comments icon inverted"></i>My Imageboards</a>
     <a class="item" href='/myclaims'><i class="teal fist raised icon inverted"></i>My Claims</a>
     <a class="item" href='/imageboard/add'><i class="teal plus icon inverted"></i>Add Imageboard</a>
@@ -7,8 +8,9 @@
         <a class="item" href='/users'><i class="teal users icon inverted"></i>Users</a>
         <a class="item" href='/sauron'><i class="teal eye icon inverted"></i>Sauron</a>
     {% endif %}
-    <a class="item" href='/about'><i class="teal info icon inverted"></i>About</a>
+
     <div class="right menu">
         <a class="item" href='/logout'><i class="teal user icon inverted"></i>{{ user }} | Logout</a>
+        <a class="item" href='/about'><i class="teal info icon inverted"></i>About</a>
     </div>
 </div>
