@@ -1,4 +1,4 @@
-# Blossom
+# 🌸 Blossom
 
 This software is designed to provide an easy-to-navigate management list for imageboards.
  Built on a Flask stack, Blossom runs in a Docker container.
