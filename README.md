@@ -14,3 +14,21 @@ This project is dedicated to the website imageboards.net, but feel free to reuse
  - Secure & Scalable: Utilizes Docker for a secure environment.
  
  - Flask Backend: Offers a robust and flexible backend with Flask.
+
+## Installation instruction
+
+Pull the repo
+
+    git pull https://github.com/imageboardsnet/Blossom.git
+
+Run it with Docker
+
+    docker compose build
+    docker compose up -d
+*Default port 7070*
+
+Run it locally
+
+    pip install -r requirements.txt
+    python app.py
+*Default port 5000*
