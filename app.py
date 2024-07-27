@@ -295,13 +295,21 @@ def endpoints_build():
     build_endpoints()
     return redirect(url_for('sauron'))
 
-@app.route('/favicons/download')
+@app.route('/favicons/download/<string:type>')
 @login_required
-def favicons_download():
+def favicons_download(type):
     if current_user.role != "admin":
         return redirect(url_for('dashboard'))
-    download_favicons()
-    return redirect(url_for('sauron'))
+    try:
+        thread_event.set()
+        if type == "missing":
+            thread = threading.Thread(target=download_favicons(onlynew=True))
+        if type == "all":
+            thread = threading.Thread(target=download_favicons(onlynew=False))
+        thread.start()
+        return redirect(url_for('sauron'))
+    except Exception as error:
+        return redirect(url_for('sauron'))
 
 @app.route('/favicons/<int:ib_id>')
 def get_favicon(ib_id):
