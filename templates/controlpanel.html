@@ -1,0 +1,124 @@
+<h2 class="ui center aligned icon header inverted">
+    <i class="circular cog icon inverted"></i>
+    Control Panel
+  </h2>
+<div class="ui message inverted about">
+    <div class="ui header inverted">Blossom Statistics</div>
+    <div class="ui grid">
+        <div class="four wide column">
+            <div class="ui statistic inverted">
+                <div class="value inverted">
+                    {{ active_boards }}
+                </div>
+                <div class="label inverted">
+                    Active Imageboards
+                </div>
+            </div>
+        </div>
+        <div class="four wide column">
+            <div class="ui statistic inverted">
+                <div class="value inverted">
+                    {{ pending_boards }}
+                </div>
+                <div class="label inverted">
+                    Pending Imageboards
+                </div>
+            </div>
+        </div>
+        <div class="four wide column">
+            <div class="ui statistic inverted">
+                <div class="value inverted">
+                    {{ offline_boards }}
+                </div>
+                <div class="label inverted">
+                    Offline Imageboards
+                </div>
+            </div>
+        </div>
+        <div class="four wide column">
+            <div class="ui statistic inverted">
+                <div class="value inverted">
+                    {{ total_boards }}
+                </div>
+                <div class="label inverted">
+                    Total Imageboards
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ui message inverted about">
+    <div class="ui header inverted">Sauron Status</div>
+    <br>
+    <div class="ui grid">
+        <div class="three wide column">
+            <div class="ui statistic inverted">
+                <div class="label inverted">
+                    Last Check Time
+                </div>
+                <div class="label inverted">
+                    {{ sauron_last_check }}
+                </div>
+            </div>
+        </div>
+        <div class="two wide column">
+            <div class="ui statistic inverted">
+                <div class="label inverted">
+                    Status
+                </div>
+                <div class="label inverted">
+                    {{ sauron_state }}
+                </div>
+            </div>
+        </div>
+        <div class="two wide column">
+            <a href="/sauron/run" class="ui button teal inverted">Run</a>
+        </div>
+        <div class="two wide column">
+            <a href="/sauron/stop" class="ui button red inverted">Stop</a>
+        </div>
+    </div>
+</div>
+
+<div class="ui message inverted about">
+    <div class="ui header inverted">Endpoint Builder</div>
+    <br>
+    <div class="ui grid">
+        <div class="three wide column">
+            <div class="ui statistic inverted">
+                <div class="label inverted">
+                    Build Time
+                </div>
+                <div class="label inverted">
+                    {{ endpoints_build_date }}
+                </div>
+            </div>
+        </div>
+        <div class="three wide column">
+            <a href="/endpoints/build" class="ui button teal inverted">Build</a>
+    </div>
+</div>
+</div>
+<div class="ui message inverted about">
+    <div class="ui header inverted">Favicons Downloader</div>
+    <br>
+    <div class="ui grid">
+        <div class="three wide column">
+            <div class="ui statistic inverted">
+                <div class="label inverted">
+                    Download Time
+                </div>
+                <div class="label inverted">
+                    {{ favicon_download_date }}
+                </div>
+            </div>
+        </div>
+        <div class="four wide column">
+            <a href="/favicons/download/missing" class="ui button teal inverted">Download Missing</a>
+        </div>
+        <div class="three wide column">
+            <a href="/favicons/download/all" class="ui button teal inverted">Download All</a>
+        </div>
+    </div>
+</div>
+</div>

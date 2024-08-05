@@ -1,0 +1,22 @@
+<h2 class="ui center aligned icon header inverted">
+    <i class="circular user icon inverted"></i>
+    My Account
+  </h2>
+  <div class="ui message inverted about">
+    <div class="ui header inverted"> </div>
+    <div class="ui form inverted">
+        <div class="two fields">
+          <div class="field inverted">
+            <label>Username</label>
+            <input value="{{ user.username }}" type="text" readonly>
+          </div>
+          <div class="field inverted">
+            <label>Date of Creation</label>
+            <input value="{{ user.creation_date | humane_date }}" type="text" readonly>
+          </div>
+        </div>
+      </div>
+    <p>Here you can manage your account settings :</p>
+    <a href="/user/reset/{{ user.id }}" class="ui button grey inverted"><i class="key icon"></i> Reset My Password</a>
+    <a href="/user/delete/{{ user.id }}" class="ui button red inverted"><i class="trash icon"></i> Delete My Account</a>
+  </div>

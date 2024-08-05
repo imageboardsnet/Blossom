@@ -1,124 +1,77 @@
 <h2 class="ui center aligned icon header inverted">
     <i class="circular eye icon inverted"></i>
     Sauron
+    <div class="sub header inverted"><a href="/sauron/run" class="ui button teal inverted">Run Sauron</a> <a href="/sauron/stop" class="ui button red inverted">Stop Sauron</a></div>
   </h2>
-<div class="ui message inverted about">
-    <div class="ui header inverted">Blossom Statistics</div>
-    <div class="ui grid">
-        <div class="four wide column">
-            <div class="ui statistic inverted">
-                <div class="value inverted">
-                    {{ active_boards }}
-                </div>
-                <div class="label inverted">
-                    Active Imageboards
-                </div>
-            </div>
-        </div>
-        <div class="four wide column">
-            <div class="ui statistic inverted">
-                <div class="value inverted">
-                    {{ pending_boards }}
-                </div>
-                <div class="label inverted">
-                    Pending Imageboards
-                </div>
-            </div>
-        </div>
-        <div class="four wide column">
-            <div class="ui statistic inverted">
-                <div class="value inverted">
-                    {{ offline_boards }}
-                </div>
-                <div class="label inverted">
-                    Offline Imageboards
-                </div>
-            </div>
-        </div>
-        <div class="four wide column">
-            <div class="ui statistic inverted">
-                <div class="value inverted">
-                    {{ total_boards }}
-                </div>
-                <div class="label inverted">
-                    Total Imageboards
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="ui message inverted about">
-    <div class="ui header inverted">Status Bot</div>
-    <br>
-    <div class="ui grid">
-        <div class="three wide column">
-            <div class="ui statistic inverted">
-                <div class="label inverted">
-                    Last Check Time
-                </div>
-                <div class="label inverted">
-                    {{ sauron_last_check }}
-                </div>
-            </div>
-        </div>
-        <div class="two wide column">
-            <div class="ui statistic inverted">
-                <div class="label inverted">
-                    Status
-                </div>
-                <div class="label inverted">
-                    {{ sauron_state }}
-                </div>
-            </div>
-        </div>
-        <div class="two wide column">
-            <a href="/sauron/run" class="ui button teal inverted">Run</a>
-        </div>
-        <div class="two wide column">
-            <a href="/sauron/stop" class="ui button red inverted">Stop</a>
-        </div>
-    </div>
-</div>
+<div class="ui fluid container inverted">
 
-<div class="ui message inverted about">
-    <div class="ui header inverted">Endpoint builder</div>
-    <br>
-    <div class="ui grid">
-        <div class="three wide column">
-            <div class="ui statistic inverted">
-                <div class="label inverted">
-                    Build Time
-                </div>
-                <div class="label inverted">
-                    {{ endpoints_build_date }}
-                </div>
+
+    <table class="ui compact striped collapsing table list sortable inverted">
+    <thead>
+        <tr>
+            <th class="sorted descending one wide">ID</th>
+            <th class="three wide">Url</th>
+            <th class="one wide">Status</th>
+            <th class="one wide">Sauron Status</th>
+            <th class="two wide">Actions</th>
+        </tr>
+    </thead>
+    {% for imb in imageboards %}
+    <tr>
+        <td>{{ imb.id }}</td>
+        <td><a href="{{ imb.url }}" target="_blank">{{ imb.url }}</a></td>
+        <td>
+            {% if imb.status == 'active' %}
+                <div class="ui green fluid label inverted"><i class="bolt icon"></i>Active</div>
+            {% elif imb.status == 'archive' %}
+                <div class="ui yellow fluid label inverted"><i class="history icon"></i>Archive</div>
+            {% elif imb.status == 'pending' %}
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Pending</div>
+            {% elif imb.status == 'offline' %}
+                <div class="ui red fluid label inverted"><i class="skull crossbones icon"></i>Offline</div>
+            {% elif imb.status == 'hiden' %}
+                <div class="ui black fluid label inverted"><i class="ghost  icon"></i>Hiden</div>
+            {% elif imb.status == 'deleted' %}
+                <div class="ui black fluid label inverted"><i class="trash icon"></i>Deleted</div>
+            {% elif imb.status == 'pending-offline' %}
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Offline</div>
+            {% elif imb.status == 'pending-deleted' %}
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Deleted</div>
+            {% elif imb.status == 'pending-active' %}
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Active</div>
+            {% elif imb.status == 'pending-inactive' %}
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Inactive</div>
+            {% endif %}
+        </td>
+        <td>
+            {% if imb.sauron_status == 'active' %}
+                <div class="ui green fluid label inverted"><i class="bolt icon"></i>Active</div>
+            {% elif imb.sauron_status == 'archive' %}
+                <div class="ui yellow fluid label inverted"><i class="history icon"></i>Archive</div>
+            {% elif imb.sauron_status == 'pending' %}
+                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Pending</div>
+            {% elif imb.sauron_status == 'offline' %}
+                <div class="ui red fluid label inverted"><i class="skull crossbones icon"></i>Offline</div>
+            {% elif imb.sauron_status == 'hiden' %}
+                <div class="ui black fluid label inverted"><i class="ghost  icon"></i>Hiden</div>
+            {% elif imb.sauron_status == 'deleted' %}
+                <div class="ui black fluid label inverted"><i class="trash icon"></i>Deleted</div>
+            {% endif %}
+        </td>
+        <td>
+            <div class="ui action inverted teal input">
+                <select class="ui compact selection inverted dropdown" id="status-select-{{ imb.id }}">
+                    <option value="active">Active</option>
+                    <option value="archive">Archive</option>
+                    <option value="pending">Pending</option>
+                    <option value="offline">Offline</option>
+                    <option value="hiden">Hiden</option>
+                    <option value="deleted">Deleted</option>
+                </select>
+                <div class="ui inverted grey button" onclick="setStatus({{ imb.id }})">Set Status</div>
             </div>
-        </div>
-        <div class="three wide column">
-            <a href="/endpoints/build" class="ui button teal inverted">Build</a>
-    </div>
-</div>
-</div>
-<div class="ui message inverted about">
-    <div class="ui header inverted">Favicons Downloader</div>
-    <br>
-    <div class="ui grid">
-        <div class="three wide column">
-            <div class="ui statistic inverted">
-                <div class="label inverted">
-                    Download Time
-                </div>
-                <div class="label inverted">
-                    {{ favicon_download_date }}
-                </div>
-            </div>
-        </div>
-        <div class="four wide column">
-            <a href="/favicons/download/missing" class="ui button teal inverted">Download Missing</a>
-        </div>
-        <div class="three wide column">
-            <a href="/favicons/download/all" class="ui button teal inverted">Download All</a>
-        </div>
-    </div>
-</div>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 </div>

@@ -21,6 +21,10 @@ a {
     box-shadow: 0 0 0 1px #ff695e inset;
 }
 
+.ui.inverted.grey.button, .ui.inverted.grey.buttons .button {
+    box-shadow: 0 0 0 1px #d4d4d5 inset;
+}
+
 .editform,.loginform{
     width: 50vw;
     margin-left: auto!important;

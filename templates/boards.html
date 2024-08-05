@@ -10,7 +10,7 @@
         <p>Note that manual validation is necessary for it to appear in the public database.</p>
     </div>
 
-    <table class="ui striped collapsing table list sortable inverted">
+    <table class="ui compact striped collapsing table list sortable inverted">
     <thead>
         <tr>
             <th class="sorted descending one wide">ID</th>
@@ -55,9 +55,9 @@
             {% elif imb.status == 'pending' %}
                 <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Pending</div>
             {% elif imb.status == 'offline' %}
-                <div class="ui red fluid label inverted"><i class="ghost icon"></i>Offline</div>
+                <div class="ui red fluid label inverted"><i class="skull crossbones icon"></i>Offline</div>
             {% elif imb.status == 'hiden' %}
-                <div class="ui black fluid label inverted"><i class="user secret  icon"></i>Hiden</div>
+                <div class="ui black fluid label inverted"><i class="ghost  icon"></i>Hiden</div>
             {% elif imb.status == 'deleted' %}
                 <div class="ui black fluid label inverted"><i class="trash icon"></i>Deleted</div>
             {% elif imb.status == 'pending-offline' %}

@@ -52,6 +52,13 @@ class imageboardsb:
                 imageboard['status'] = status
                 self.save_imageboards()
                 break
+
+    def set_sauron_status(self, imageboard_id, status):
+        for imageboard in self.imageboards:
+            if imageboard['id'] == imageboard_id:
+                imageboard['sauron_status'] = status
+                self.save_imageboards()
+                break
                 
     def __iter__(self):
         return iter(self.imageboards)

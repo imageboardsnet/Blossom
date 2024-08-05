@@ -11,6 +11,7 @@ from butils.config import get_var, set_var
 import secrets
 import threading
 import os
+import json
 
 app = Flask(__name__)
 
@@ -179,6 +180,17 @@ def imageboard_edit(imageboard_id):
             return redirect(url_for('dashboard'))
     return render_page("Edit imageboard | Blossom", render_template('forms/ibedit.html', id=imageboard_id, form=form))
 
+@app.route('/imageboard/status/<int:imageboard_id>', methods=['POST'])
+@login_required
+def imageboard_status(imageboard_id):
+    if current_user.role == "admin":
+        imageboardsl = imageboardsb()
+        update = imageboardsl.get_imageboard(imageboard_id)
+        update['status'] = request.json['status']
+        imageboardsl.update_imageboard(imageboard_id, update)
+        return json.dumps({'status': 'ok'}), 200
+    return ('nok', 200)
+
 @app.route('/imageboard/delete/<int:imageboard_id>')
 @login_required
 def imageboard_delete(imageboard_id):
@@ -233,25 +245,31 @@ def user_edit(user_id):
 @app.route('/user/delete/<int:user_id>')
 @login_required
 def user_delete(user_id):
-    if current_user.role != "admin":
-        return redirect(url_for('users'))
-    usersl = usersb()
-    usersl.remove_user(user_id)
+    if current_user.role == "admin" or int(current_user.id) == user_id:
+            usersl = usersb()
+            usersl.remove_user(user_id)
     return redirect(url_for('users'))
 
 @app.route('/user/reset/<int:user_id>')
 @login_required
 def user_reset(user_id):
-    if current_user.role != "admin":
-        return redirect(url_for('users'))
-    new_password = secrets.token_urlsafe(16)
-    usersl = usersb()
-    usersl.set_password(user_id, new_password)
-    return render_page("Reset Password | Blossom", render_template('forms/userreset.html',username=usersl.get_username(user_id) , password=new_password))
+    if current_user.role == "admin" or int(current_user.id) == user_id:
+        new_password = secrets.token_urlsafe(16)
+        usersl = usersb()
+        usersl.set_password(user_id, new_password)
+        return render_page("Reset Password | Blossom", render_template('forms/userreset.html',username=usersl.get_username(user_id) , password=new_password))
+    return redirect(url_for('users'))
 
-@app.route('/sauron')
+@app.route('/myaccount')
 @login_required
-def sauron():
+def myaccount():
+    usersl = usersb()
+    user = usersl.get_user(int(current_user.id))
+    return render_page("My Account | Blossom", render_template('myaccount.html', user=user))
+
+@app.route('/controlpanel')
+@login_required
+def controlpanel():
     if current_user.role != "admin":
         return redirect(url_for('dashboard'))
     imageboardsl = imageboardsb()
@@ -262,7 +280,15 @@ def sauron():
     sauron_last_check = time_elapsed_str(get_var('sauron_last_check'))
     favicon_download_date = time_elapsed_str(get_var('favicon_download_date'))
     endpoints_build_date = time_elapsed_str(get_var('endpoint_build_date'))
-    return render_page("Sauron | Blossom", render_template('sauron.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), sauron_last_check=sauron_last_check , sauron_state=sauron_state, endpoints_build_date=endpoints_build_date, favicon_download_date=favicon_download_date))
+    return render_page("Control Panel | Blossom", render_template('controlpanel.html',active_boards=len(active_boards),pending_boards=len(pending_boards), offline_boards=len(offline_boards),total_boards=len(imageboardsl), sauron_last_check=sauron_last_check , sauron_state=sauron_state, endpoints_build_date=endpoints_build_date, favicon_download_date=favicon_download_date))
+
+@app.route('/sauron')
+@login_required
+def sauron():
+    if current_user.role != "admin":
+        return redirect(url_for('dashboard'))
+    imageboardsl = imageboardsb()
+    return render_page("Sauron | Blossom", render_template('sauron.html', imageboards=imageboardsl))
 
 @app.route('/sauron/run')
 @login_required
@@ -273,9 +299,9 @@ def sauron_run():
         thread_event.set()
         thread = threading.Thread(target=check_imageboards)
         thread.start()
-        return redirect(url_for('sauron'))
+        return redirect(url_for('controlpanel'))
     except Exception as error:
-        return redirect(url_for('sauron'))
+        return redirect(url_for('controlpanel'))
 
 @app.route('/sauron/stop')
 @login_required
@@ -285,7 +311,7 @@ def sauron_stop():
     thread_event.clear()
     if get_var('sauron_state') == "checking":
         set_var('sauron_state','canceled')
-    return redirect(url_for('sauron'))
+    return redirect(url_for('controlpanel'))
 
 @app.route('/endpoints/build')
 @login_required
@@ -293,7 +319,7 @@ def endpoints_build():
     if current_user.role != "admin":
         return redirect(url_for('dashboard'))
     build_endpoints()
-    return redirect(url_for('sauron'))
+    return redirect(url_for('controlpanel'))
 
 @app.route('/favicons/download/<string:type>')
 @login_required
@@ -307,9 +333,9 @@ def favicons_download(type):
         if type == "all":
             thread = threading.Thread(target=download_favicons(onlynew=False))
         thread.start()
-        return redirect(url_for('sauron'))
+        return redirect(url_for('controlpanel'))
     except Exception as error:
-        return redirect(url_for('sauron'))
+        return redirect(url_for('controlpanel'))
 
 @app.route('/favicons/<int:ib_id>')
 def get_favicon(ib_id):

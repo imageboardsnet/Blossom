@@ -5,12 +5,29 @@
     <a class="item" href='/imageboard/add'><i class="teal plus icon inverted"></i>Add Imageboard</a>
     <a class="item" href='/imageboard/claim'><i class="teal exclamation icon inverted"></i>Claim Imageboard</a>
     {% if admin == True %}
-        <a class="item" href='/users'><i class="teal users icon inverted"></i>Users</a>
-        <a class="item" href='/sauron'><i class="teal eye icon inverted"></i>Sauron</a>
+    <div class="ui compact inverted menu">
+        <div class="ui simple dropdown inverted item">
+            <i class="teal cog icon inverted"></i> Admin
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <a class="item" href='/controlpanel'><i class="teal cog icon inverted"></i>Control Panel</a>
+                <a class="item" href='/sauron'><i class="teal eye icon inverted"></i>Sauron</a>
+                <a class="item" href='/users'><i class="teal users icon inverted"></i>Users</a>
+            </div>
+        </div>
+    </div>
     {% endif %}
-
     <div class="right menu">
-        <a class="item" href='/logout'><i class="teal user icon inverted"></i>{{ user }} | Logout</a>
+        <div class="ui compact inverted menu">
+            <div class="ui simple dropdown inverted item">
+                <i class="teal user icon inverted"></i> {{ user }}
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item" href='/myaccount'><i class="teal user icon inverted"></i>My Account</a>
+                    <a class="item" href='/logout'><i class="teal sign out alternate icon inverted"></i>Logout</a>
+                </div>
+            </div>
+        </div>
         <a class="item" href='/about'><i class="teal info icon inverted"></i>About</a>
     </div>
 </div>
