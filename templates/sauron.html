@@ -10,7 +10,7 @@
     <thead>
         <tr>
             <th class="sorted descending one wide">ID</th>
-            <th class="three wide">Url</th>
+            <th class="two wide">Url</th>
             <th class="one wide">Status</th>
             <th class="one wide">Sauron Status</th>
             <th class="two wide">Actions</th>
@@ -70,6 +70,7 @@
                 </select>
                 <div class="ui inverted grey button" onclick="setStatus({{ imb.id }})">Set Status</div>
             </div>
+            <a href="/imageboard/edit/{{ imb.id }}" class="ui button inverted"><i class="edit icon"></i> Edit</a>
         </td>
     </tr>
     {% endfor %}
