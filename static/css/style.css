@@ -6,23 +6,20 @@ body {
 }
 
 a {
-    color: #6dffff;
+    color: #2bbfd6;
 }
 
-.ui.inverted.teal.button, .ui.inverted.teal.buttons .button {
-    box-shadow: 0 0 0 1px #6dffff inset;
+.navlogo{
+    margin-right: 13px !important;
+    height: 16px !important;
+    width: 16px !important;
 }
 
-.ui.inverted.button {
-    box-shadow: 0 0 0 1px #fff inset;
-}
-
-.ui.inverted.red.button, .ui.inverted.red.buttons .button {
-    box-shadow: 0 0 0 1px #ff695e inset;
-}
-
-.ui.inverted.grey.button, .ui.inverted.grey.buttons .button {
-    box-shadow: 0 0 0 1px #d4d4d5 inset;
+.loginlogo{
+    margin: 5px !important;
+    margin-bottom: 10px !important;
+    height: 24px !important;
+    width: 24px !important;
 }
 
 .editform,.loginform{
@@ -30,7 +27,7 @@ a {
     margin-left: auto!important;
     margin-right: auto!important;
     border: solid;
-    border-color: #6dffff;
+    border-color: #2bbfd6;
     border-radius: 3px;
     border-width: 1px 2px;
 }
@@ -40,7 +37,7 @@ a {
     margin-left: auto!important;
     margin-right: auto!important;
     border: solid;
-    border-color: #6dffff;
+    border-color: #2bbfd6;
     border-radius: 4px;
     border-width: 1px;
 }
@@ -55,7 +52,7 @@ a {
     height: 3.3rem;
     border-top: solid !important;
     border-top-width: 1px !important;
-    border-top-color: #6dffff !important;
+    border-top-color: #2bbfd6 !important;
     border-top-left-radius: 0px !important;
     border-top-right-radius: 0px !important;
 }
@@ -67,7 +64,7 @@ a {
   
 #content-wrap {
     padding-bottom: 4.3rem;
-    padding-top: 6em;
+    padding-top: 4em;
 }
 
 table {
