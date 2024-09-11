@@ -32,6 +32,11 @@ a {
     border-width: 1px 2px;
 }
 
+.description {
+    overflow: auto;
+    height: 3em;
+}
+
 .about {
     width: 50vw;
     margin-left: auto!important;

@@ -61,10 +61,10 @@
             <div class="ui action inverted teal input">
                 <select class="ui compact selection inverted dropdown" id="status-select-{{ imb.id }}">
                     <option value="active">Active</option>
-                    <option value="archive">Archive</option>
                     <option value="pending">Pending</option>
-                    <option value="offline">Offline</option>
+                    <option value="archive">Archive</option>
                     <option value="hiden">Hiden</option>
+                    <option value="offline">Offline</option>
                     <option value="deleted">Deleted</option>
                 </select>
                 <div class="ui inverted grey button" onclick="setStatus({{ imb.id }})">Set Status</div>

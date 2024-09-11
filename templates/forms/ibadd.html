@@ -16,35 +16,35 @@
         {% endwith %}
 
         {{ form.hidden_tag() }}
-        <div class="field">
+        <div class="required field">
             <label>Name</label>
             {{ form.name(placeholder="Enter name") }}
         </div>
-        <div class="field">
+        <div class="required field">
             <label>URL</label>
             {{ form.url(placeholder="Enter URL") }}
         </div>
         <div class="field">
-            <label>Mirrors (Ex: myboard.net,myboard.fun)</label>
-            {{ form.mirrors(placeholder="Enter mirrors") }}
+            <label>Mirrors</label>
+            {{ form.mirrors(placeholder="Enter mirrors ( eg. myboard.net , myboard.org )") }}
         </div>
         <div class="two fields">
-            <div class="field">
+            <div class="required field">
                 <label>Language</label>
-                {{ form.language(placeholder="Enter language") }}
+                {{ form.language(class="ui fluid search dropdown") }}
             </div>
-            <div class="field">
-                <label>Software (Ex: tinyboard,vichan,jschan)</label>
-                {{ form.software(placeholder="Enter software") }}
+            <div class="required field">
+                <label>Software</label>
+                {{ form.software(placeholder="Enter software ( eg. jschan)") }}
             </div>
         </div>
         <div class="field">
-            <label>Boards (Ex: \b\ Random, \g\ Computer)</label>
-            {{ form.boards(placeholder="Enter boards") }}
+            <label>Boards</label>
+            {{ form.boards(placeholder="Enter boards ( eg. \ r \ Random , \ g \ Computer )") }}
         </div>
         <div class="field">
-            <label>Description, A small description of your imageboard.</label>
-            {{ form.description() }}
+            <label>Description</label>
+            {{ form.description(placeholder="A small description of your imageboard.",rows="3") }}
         </div>
         <div class="h-captcha" data-sitekey="{{ sitekey }}" data-theme="dark"></div>
             {{ form.submit(class="ui button teal inverted") }}

@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField
-from wtforms.validators import DataRequired, Optional
+from wtforms.widgets import TextArea
+from wtforms.validators import DataRequired, Optional, Length
 from butils.iso639 import iso639
 
 
@@ -14,24 +15,24 @@ class RegisterForm(FlaskForm):
 
 class ibEditForm(FlaskForm):
     id = StringField('ID')
-    status = SelectField('Status', choices=[('active', 'Active'), ('archive', 'Archive',), ('offline', 'Offline'),('pending','Pending'),('deleted','Deleted'),('hiden','Hiden') ], validators=[DataRequired()])
-    name = StringField('Name', validators=[DataRequired()])
-    url = StringField('URL', validators=[DataRequired()])
-    mirrors = StringField('Mirrors', validators=[Optional()])
-    language = SelectField('Language', choices=iso639, validators=[DataRequired()])
-    software = StringField('Software', validators=[DataRequired()])
-    boards = StringField('Boards', validators=[Optional()])
-    description = StringField('Description', validators=[Optional()])
+    status = SelectField('Status', choices=[('active', 'Active'),('pending','Pending'),('archive', 'Archive',),('hiden','Hiden'),('offline', 'Offline'),('deleted','Deleted')], validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired(),Length(min=3,max=25)])
+    url = StringField('URL', validators=[DataRequired(),Length(min=3,max=50)])
+    mirrors = StringField('Mirrors', validators=[Optional(),Length(min=3,max=500)])
+    language = SelectField('Language', choices=iso639, validators=[DataRequired(),Length(min=1,max=25)])
+    software = StringField('Software', validators=[DataRequired(),Length(min=3,max=100)])
+    boards = StringField('Boards', validators=[Optional(),Length(min=3,max=500)])
+    description = StringField('Description', widget=TextArea(), validators=[Optional(), Length(max=350)],)
     submit = SubmitField('Save')
 
 class ibAddForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    url = StringField('URL', validators=[DataRequired()])
-    mirrors = StringField('Mirrors', validators=[Optional()])
-    language = SelectField('Language', choices=iso639, validators=[DataRequired()])
-    software = StringField('Software', validators=[DataRequired()])
-    boards = StringField('Boards', validators=[Optional()])
-    description = StringField('Description', validators=[Optional()])
+    name = StringField('Name', validators=[DataRequired(),Length(min=3,max=25)])
+    url = StringField('URL', validators=[DataRequired(),Length(min=3,max=50)])
+    mirrors = StringField('Mirrors', validators=[Optional(),Length(min=3,max=500)])
+    language = SelectField('Language', choices=iso639, validators=[DataRequired(),Length(min=1,max=25)])
+    software = StringField('Software', validators=[DataRequired(),Length(min=3,max=100)])
+    boards = StringField('Boards', validators=[Optional(),Length(min=3,max=500)])
+    description = StringField('Description',widget=TextArea(), validators=[Optional(), Length(max=350)])
     submit = SubmitField('Add')
 
 class ibClaimForm(FlaskForm):

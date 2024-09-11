@@ -126,6 +126,12 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+	$('#language').dropdown({
+	});	
+
+	$('#status').dropdown({
+	});	
+
 	const copyButtons = document.querySelectorAll('.ui.action.input .ui.button');
 	const inputFields = document.querySelectorAll('.ui.action.input input');
 	$('table').tablesort();
