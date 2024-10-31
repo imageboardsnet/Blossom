@@ -15,6 +15,13 @@ a {
     width: 16px !important;
 }
 
+.navbar {
+    border-bottom: solid !important;
+    border-bottom-width: 1px !important;
+    border-bottom-color: #2bbfd6 !important;
+    box-shadow: rgba(0, 0, 0, .19) 0 10px 20px, rgba(0, 0, 0, .23) 0 6px 6px !important;
+}
+
 .loginlogo{
     margin: 5px !important;
     margin-bottom: 10px !important;
