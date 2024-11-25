@@ -86,9 +86,3 @@ class imageboardsb:
     
     def __len__(self):
         return len(self.imageboards)
-
-    def add_protocol(self):
-        for ib in self.imageboards:
-            ib['protocol'] = 'https'
-        self.save_imageboards()
-
