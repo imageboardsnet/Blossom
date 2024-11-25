@@ -16,6 +16,7 @@ class RegisterForm(FlaskForm):
 class ibEditForm(FlaskForm):
     id = StringField('ID')
     status = SelectField('Status', choices=[('active', 'Active'),('pending','Pending'),('archive', 'Archive',),('hiden','Hiden'),('offline', 'Offline'),('deleted','Deleted')], validators=[DataRequired()])
+    protocol = SelectField('Protocol', choices=[('https', 'HTTP/S'),('other', 'Other')], validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired(),Length(min=3,max=25)])
     url = StringField('URL', validators=[DataRequired(),Length(min=3,max=50)])
     mirrors = StringField('Mirrors', validators=[Optional(),Length(min=3,max=500)])
@@ -34,6 +35,10 @@ class ibAddForm(FlaskForm):
     boards = StringField('Boards', validators=[Optional(),Length(min=3,max=500)])
     description = StringField('Description',widget=TextArea(), validators=[Optional(), Length(max=350)])
     submit = SubmitField('Add')
+
+class ibImportForm(FlaskForm):
+    imageboards = StringField('Imageboards', widget=TextArea(), validators=[DataRequired(), Length(min=3,max=5000)])
+    submit = SubmitField('Import')
 
 class ibClaimForm(FlaskForm):
     id = StringField('ID')

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, send_from_directory
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from obj.forms import LoginForm, RegisterForm, ibEditForm, ibAddForm, ibClaimForm, UserEditForm
+from obj.forms import LoginForm, RegisterForm, ibEditForm, ibAddForm, ibClaimForm, UserEditForm, ibImportForm
 from obj.users import usersb
 from obj.imageboards import imageboardsb
 from butils.sauron import check_imageboards
@@ -12,12 +12,20 @@ import secrets
 import threading
 import os
 import json
+from yarl import URL
+from concurrent.futures import ThreadPoolExecutor
+import time
 
 app = Flask(__name__)
 
 app.jinja_env.filters['humane_date'] = timestamp_to_humane
 
 app.config['SECRET_KEY'] = get_var('app_secret_key')
+
+
+data_dir = os.path.join(os.path.dirname(__file__), 'data')
+if not os.path.exists(data_dir):
+    os.makedirs(data_dir)
 
 @app.context_processor
 def inject_global_vars():
@@ -28,6 +36,20 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 thread_event = threading.Event()
+
+class ThreadPoolExecutorWrapper:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.executor = ThreadPoolExecutor(max_workers=2)
+        return cls._instance
+
+    def submit(self, fn, *args, **kwargs):
+        return self.executor.submit(fn, *args, **kwargs)
+
+executor = ThreadPoolExecutorWrapper()
 
 build_endpoints()
 
@@ -131,8 +153,12 @@ def imageboard_add():
                     flash('hCaptcha verification failed')
                     return render_page("Add imageboard | Blossom", render_template('forms/ibadd.html', form=form))
             imageboardsl = imageboardsb()
+            if imageboardsl.check_if_duplicate(form.data):
+                flash('Imageboard already exists')
+                return render_page("Add imageboard | Blossom", render_template('forms/ibadd.html', form=form))
             newib = {}
             newib['status'] = "pending"
+            newib['protocol'] = 'https'
             for field in ["name", "url", "description"]:
                 newib[field] = getattr(form, field).data
             for field in ["mirrors", "language", "software", "boards"]:
@@ -147,6 +173,46 @@ def imageboard_add():
             return redirect(url_for('dashboard'))
     return render_page("Add imageboard | Blossom", render_template('forms/ibadd.html', form=form))
 
+@app.route('/imageboard/import',methods=['GET','POST'])
+@login_required
+def imageboard_import():
+    form = ibImportForm()
+    if current_user.role != "admin":
+        return redirect(url_for('dashboard'))
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            imageboardsl = imageboardsb()
+            for url in form.data['imageboards'].split(','):
+                try:
+                    if url.strip() != "":
+                        parsed_url = URL(url)
+                        if not parsed_url.host:
+                            continue
+                            
+                        host_parts = parsed_url.host.split('.')
+                        if len(host_parts) > 2:
+                            name = '.'.join(host_parts[-2:])
+                        else:
+                            name = parsed_url.host
+                        
+                        newib = {
+                            'name': name,
+                            'url': url.strip(),
+                            'status': 'pending',
+                            'protocol': 'https' if parsed_url.scheme == 'https' else 'other',
+                            'mirrors': [],
+                            'language': ['eng'],
+                            'software': ['unknown'],
+                            'boards': [],
+                            'description': ''
+                        }
+                        imageboardsl.add_imageboard(newib)
+                except Exception as e:
+                    print(f"Error processing URL {url}: {str(e)}")
+                    continue
+            return redirect(url_for('dashboard'))
+    return render_page("Massive Imageboard Import | Blossom", render_template('forms/ibimport.html', form=form))
+
 @app.route('/imageboard/edit/<int:imageboard_id>', methods=['GET', 'POST'])
 @login_required
 def imageboard_edit(imageboard_id):
@@ -157,7 +223,7 @@ def imageboard_edit(imageboard_id):
     imageboard = imageboardsl.get_imageboard(imageboard_id)
     form = ibEditForm()
     if request.method == 'GET':
-        for field in ["id", "status", "name", "url", "description"]:
+        for field in ["id", "status","protocol", "name", "url", "description"]:
             form[field].data = imageboard[field]
         for field in ["mirrors", "language", "software", "boards"]:
             form[field].data = ','.join(imageboard[field])
@@ -176,6 +242,8 @@ def imageboard_edit(imageboard_id):
                     updates['status'] = "pending"
                 else:
                     updates['status'] = "pending-" + getattr(form, 'status').data
+            if current_user.role == "admin":
+                updates['protocol'] = getattr(form, 'protocol').data
             imageboardsl.update_imageboard(imageboard_id, updates)
             return redirect(url_for('dashboard'))
     return render_page("Edit imageboard | Blossom", render_template('forms/ibedit.html', id=imageboard_id, form=form))
@@ -297,10 +365,10 @@ def sauron_run():
         return redirect(url_for('dashboard'))
     try:
         thread_event.set()
-        thread = threading.Thread(target=check_imageboards)
-        thread.start()
+        executor.submit(check_imageboards, thread_event)
         return redirect(url_for('controlpanel'))
     except Exception as error:
+        print(f"Error starting Sauron: {error}")
         return redirect(url_for('controlpanel'))
 
 @app.route('/sauron/stop')
@@ -308,10 +376,14 @@ def sauron_run():
 def sauron_stop():
     if current_user.role != "admin":
         return redirect(url_for('dashboard'))
-    thread_event.clear()
-    if get_var('sauron_state') == "checking":
-        set_var('sauron_state','canceled')
-    return redirect(url_for('controlpanel'))
+    try:
+        thread_event.clear()
+        set_var('sauron_state', 'canceled')
+        time.sleep(0.5)
+        return redirect(url_for('controlpanel'))
+    except Exception as error:
+        print(f"Error stopping Sauron: {error}")
+        return redirect(url_for('controlpanel'))
 
 @app.route('/endpoints/build')
 @login_required
@@ -329,12 +401,12 @@ def favicons_download(type):
     try:
         thread_event.set()
         if type == "missing":
-            thread = threading.Thread(target=download_favicons(onlynew=True))
+            executor.submit(download_favicons, True)
         if type == "all":
-            thread = threading.Thread(target=download_favicons(onlynew=False))
-        thread.start()
+            executor.submit(download_favicons, False)
         return redirect(url_for('controlpanel'))
     except Exception as error:
+        print(f"Error downloading favicons: {error}")
         return redirect(url_for('controlpanel'))
 
 @app.route('/favicons/<int:ib_id>')
@@ -408,6 +480,11 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_page("500 | Blossom", render_template('error.html')), 500
+
+@app.route('/addprotocols')
+def add_protocols():
+    imageboardsl = imageboardsb()
+    imageboardsl.add_protocol()
 
 if __name__ == '__main__':
     app.run() 

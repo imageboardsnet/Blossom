@@ -57,6 +57,11 @@ a {
 .centered {
     text-align: center;
 }
+
+.iblink {
+    word-break: break-word;
+}
+
 .footer {
     position: absolute!important;
     bottom: 0;

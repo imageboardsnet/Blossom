@@ -14,11 +14,11 @@
     <thead>
         <tr>
             <th class="sorted descending one wide">ID</th>
-            <th class="two wide">Name</th>
-            <th class="three wide">Url</th>
+            <th class="one wide">Name</th>
+            <th class="two wide">Url</th>
             <th class="two wide">Description</th>
             <th class="one wide">Mirror(s)</th>
-            <th class="two wide">Software(s)</th>
+            <th class="one wide">Software(s)</th>
             <th class="one wide">Language(s)</th>
             <th class="one wide">Status</th>
             <th class="two wide">Actions</th>
@@ -28,7 +28,7 @@
     <tr>
         <td>{{ imb.id }}</td>
         <td>{{ imb.name }}</td>
-        <td><a href="{{ imb.url }}" target="_blank">{{ imb.url }}</a></td>
+        <td><a class="iblink" href="{{ imb.url }}" target="_blank">{{ imb.url }}</a></td>
         <td><div class="description">{{ imb.description }}</div></td>
         <td>
             {% if imb.mirrors is defined and imb.mirrors | length > 0  %}

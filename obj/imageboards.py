@@ -1,10 +1,9 @@
 import os
 import json
 import requests
+from yarl import URL
 
 imageboards_path = 'data/imageboards.json'
-
-imageboards_endpoint_old = 'https://imageboardsnet.github.io/imageboards.json/imageboards.json'
 
 class imageboardsb:
     def __init__(self):
@@ -60,25 +59,36 @@ class imageboardsb:
                 self.save_imageboards()
                 break
                 
+    def check_if_duplicate(self, imageboard):
+        for ib in self.imageboards:
+            try:
+                ib_url = URL(ib['url'])
+                new_url = URL(imageboard['url'])
+                
+                if not ib_url.host or not new_url.host:
+                    continue
+                    
+                ib_host_parts = ib_url.host.split('.')
+                new_host_parts = new_url.host.split('.')
+                
+                ib_domain = '.'.join(ib_host_parts[-2:] if len(ib_host_parts) > 2 else ib_host_parts)
+                new_domain = '.'.join(new_host_parts[-2:] if len(new_host_parts) > 2 else new_host_parts)
+                
+                if ib_domain == new_domain:
+                    return True
+            except (KeyError, AttributeError):
+                continue
+                
+        return False
+
     def __iter__(self):
         return iter(self.imageboards)
     
     def __len__(self):
         return len(self.imageboards)
 
-    def assign_fields(self):
-        self.imageboards = requests.get(imageboards_endpoint_old).json()
-        id_counter = 0
-        for imageboard in self.imageboards:
-            imageboard['id'] = id_counter
-            id_counter += 1
-            imageboard['description'] = ""
-            imageboard['boards'] = []
-            imageboard['status'] = "offline"
-            if 'mirrors' not in imageboard:
-                imageboard['mirrors'] = []
-            if 'language' not in imageboard:
-                imageboard['language'] = ""
-            if 'software' not in imageboard:
-                imageboard['software'] = ""
+    def add_protocol(self):
+        for ib in self.imageboards:
+            ib['protocol'] = 'https'
         self.save_imageboards()
+

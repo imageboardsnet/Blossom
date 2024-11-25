@@ -7,17 +7,21 @@ from butils.config import get_var
 from obj.imageboards import imageboardsb
 import datetime
 
-
-def clean_url(url):
-    parsed_url = URL(url)
-    clean_netloc = parsed_url.host
-    return clean_netloc
+def check_if_dns_resolves(url):
+    resolver = dns.resolver.Resolver()
+    resolver.nameservers = ['8.8.8.8']
+    domain = URL(url).host
+    try:
+        resolver.resolve(domain)
+        return True
+    except:
+        return False
 
 def query_txt_records(domain):
     txt_records = []
     resolver = dns.resolver.Resolver()
     resolver.nameservers = ['8.8.8.8']
-    domain = clean_url(domain)
+    domain = URL(domain).host
     try:
         answers = resolver.resolve(domain, 'TXT')
         for rdata in answers:
@@ -82,3 +86,15 @@ def check_claimed_imageboard(user_uuid, ib_id):
         if txtrecord == "ibclaim-" + user_uuid:
             return True
     return False
+
+class ThreadPoolExecutorWrapper:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.executor = ThreadPoolExecutor(max_workers=2)
+        return cls._instance
+
+    def submit(self, fn, *args, **kwargs):
+        return self.executor.submit(fn, *args, **kwargs)
