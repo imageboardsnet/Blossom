@@ -91,7 +91,7 @@ def index():
 def dashboard():
     imageboardsl = imageboardsb()
     if current_user.role == "admin":
-        return render_page("Dashboard | Blossom", render_template('boards.html', imageboards=imageboardsl, admin=True))
+        return render_page("Dashboard | Blossom", render_template('dashboard.html', imageboards=imageboardsl, admin=True))
     elif current_user.role == "user":
         userib = [ib for ib in imageboardsl if ib['id'] in current_user.imageboards]
         userclaim = [ib for ib in imageboardsl if str(ib['id']) in current_user.claim]
@@ -99,7 +99,7 @@ def dashboard():
             for uib in current_user.imageboards:
                 if ib['id'] == int(uib):
                     userib.append(ib)
-        return render_page("Dashboard | Blossom", render_template('boards.html', imageboards=userib, userclaim=userclaim, admin=False))
+        return render_page("Dashboard | Blossom", render_template('dashboard.html', imageboards=userib, userclaim=userclaim, admin=False))
 
 @app.route('/imageboard/claim', methods=['GET', 'POST'])
 @login_required
