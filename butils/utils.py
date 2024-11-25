@@ -86,15 +86,3 @@ def check_claimed_imageboard(user_uuid, ib_id):
         if txtrecord == "ibclaim-" + user_uuid:
             return True
     return False
-
-class ThreadPoolExecutorWrapper:
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance.executor = ThreadPoolExecutor(max_workers=2)
-        return cls._instance
-
-    def submit(self, fn, *args, **kwargs):
-        return self.executor.submit(fn, *args, **kwargs)

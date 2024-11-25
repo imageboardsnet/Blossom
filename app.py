@@ -91,14 +91,15 @@ def index():
 def dashboard():
     imageboardsl = imageboardsb()
     if current_user.role == "admin":
-        return render_page("Dashboard | Blossom", render_template('boards.html', imageboards=imageboardsl))
+        return render_page("Dashboard | Blossom", render_template('boards.html', imageboards=imageboardsl, admin=True))
     elif current_user.role == "user":
         userib = [ib for ib in imageboardsl if ib['id'] in current_user.imageboards]
+        userclaim = [ib for ib in imageboardsl if str(ib['id']) in current_user.claim]
         for ib in imageboardsl:
             for uib in current_user.imageboards:
                 if ib['id'] == int(uib):
                     userib.append(ib)
-        return render_page("Dashboard | Blossom", render_template('boards.html', imageboards=userib))
+        return render_page("Dashboard | Blossom", render_template('boards.html', imageboards=userib, userclaim=userclaim, admin=False))
 
 @app.route('/imageboard/claim', methods=['GET', 'POST'])
 @login_required
@@ -113,7 +114,7 @@ def imageboard_claim():
             if current_user.role == "user":
                 userl = usersb()
                 userl.add_claim(current_user.id, getattr(form, 'id').data)
-            return redirect(url_for('myclaims'))
+            return redirect(url_for('dashboard'))
     return render_page("Claim imageboard | Blossom", render_template('forms/ibclaim.html', form=form, useruuid=current_user.uuid, imageboards=imageboardsl))
 
 @app.route('/imageboard/unclaim/<int:imageboard_id>', methods=['GET'])
@@ -122,7 +123,7 @@ def imageboard_unclaim(imageboard_id):
     if current_user.role == "user":
         userl = usersb()
         userl.remove_claim(current_user.id, str(imageboard_id))
-    return redirect(url_for('myclaims'))
+    return redirect(url_for('dashboard'))
 
 @app.route('/imageboard/claim/<int:imageboard_id>', methods=['GET'])
 @login_required
@@ -133,14 +134,7 @@ def imageboard_claim_ib(imageboard_id):
             userl.remove_claim(current_user.id, str(imageboard_id))
             userl.add_imageboard(current_user.id, str(imageboard_id))
             return redirect(url_for('dashboard'))
-    return redirect(url_for('myclaims'))
-
-@app.route('/myclaims', methods=['GET'])
-@login_required
-def myclaims():
-    imageboardsl = imageboardsb()
-    userib = [ib for ib in imageboardsl if str(ib['id']) in current_user.claim]
-    return render_page("My Claimed imageboards | Blossom", render_template('myclaims.html', imageboards=userib, useruuid=current_user.uuid))
+    return redirect(url_for('dashboard'))
 
 @app.route('/imageboard/add', methods=['GET', 'POST'])
 @login_required

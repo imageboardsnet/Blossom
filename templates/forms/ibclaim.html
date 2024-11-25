@@ -1,6 +1,12 @@
 <h2 class="ui center aligned header inverted">
     Claim Imageboard
 </h2>
+
+<div class="ui message center aligned inverted about">
+    <p> To validate a claim, you need to add the following TXT record to your DNS :</p>
+    <p> <b> TXT @ ibclaim-{{ useruuid }}</b> </p>
+</div>
+
 <div class="editform">
     <form class="ui form attached fluid segment inverted error" method="POST">
 
@@ -45,10 +51,9 @@
             <label>ID</label>
             {{ form.id(placeholder="Enter Imageboard ID") }}
         </div>
-        <p> To validate the claim, you need to add the following TXT record to your DNS :</p>
-        <p> <b> @ ibclaim-{{ useruuid }}</b> </p>
+
         <div class="h-captcha" data-sitekey="{{ sitekey }}" data-theme="dark"></div>
             {{ form.submit(class="ui button teal inverted") }}
-            <a href="/myclaims" class="ui button inverted">Cancel</a>
+            <a href="/dashboard" class="ui button inverted">Cancel</a>
     </form>
 </div>

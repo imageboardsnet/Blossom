@@ -89,6 +89,12 @@ table {
     margin-right: auto!important;
 }
 
+.dashboard_table {
+    margin-left: 20px!important;
+    margin-right: 20px!important;
+    max-height: 51em!important;
+}
+
 @media screen and (max-width: 800px) {
     .ui.collapsing.table,.about,.editform,.loginform{
         width: 96vw!important;
