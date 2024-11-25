@@ -475,11 +475,6 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_page("500 | Blossom", render_template('error.html')), 500
 
-@app.route('/addprotocols')
-def add_protocols():
-    imageboardsl = imageboardsb()
-    imageboardsl.add_protocol()
-
 if __name__ == '__main__':
     app.run() 
 
