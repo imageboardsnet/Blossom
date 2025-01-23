@@ -103,3 +103,9 @@ table {
     padding-top: 13em;
     }
 }
+
+@media only screen and (min-width: 1200px) {
+    .ui.ui.ui.container:not(.fluid) {
+        width: 1627px!important;
+    }
+}

@@ -86,3 +86,12 @@ def check_claimed_imageboard(user_uuid, ib_id):
         if txtrecord == "ibclaim-" + user_uuid:
             return True
     return False
+
+def get_board_name(board_id):
+    """ Get imageboard name from id. """
+    board_id = int(board_id)
+    imageboards = imageboardsb()
+    imageboard = imageboards.get_imageboard(board_id)
+    if imageboard is None:
+        return None
+    return str(imageboard['name'])

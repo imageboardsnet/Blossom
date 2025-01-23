@@ -5,7 +5,7 @@ from obj.users import usersb
 from obj.imageboards import imageboardsb
 from butils.sauron import check_imageboards
 from butils.endpoints import build_endpoints, get_endpoints
-from butils.utils import time_elapsed_str, verify_hcaptcha, check_claimed_imageboard, timestamp_to_humane
+from butils.utils import time_elapsed_str, verify_hcaptcha, check_claimed_imageboard, timestamp_to_humane, get_board_name
 from butils.favicons import download_favicons
 from butils.config import get_var, set_var
 import secrets
@@ -29,7 +29,11 @@ if not os.path.exists(data_dir):
 
 @app.context_processor
 def inject_global_vars():
-    return {'sitekey': get_var('hcaptcha_sitekey')}
+    return {
+        'sitekey': get_var('hcaptcha_sitekey'),
+        'get_board_name': get_board_name
+    }
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)

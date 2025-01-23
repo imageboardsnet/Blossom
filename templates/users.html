@@ -9,10 +9,10 @@
                 <th class="one wide">ID</th>
                 <th class="one wide">Username</th>
                 <th class="two wide">Creation date</th>
-                <th class="one wide">Role</th>
-                <th class="two wide">Imageboards</th>
+                <th class="two wide">Role</th>
+                <th class="four wide">Imageboards</th>
                 <th class="two wide">Claims</th>
-                <th class="thre wide">Actions</th>
+                <th class="four wide">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,27 +21,27 @@
                 <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.creation_date | humane_date }}</td>
-                <td>{{ user.role }}</td>
+                <td>{% if user.role == "admin" %}<i class="user shield icon"></i>{% endif %}{% if user.role == "user" %}<i class="user icon"></i>{% endif %} {{ user.role }}</td>
                 <td>
                     {% if user.imageboards %}
                         {% for imageboard in user.imageboards %}
-                        <a href="/imageboard/edit/{{ imageboard }}">{{ imageboard }}</a>
+                        <a href="/imageboard/edit/{{ imageboard }}">{{ get_board_name(imageboard) }}  [{{ imageboard }}]</a>{% if not loop.last %}, {% endif %}
                         {% endfor %}
                     {% else %}
-                    none
+                    None
                     {% endif %}
                 </td>
                 <td>
                     {% if user.claim %}
                         {% for claim in user.claim %}
-                        <a href="/imageboard/edit/{{ claim }}">{{ claim }}</a>
+                        <a href="/imageboard/edit/{{ claim }}">{{ get_board_name(claim) }}  [{{ claim }}]</a>{% if not loop.last %}, {% endif %}
                         {% endfor %}
                     {% else %}
-                    none
+                    None
                     {% endif %}
                 <td>
                     <a href="/user/edit/{{ user.id }}" class="ui button inverted"><i class="edit icon"></i> Edit</a>
-                    <a href="/user/reset/{{ user.id }}" class="ui button inverted"><i class="key icon"></i> Reset password</a>
+                    <a href="/user/reset/{{ user.id }}" class="ui button inverted"><i class="key icon"></i> Reset Password</a>
                     <a href="/user/delete/{{ user.id }}" class="ui button red inverted"><i class="trash icon"></i> Delete</a>
             </tr>
             {% endfor %}
