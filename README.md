@@ -1,6 +1,6 @@
 # 🌸 Blossom
 
-This software is designed to provide an easy-to-navigate management list for imageboards.
+This software is designed to provide an easy-to-navigate database for imageboards.
  Built on a Flask stack, Blossom runs in a Docker container.
 This project is dedicated to the website imageboards.net, but feel free to reuse it.
 
@@ -8,12 +8,7 @@ This project is dedicated to the website imageboards.net, but feel free to reuse
 
  - User-friendly Interface: Simplifies the management of imageboards.
  
- - Efficient Organization: Categorizes and arranges imageboards   
-   effectively.
-   
- - Secure & Scalable: Utilizes Docker for a secure environment.
- 
- - Flask Backend: Offers a robust and flexible backend with Flask.
+ - Efficient Organization: Maintain an up-to-date list with automation.
 
 ## Installation instruction
 
