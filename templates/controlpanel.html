@@ -1,123 +1,79 @@
-<h2 class="ui center aligned icon header inverted">
+<h2 class="text-center text-light mb-4">
     Control Panel
   </h2>
-<div class="ui message inverted about">
-    <div class="ui header inverted">Blossom Statistics</div>
-    <div class="ui grid">
-        <div class="four wide column">
-            <div class="ui statistic inverted">
-                <div class="value inverted">
-                    {{ active_boards }}
-                </div>
-                <div class="label inverted">
-                    Active Imageboards
-                </div>
+<div class="card bg-dark text-light about mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Blossom Statistics</h5>
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="display-6">{{ active_boards }}</div>
+                <div class="text-info">Active Imageboards</div>
             </div>
-        </div>
-        <div class="four wide column">
-            <div class="ui statistic inverted">
-                <div class="value inverted">
-                    {{ pending_boards }}
-                </div>
-                <div class="label inverted">
-                    Pending Imageboards
-                </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="display-6">{{ pending_boards }}</div>
+                <div class="text-info">Pending Imageboards</div>
             </div>
-        </div>
-        <div class="four wide column">
-            <div class="ui statistic inverted">
-                <div class="value inverted">
-                    {{ offline_boards }}
-                </div>
-                <div class="label inverted">
-                    Offline Imageboards
-                </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="display-6">{{ offline_boards }}</div>
+                <div class="text-info">Offline Imageboards</div>
             </div>
-        </div>
-        <div class="four wide column">
-            <div class="ui statistic inverted">
-                <div class="value inverted">
-                    {{ total_boards }}
-                </div>
-                <div class="label inverted">
-                    Total Imageboards
-                </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="display-6">{{ total_boards }}</div>
+                <div class="text-info">Total Imageboards</div>
             </div>
         </div>
     </div>
 </div>
-<div class="ui message inverted about">
-    <div class="ui header inverted">Sauron Status</div>
-    <br>
-    <div class="ui grid">
-        <div class="three wide column">
-            <div class="ui statistic inverted">
-                <div class="label inverted">
-                    Last Check Time
-                </div>
-                <div class="label inverted">
-                    {{ sauron_last_check }}
-                </div>
+<div class="card bg-dark text-light about mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Sauron Status</h5>
+        <div class="row align-items-center">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="small text-uppercase text-info">Last Check Time</div>
+                <div class="fw-semibold">{{ sauron_last_check }}</div>
             </div>
-        </div>
-        <div class="two wide column">
-            <div class="ui statistic inverted">
-                <div class="label inverted">
-                    Status
-                </div>
-                <div class="label inverted">
-                    {{ sauron_state }}
-                </div>
+            <div class="col-md-3 mb-3 mb-md-0">
+                <div class="small text-uppercase text-info">Status</div>
+                <div class="fw-semibold">{{ sauron_state }}</div>
             </div>
-        </div>
-        <div class="three wide column">
-            <a href="/sauron/run" class="ui button teal inverted"><i class="teal play icon inverted"></i> Run</a>
-        </div>
-        <div class="three wide column">
-            <a href="/sauron/stop" class="ui button red inverted"><i class="red stop icon inverted"></i> Stop</a>
+            <div class="col-md-2 mb-2 mb-md-0">
+                <a href="/sauron/run" class="btn btn-outline-info w-100"><i class="bi bi-play-fill me-1"></i>Run</a>
+            </div>
+            <div class="col-md-2">
+                <a href="/sauron/stop" class="btn btn-outline-danger w-100"><i class="bi bi-stop-fill me-1"></i>Stop</a>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="ui message inverted about">
-    <div class="ui header inverted">Endpoint Builder</div>
-    <br>
-    <div class="ui grid">
-        <div class="three wide column">
-            <div class="ui statistic inverted">
-                <div class="label inverted">
-                    Build Time
-                </div>
-                <div class="label inverted">
-                    {{ endpoints_build_date }}
-                </div>
+<div class="card bg-dark text-light about mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Endpoint Builder</h5>
+        <div class="row align-items-center">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="small text-uppercase text-info">Build Time</div>
+                <div class="fw-semibold">{{ endpoints_build_date }}</div>
             </div>
-        </div>
-        <div class="three wide column">
-            <a href="/endpoints/build" class="ui button teal inverted"><i class="teal hammer icon inverted"></i> Build</a>
-    </div>
-</div>
-</div>
-<div class="ui message inverted about">
-    <div class="ui header inverted">Favicons Downloader</div>
-    <br>
-    <div class="ui grid">
-        <div class="three wide column">
-            <div class="ui statistic inverted">
-                <div class="label inverted">
-                    Download Time
-                </div>
-                <div class="label inverted">
-                    {{ favicon_download_date }}
-                </div>
+            <div class="col-md-3">
+                <a href="/endpoints/build" class="btn btn-outline-info w-100"><i class="bi bi-hammer me-1"></i>Build</a>
             </div>
-        </div>
-        <div class="four wide column">
-            <a href="/favicons/download/missing" class="ui button teal inverted"><i class="teal angle down icon inverted"></i> Download Missing</a>
-        </div>
-        <div class="four wide column">
-            <a href="/favicons/download/all" class="ui button teal inverted"><i class="teal angle double down icon inverted"></i> Download All</a>
         </div>
     </div>
 </div>
+<div class="card bg-dark text-light about">
+    <div class="card-body">
+        <h5 class="card-title">Favicons Downloader</h5>
+        <div class="row align-items-center">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="small text-uppercase text-info">Download Time</div>
+                <div class="fw-semibold">{{ favicon_download_date }}</div>
+            </div>
+            <div class="col-md-4 mb-2 mb-md-0">
+                <a href="/favicons/download/missing" class="btn btn-outline-info w-100"><i class="bi bi-download me-1"></i>Download Missing</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/favicons/download/all" class="btn btn-outline-info w-100"><i class="bi bi-download me-1"></i>Download All</a>
+            </div>
+        </div>
+    </div>
 </div>

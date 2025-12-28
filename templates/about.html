@@ -1,28 +1,30 @@
-<h2 class="ui center aligned icon header inverted">
-  <img src="{{ url_for('static', filename='favicon.ico') }}" class="loginlogo"> Blossom <img src="{{ url_for('static', filename='favicon.ico') }}" class="loginlogo">
+<h2 class="text-center text-light mb-4">
+  <img src="{{ url_for('static', filename='favicon.ico') }}" class="loginlogo" alt="logo"> Blossom <img src="{{ url_for('static', filename='favicon.ico') }}" class="loginlogo" alt="logo">
 </h2>
-<div class="ui message inverted about">
-  <div class="ui header inverted">About Us</div>
-  <p> This software is designed to be an easy-to-navigate editor for imageboards list.</p>
-  <p> fell free to contribute to the project : <a href="https://github.com/imageboardsnet/Blossom">github.com/imageboardsnet/Blossom</a> </p>
-  <p>Contact : me@imageboards.net </p>
+<div class="card bg-dark text-light about mb-3">
+  <div class="card-body">
+    <h5 class="card-title">About Us</h5>
+    <p class="card-text">This software is designed to be an easy-to-navigate editor for the imageboards list.</p>
+    <p class="card-text">Feel free to contribute to the project: <a href="https://github.com/imageboardsnet/Blossom" class="link-info">github.com/imageboardsnet/Blossom</a></p>
+    <p class="card-text mb-0">Contact : me@imageboards.net</p>
+  </div>
 </div>
-<div class="ui message inverted about">
-    <div class="ui header inverted">Endpoints</div>
-    <p> imageboards.json endpoint</p>
-    <div class="ui action fluid input">
-        <input type="text" value="https://blossom.imageboards.net/imageboards.json" readonly>
-        <button class="ui inverted teal right labeled icon button">
-          <i class="copy icon"></i>
-          Copy
-        </button>
-      </div>
-      <p> imageboards.json endpoint (legacy, like ccd0 list)</p>
-      <div class="ui action fluid input">
-          <input type="text" value="https://blossom.imageboards.net/imageboards_legacy.json" readonly>
-          <button class="ui inverted teal right labeled icon button">
-            <i class="copy icon"></i>
-            Copy
-          </button>
-        </div>
+<div class="card bg-dark text-light about">
+    <div class="card-body">
+        <h5 class="card-title">Endpoints</h5>
+        <p class="card-text mb-2">imageboards.json endpoint</p>
+        <div class="input-group mb-3 copy-input">
+            <input type="text" class="form-control text-bg-dark border-info" value="https://blossom.imageboards.net/imageboards.json" readonly>
+            <button class="btn btn-outline-info copy-btn" type="button">
+              <i class="bi bi-clipboard-check me-1"></i>Copy
+            </button>
+          </div>
+          <p class="card-text mb-2">imageboards.json endpoint (legacy, like ccd0 list)</p>
+          <div class="input-group copy-input">
+              <input type="text" class="form-control text-bg-dark border-info" value="https://blossom.imageboards.net/imageboards_legacy.json" readonly>
+              <button class="btn btn-outline-info copy-btn" type="button">
+                <i class="bi bi-clipboard-check me-1"></i>Copy
+              </button>
+            </div>
+    </div>
 </div>

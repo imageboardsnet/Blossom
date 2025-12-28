@@ -1,165 +1,170 @@
-  <h2 class="ui center aligned icon header inverted">
+<h2 class="text-center text-light mb-4">
     Dashboard
     <br>
-    <div class="sub header inverted"><a href="/imageboard/add" class="ui button teal inverted"><i class="teal comments icon inverted"></i> Add Imageboard</a> <a href="/imageboard/claim" class="ui button teal inverted"><i class="teal fist raised icon inverted"></i> Claim Imageboard</a></div>
-  </h2>
-<div class="ui fluid container inverted">
+    <div class="h6 fw-normal mt-2">
+        <a href="/imageboard/add" class="btn btn-outline-info btn-sm me-2"><i class="bi bi-chat-dots-fill me-1"></i>Add Imageboard</a>
+        <a href="/imageboard/claim" class="btn btn-outline-info btn-sm"><i class="bi bi-hand-thumbs-up-fill me-1"></i>Claim Imageboard</a>
+    </div>
+</h2>
+<div class="container-fluid text-light">
 
 {% if imageboards|length > 0 %}
-    <table class="ui compact striped collapsing table list overflowing stuck table sortable inverted dashboard_table">
-    <thead>
-        <tr>
-            <th class="sorted descending one wide">ID</th>
-            <th class="one wide">Name</th>
-            <th class="three wide">Url</th>
-            <th class="four wide">Description</th>
-            <th class="one wide">Mirror(s)</th>
-            <th class="one wide">Software(s)</th>
-            <th class="one wide">Language(s)</th>
-            <th class="one wide">Status</th>
-            <th class="two wide">Actions</th>
-        </tr>
-    </thead>
-    {% for imb in imageboards %}
-    <tr>
-        <td>{{ imb.id }}</td>
-        <td>{{ imb.name }}</td>
-        <td><a class="iblink" href="{{ imb.url }}" target="_blank">{{ imb.url }}</a></td>
-        <td><div class="description">{{ imb.description }}</div></td>
-        <td>
-            {% if imb.mirrors is defined and imb.mirrors | length > 0  %}
-                Yes
-            {% else %}
-                No
-            {% endif %}
-        </td>
-        <td>
-            {% for sw in imb.software %}
-                {{ sw }}
-            {% endfor %}
-        </td>
-        <td>
-            {% for lg in imb.language %}
-                {{ lg }}
-            {% endfor %}
-        </td>
-        <td>
-            {% if imb.status == 'active' %}
-                <div class="ui green fluid label inverted"><i class="bolt icon"></i>Active</div>
-            {% elif imb.status == 'archive' %}
-                <div class="ui yellow fluid label inverted"><i class="history icon"></i>Archive</div>
-            {% elif imb.status == 'pending' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Pending</div>
-            {% elif imb.status == 'offline' %}
-                <div class="ui red fluid label inverted"><i class="skull crossbones icon"></i>Offline</div>
-            {% elif imb.status == 'hiden' %}
-                <div class="ui black fluid label inverted"><i class="ghost  icon"></i>Hiden</div>
-            {% elif imb.status == 'deleted' %}
-                <div class="ui black fluid label inverted"><i class="trash icon"></i>Deleted</div>
-            {% elif imb.status == 'pending-offline' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Offline</div>
-            {% elif imb.status == 'pending-deleted' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Deleted</div>
-            {% elif imb.status == 'pending-active' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Active</div>
-            {% elif imb.status == 'pending-inactive' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Inactive</div>
-            {% endif %}
-        </td>
-        <td>
-            <a href="/imageboard/edit/{{ imb.id }}" class="ui button inverted"><i class="edit icon"></i> Edit</a>
-            <a href="/imageboard/delete/{{ imb.id }}" class="ui button red  inverted"><i class="trash icon"></i> Delete</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-    <div class="ui message inverted about">
-        <div class="ui icon header inverted">
-            <i class="comments icon inverted"></i>
-            No imageboards owned
-        </div>
-    </div>
-{% endif %}
-{% if admin == False %}
-
-
-{% if userclaim|length > 0 %}
-<h2 class="ui center aligned icon header inverted">My Claimed Imageboards</h2>
-    <table class="ui compact striped collapsing table list overflowing stuck table sortable inverted dashboard_table">
+    <div class="table-responsive dashboard_table mb-4">
+        <table class="table table-dark table-striped table-hover align-middle table-bordered table-sm sortable mb-0">
         <thead>
             <tr>
-                <th class="sorted descending one wide">ID</th>
-                <th class="one wide">Name</th>
-                <th class="three wide">Url</th>
-                <th class="four wide">Description</th>
-                <th class="one wide">Mirror(s)</th>
-                <th class="one wide">Software(s)</th>
-                <th class="one wide">Language(s)</th>
-                <th class="one wide">Status</th>
-                <th class="two wide">Actions</th>
+                <th class="sorted descending" style="width:6%;">ID</th>
+                <th style="width:12%;">Name</th>
+                <th class="table-url">Url</th>
+                <th class="table-desc">Description</th>
+                <th style="width:8%;">Mirror(s)</th>
+                <th style="width:10%;">Software(s)</th>
+                <th style="width:10%;">Language(s)</th>
+                <th style="width:12%;">Status</th>
+                <th style="width:12%;">Actions</th>
             </tr>
         </thead>
-        {% for claimib in userclaim %}
-        
+        <tbody>
+        {% for imb in imageboards %}
         <tr>
-            <td>{{ claimib.id }}</td>
-            <td>{{ claimib.name }}</td>
-            <td><a class="iblink" href="{{ claimib.url }}" target="_blank">{{ claimib.url }}</a></td>
-            <td><div class="description">{{ claimib.description }}</div></td>
+            <td>{{ imb.id }}</td>
+            <td>{{ imb.name }}</td>
+            <td class="table-url"><a class="iblink link-info" href="{{ imb.url }}" target="_blank">{{ imb.url }}</a></td>
+            <td class="table-desc"><div class="description">{{ imb.description }}</div></td>
             <td>
-                {% if claimib.mirrors is defined and claimib.mirrors | length > 0  %}
+                {% if imb.mirrors is defined and imb.mirrors | length > 0  %}
                     Yes
                 {% else %}
                     No
                 {% endif %}
             </td>
             <td>
-                {% for sw in claimib.software %}
+                {% for sw in imb.software %}
                     {{ sw }}
                 {% endfor %}
             </td>
             <td>
-                {% for lg in claimib.language %}
+                {% for lg in imb.language %}
                     {{ lg }}
                 {% endfor %}
             </td>
             <td>
-                {% if claimib.status == 'active' %}
-                    <div class="ui green fluid label inverted"><i class="bolt icon"></i>Active</div>
-                {% elif claimib.status == 'archive' %}
-                    <div class="ui yellow fluid label inverted"><i class="history icon"></i>Archive</div>
-                {% elif claimib.status == 'pending' %}
-                    <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Pending</div>
-                {% elif claimib.status == 'offline' %}
-                    <div class="ui red fluid label inverted"><i class="skull crossbones icon"></i>Offline</div>
-                {% elif claimib.status == 'hiden' %}
-                    <div class="ui black fluid label inverted"><i class="ghost  icon"></i>Hiden</div>
-                {% elif claimib.status == 'deleted' %}
-                    <div class="ui black fluid label inverted"><i class="trash icon"></i>Deleted</div>
-                {% elif claimib.status == 'pending-offline' %}
-                    <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Offline</div>
-                {% elif claimib.status == 'pending-deleted' %}
-                    <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Deleted</div>
-                {% elif claimib.status == 'pending-active' %}
-                    <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Active</div>
-                {% elif claimib.status == 'pending-inactive' %}
-                    <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Inactive</div>
+                {% if imb.status == 'active' %}
+                    <span class="badge text-bg-success w-100"><i class="bi bi-lightning-charge-fill me-1"></i>Active</span>
+                {% elif imb.status == 'archive' %}
+                    <span class="badge text-bg-warning w-100"><i class="bi bi-clock-history me-1"></i>Archive</span>
+                {% elif imb.status == 'pending' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                {% elif imb.status == 'offline' %}
+                    <span class="badge text-bg-danger w-100"><i class="bi bi-exclamation-octagon-fill me-1"></i>Offline</span>
+                {% elif imb.status == 'hiden' %}
+                    <span class="badge text-bg-dark w-100"><i class="bi bi-ghost me-1"></i>Hidden</span>
+                {% elif imb.status == 'deleted' %}
+                    <span class="badge text-bg-dark w-100"><i class="bi bi-trash3-fill me-1"></i>Deleted</span>
+                {% elif imb.status == 'pending-offline' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Offline</span>
+                {% elif imb.status == 'pending-deleted' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Deleted</span>
+                {% elif imb.status == 'pending-active' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Active</span>
+                {% elif imb.status == 'pending-inactive' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Inactive</span>
                 {% endif %}
             </td>
-            <td>
-                <a href="/imageboard/claim/{{ claimib.id }}" class="ui button olive inverted"><i class="olive refresh icon inverted"></i> Check</a>
-                <a href="/imageboard/unclaim/{{ claimib.id }}" class="ui button red inverted"><i class="trash icon"></i> Unclaim</a>
+            <td class="text-nowrap">
+                <a href="/imageboard/edit/{{ imb.id }}" class="btn btn-outline-secondary btn-sm me-1"><i class="bi bi-pencil-square me-1"></i>Edit</a>
+                <a href="/imageboard/delete/{{ imb.id }}" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash3-fill me-1"></i>Delete</a>
             </td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
+    </div>
 {% else %}
-    <div class="ui message inverted about">
-        <div class="ui icon header inverted">
-            <i class="fist raised icon inverted"></i>
-            No claimed imageboards
-        </div>
+    <div class="alert alert-secondary about text-center" role="alert">
+        <div class="h5 mb-1"><i class="bi bi-chat-dots-fill me-2"></i>No imageboards owned</div>
+    </div>
+{% endif %}
+{% if admin == False %}
+
+
+{% if userclaim|length > 0 %}
+<h2 class="text-center text-light mb-3">My Claimed Imageboards</h2>
+    <div class="table-responsive dashboard_table">
+        <table class="table table-dark table-striped table-hover align-middle table-bordered table-sm sortable mb-0">
+            <thead>
+                <tr>
+                    <th class="sorted descending" style="width:6%;">ID</th>
+                    <th style="width:12%;">Name</th>
+                    <th class="table-url">Url</th>
+                    <th class="table-desc">Description</th>
+                    <th style="width:8%;">Mirror(s)</th>
+                    <th style="width:10%;">Software(s)</th>
+                    <th style="width:10%;">Language(s)</th>
+                    <th style="width:12%;">Status</th>
+                    <th style="width:12%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for claimib in userclaim %}
+            
+            <tr>
+                <td>{{ claimib.id }}</td>
+                <td>{{ claimib.name }}</td>
+                <td class="table-url"><a class="iblink link-info" href="{{ claimib.url }}" target="_blank">{{ claimib.url }}</a></td>
+                <td class="table-desc"><div class="description">{{ claimib.description }}</div></td>
+                <td>
+                    {% if claimib.mirrors is defined and claimib.mirrors | length > 0  %}
+                        Yes
+                    {% else %}
+                        No
+                    {% endif %}
+                </td>
+                <td>
+                    {% for sw in claimib.software %}
+                        {{ sw }}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for lg in claimib.language %}
+                        {{ lg }}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if claimib.status == 'active' %}
+                        <span class="badge text-bg-success w-100"><i class="bi bi-lightning-charge-fill me-1"></i>Active</span>
+                    {% elif claimib.status == 'archive' %}
+                        <span class="badge text-bg-warning w-100"><i class="bi bi-clock-history me-1"></i>Archive</span>
+                    {% elif claimib.status == 'pending' %}
+                        <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                    {% elif claimib.status == 'offline' %}
+                        <span class="badge text-bg-danger w-100"><i class="bi bi-exclamation-octagon-fill me-1"></i>Offline</span>
+                    {% elif claimib.status == 'hiden' %}
+                        <span class="badge text-bg-dark w-100"><i class="bi bi-ghost me-1"></i>Hidden</span>
+                    {% elif claimib.status == 'deleted' %}
+                        <span class="badge text-bg-dark w-100"><i class="bi bi-trash3-fill me-1"></i>Deleted</span>
+                    {% elif claimib.status == 'pending-offline' %}
+                        <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Offline</span>
+                    {% elif claimib.status == 'pending-deleted' %}
+                        <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Deleted</span>
+                    {% elif claimib.status == 'pending-active' %}
+                        <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Active</span>
+                    {% elif claimib.status == 'pending-inactive' %}
+                        <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Inactive</span>
+                    {% endif %}
+                </td>
+                <td class="text-nowrap">
+                    <a href="/imageboard/claim/{{ claimib.id }}" class="btn btn-outline-success btn-sm me-1"><i class="bi bi-arrow-repeat me-1"></i>Check</a>
+                    <a href="/imageboard/unclaim/{{ claimib.id }}" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash3-fill me-1"></i>Unclaim</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-secondary about text-center" role="alert">
+        <div class="h5 mb-1"><i class="bi bi-hand-thumbs-up-fill me-2"></i>No claimed imageboards</div>
     </div>
 {% endif %}
 {% endif %}

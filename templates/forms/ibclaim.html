@@ -1,59 +1,73 @@
-<h2 class="ui center aligned header inverted">
+<h2 class="text-center text-light mb-4">
     Claim Imageboard
 </h2>
 
-<div class="ui message center aligned inverted about">
-    <p> To validate a claim, you need to add the following TXT record to your DNS :</p>
-    <p> <b> TXT @ ibclaim-{{ useruuid }}</b> </p>
+<div class="alert alert-info text-center about">
+    <p class="mb-1">To validate a claim, you need to add the following TXT record to your DNS :</p>
+    <p class="mb-0 fw-semibold">TXT @ ibclaim-{{ useruuid }}</p>
 </div>
 
-<div class="editform">
-    <form class="ui form attached fluid segment inverted error" method="POST">
-
+<div class="editform card bg-dark text-light">
+    <div class="card-body">
+        <p class="small text-info mb-3">
+            1) Add the TXT record above, 2) submit the imageboard ID you want to claim, 3) go to Dashboard → “My Claimed Imageboards” and hit “Check” once DNS is ready.
+        </p>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-            <div class="ui error message">
-                <div class="header">Action Forbidden</div>
-                <p>{{ message }}</p>
+            <div class="alert alert-danger">
+                <div class="fw-semibold">There was a problem</div>
+                <p class="mb-0">{{ message }}</p>
             </div>
             {% endfor %}
         {% endif %}
         {% endwith %}
 
-        {{ form.hidden_tag() }}
-        
-        <div class="field">
+        <form method="POST">
+
+            {{ form.hidden_tag() }}
             
-            <table class="ui compact unstackable celled scrolling table inverted">
-                <thead>
+            <div class="mb-3">
                 
-                  <tr>
-                    <th class="one wide">ID</th>
-                    <th class="two wide">Name</th>
-                    <th class="five wide">Url</th>
-                  </tr>
-                </thead>
-                <tbody>
+                <div class="table-responsive scroll-table scroll-table-claim">
+                    <table class="table table-dark table-striped table-hover align-middle table-bordered table-sm mb-0">
+                        <thead>
+                        
+                          <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Url</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for imb in imageboards %}
+                            <tr>
+                            <td>{{ imb.id }}</td>
+                            <td>{{ imb.name }}</td>
+                            <td><a href="{{ imb.url }}" target="_blank" class="link-info">{{ imb.url }}</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">ID</label>
+                {{ form.id(placeholder="Enter Imageboard ID", class="form-control text-bg-dark", list="claim-ids") }}
+                <datalist id="claim-ids">
                     {% for imb in imageboards %}
-                    <tr>
-                    <td class="one wide" >{{ imb.id }}</td>
-                    <td class="two wide">{{ imb.name }}</td>
-                    <td class="five wide"><a href="{{ imb.url }}" target="_blank">{{ imb.url }}</a></td>
-                    </tr>
+                        <option value="{{ imb.id }}">{{ imb.name }} — {{ imb.url }}</option>
                     {% endfor %}
-                </tbody>
-                </table>
+                </datalist>
+            </div>
 
-        </div>
-
-        <div class="field">
-            <label>ID</label>
-            {{ form.id(placeholder="Enter Imageboard ID") }}
-        </div>
-
-        <div class="h-captcha" data-sitekey="{{ sitekey }}" data-theme="dark"></div>
-            {{ form.submit(class="ui button teal inverted") }}
-            <a href="/dashboard" class="ui button inverted">Cancel</a>
-    </form>
+            <div class="mb-3">
+                <div class="h-captcha" data-sitekey="{{ sitekey }}" data-theme="dark"></div>
+            </div>
+                {{ form.submit(class="btn btn-outline-info me-2") }}
+                <a href="/dashboard" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
 </div>

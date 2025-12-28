@@ -1,77 +1,84 @@
-<h2 class="ui center aligned icon header inverted">
+<h2 class="text-center text-light mb-4">
     Sauron
-    <div class="sub header inverted"><a href="/sauron/run" class="ui button teal inverted"><i class="teal play icon inverted"></i> Run</a> <a href="/sauron/stop" class="ui button red inverted"><i class="red stop icon inverted"></i> Stop</a></div>
+    <div class="h6 fw-normal mt-2">
+        <a href="/sauron/run" class="btn btn-outline-info btn-sm me-2"><i class="bi bi-play-fill me-1"></i>Run</a>
+        <a href="/sauron/stop" class="btn btn-outline-danger btn-sm"><i class="bi bi-stop-fill me-1"></i>Stop</a>
+    </div>
   </h2>
-<div class="ui fluid container inverted">
+<div class="container-fluid text-light">
 
 
-    <table class="ui compact striped collapsing table list overflowing stuck table sortable inverted dashboard_table">
-    <thead>
+    <div class="table-responsive dashboard_table">
+        <table class="table table-dark table-striped table-hover align-middle table-bordered table-sm sortable mb-0">
+        <thead>
+            <tr>
+                <th class="sorted descending" style="width:6%;">ID</th>
+                <th class="table-url">Url</th>
+                <th style="width:16%;">Status</th>
+                <th style="width:16%;">Sauron Status</th>
+                <th style="width:20%;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for imb in imageboards %}
         <tr>
-            <th class="sorted descending one wide">ID</th>
-            <th class="two wide">Url</th>
-            <th class="one wide">Status</th>
-            <th class="one wide">Sauron Status</th>
-            <th class="two wide">Actions</th>
+            <td>{{ imb.id }}</td>
+            <td><a href="{{ imb.url }}" target="_blank" class="link-info">{{ imb.url }}</a></td>
+            <td>
+                {% if imb.status == 'active' %}
+                    <span class="badge text-bg-success w-100"><i class="bi bi-lightning-charge-fill me-1"></i>Active</span>
+                {% elif imb.status == 'archive' %}
+                    <span class="badge text-bg-warning w-100"><i class="bi bi-clock-history me-1"></i>Archive</span>
+                {% elif imb.status == 'pending' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                {% elif imb.status == 'offline' %}
+                    <span class="badge text-bg-danger w-100"><i class="bi bi-exclamation-octagon-fill me-1"></i>Offline</span>
+                {% elif imb.status == 'hiden' %}
+                    <span class="badge text-bg-dark w-100"><i class="bi bi-ghost me-1"></i>Hidden</span>
+                {% elif imb.status == 'deleted' %}
+                    <span class="badge text-bg-dark w-100"><i class="bi bi-trash3-fill me-1"></i>Deleted</span>
+                {% elif imb.status == 'pending-offline' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Offline</span>
+                {% elif imb.status == 'pending-deleted' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Deleted</span>
+                {% elif imb.status == 'pending-active' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Active</span>
+                {% elif imb.status == 'pending-inactive' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Inactive</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if imb.sauron_status == 'active' %}
+                    <span class="badge text-bg-success w-100"><i class="bi bi-lightning-charge-fill me-1"></i>Active</span>
+                {% elif imb.sauron_status == 'archive' %}
+                    <span class="badge text-bg-warning w-100"><i class="bi bi-clock-history me-1"></i>Archive</span>
+                {% elif imb.sauron_status == 'pending' %}
+                    <span class="badge text-bg-secondary w-100"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                {% elif imb.sauron_status == 'offline' %}
+                    <span class="badge text-bg-danger w-100"><i class="bi bi-exclamation-octagon-fill me-1"></i>Offline</span>
+                {% elif imb.sauron_status == 'hiden' %}
+                    <span class="badge text-bg-dark w-100"><i class="bi bi-ghost me-1"></i>Hidden</span>
+                {% elif imb.sauron_status == 'deleted' %}
+                    <span class="badge text-bg-dark w-100"><i class="bi bi-trash3-fill me-1"></i>Deleted</span>
+                {% endif %}
+            </td>
+            <td class="text-nowrap">
+                <div class="d-flex align-items-center gap-2">
+                    <select class="form-select form-select-sm text-bg-dark border-info flex-grow-1" id="status-select-{{ imb.id }}">
+                        <option value="active" {% if imb.status == 'active' %}selected{% endif %}>Active</option>
+                        <option value="pending" {% if imb.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="archive" {% if imb.status == 'archive' %}selected{% endif %}>Archive</option>
+                        <option value="hiden" {% if imb.status == 'hiden' %}selected{% endif %}>Hidden</option>
+                        <option value="offline" {% if imb.status == 'offline' %}selected{% endif %}>Offline</option>
+                        <option value="deleted" {% if imb.status == 'deleted' %}selected{% endif %}>Deleted</option>
+                    </select>
+                    <button class="btn btn-outline-info btn-sm" type="button" onclick="setStatus({{ imb.id }})">Set</button>
+                    <a href="/imageboard/edit/{{ imb.id }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-square me-1"></i>Edit</a>
+                </div>
+            </td>
         </tr>
-    </thead>
-    {% for imb in imageboards %}
-    <tr>
-        <td>{{ imb.id }}</td>
-        <td><a href="{{ imb.url }}" target="_blank">{{ imb.url }}</a></td>
-        <td>
-            {% if imb.status == 'active' %}
-                <div class="ui green fluid label inverted"><i class="bolt icon"></i>Active</div>
-            {% elif imb.status == 'archive' %}
-                <div class="ui yellow fluid label inverted"><i class="history icon"></i>Archive</div>
-            {% elif imb.status == 'pending' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Pending</div>
-            {% elif imb.status == 'offline' %}
-                <div class="ui red fluid label inverted"><i class="skull crossbones icon"></i>Offline</div>
-            {% elif imb.status == 'hiden' %}
-                <div class="ui black fluid label inverted"><i class="ghost  icon"></i>Hiden</div>
-            {% elif imb.status == 'deleted' %}
-                <div class="ui black fluid label inverted"><i class="trash icon"></i>Deleted</div>
-            {% elif imb.status == 'pending-offline' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Offline</div>
-            {% elif imb.status == 'pending-deleted' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Deleted</div>
-            {% elif imb.status == 'pending-active' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Active</div>
-            {% elif imb.status == 'pending-inactive' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Inactive</div>
-            {% endif %}
-        </td>
-        <td>
-            {% if imb.sauron_status == 'active' %}
-                <div class="ui green fluid label inverted"><i class="bolt icon"></i>Active</div>
-            {% elif imb.sauron_status == 'archive' %}
-                <div class="ui yellow fluid label inverted"><i class="history icon"></i>Archive</div>
-            {% elif imb.sauron_status == 'pending' %}
-                <div class="ui grey fluid label inverted"><i class="hourglass outline icon"></i>Pending</div>
-            {% elif imb.sauron_status == 'offline' %}
-                <div class="ui red fluid label inverted"><i class="skull crossbones icon"></i>Offline</div>
-            {% elif imb.sauron_status == 'hiden' %}
-                <div class="ui black fluid label inverted"><i class="ghost  icon"></i>Hiden</div>
-            {% elif imb.sauron_status == 'deleted' %}
-                <div class="ui black fluid label inverted"><i class="trash icon"></i>Deleted</div>
-            {% endif %}
-        </td>
-        <td>
-            <div class="ui action inverted teal input">
-                <select class="ui compact selection inverted dropdown" id="status-select-{{ imb.id }}">
-                    <option value="active">Active</option>
-                    <option value="pending">Pending</option>
-                    <option value="archive">Archive</option>
-                    <option value="hiden">Hiden</option>
-                    <option value="offline">Offline</option>
-                    <option value="deleted">Deleted</option>
-                </select>
-                <div class="ui inverted grey button" onclick="setStatus({{ imb.id }})">Set Status</div>
-            </div>
-            <a href="/imageboard/edit/{{ imb.id }}" class="ui button inverted"><i class="edit icon"></i> Edit</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+        {% endfor %}
+    </tbody>
+    </table>
+    </div>
 </div>

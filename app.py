@@ -114,10 +114,21 @@ def imageboard_claim():
         if form.validate_on_submit():
             if not verify_hcaptcha(request.form.get('h-captcha-response')):
                 flash('hCaptcha verification failed')
-                return render_page("Claim imageboard | Blossom", render_template('forms/ibclaim.html', form=form, imageboard = imageboardsl))
+                return render_page("Claim imageboard | Blossom", render_template('forms/ibclaim.html', form=form, imageboards=imageboardsl, useruuid=current_user.uuid))
+            claim_id = getattr(form, 'id').data
+            target = next((ib for ib in imageboardsl if ib['id'] == claim_id), None)
+            if target is None:
+                flash('Imageboard ID not found')
+                return render_page("Claim imageboard | Blossom", render_template('forms/ibclaim.html', form=form, imageboards=imageboardsl, useruuid=current_user.uuid))
+            if str(claim_id) in current_user.claim:
+                flash('You already claimed this imageboard')
+                return render_page("Claim imageboard | Blossom", render_template('forms/ibclaim.html', form=form, imageboards=imageboardsl, useruuid=current_user.uuid))
+            if str(claim_id) in current_user.imageboards:
+                flash('You already own this imageboard')
+                return render_page("Claim imageboard | Blossom", render_template('forms/ibclaim.html', form=form, imageboards=imageboardsl, useruuid=current_user.uuid))
             if current_user.role == "user":
                 userl = usersb()
-                userl.add_claim(current_user.id, getattr(form, 'id').data)
+                userl.add_claim(current_user.id, str(claim_id))
             return redirect(url_for('dashboard'))
     return render_page("Claim imageboard | Blossom", render_template('forms/ibclaim.html', form=form, useruuid=current_user.uuid, imageboards=imageboardsl))
 

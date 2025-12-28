@@ -1,26 +1,28 @@
-<h2 class="ui center aligned header inverted">
+<h2 class="text-center text-light mb-4">
     Massive Imageboard Import
 </h2>
-<div class="editform">
-    <form class="ui form attached fluid segment inverted error" method="POST">
-
+<div class="editform card bg-dark text-light">
+    <div class="card-body">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-            <div class="ui error message">
-                <div class="header">Action Forbidden</div>
-                <p>{{ message }}</p>
+            <div class="alert alert-danger">
+                <div class="fw-semibold">Action Forbidden</div>
+                <p class="mb-0">{{ message }}</p>
             </div>
             {% endfor %}
         {% endif %}
         {% endwith %}
 
-        {{ form.hidden_tag() }}
-        <div class="field">
-            <label>Imageboards</label>
-            {{ form.imageboards(placeholder="Enter imageboards ( eg. https://myboard.net , https://myboard.org )",rows="10") }}
-        </div>
-            {{ form.submit(class="ui button teal inverted") }}
-            <a href="/" class="ui button inverted">Cancel</a>
-    </form>
+        <form method="POST">
+
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                <label class="form-label">Imageboards</label>
+                {{ form.imageboards(placeholder="Enter imageboards ( eg. https://myboard.net , https://myboard.org )",rows="10", class="form-control text-bg-dark") }}
+            </div>
+                {{ form.submit(class="btn btn-outline-info me-2") }}
+                <a href="/" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
 </div>

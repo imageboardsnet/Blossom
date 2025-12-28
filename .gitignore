@@ -161,3 +161,4 @@ cython_debug/
 
 /endpoints/
 /data/
+.DS_Store

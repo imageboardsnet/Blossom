@@ -1,27 +1,25 @@
-<h2 class="ui center aligned icon header inverted">
+<h2 class="text-center text-light mb-4">
     Password Reset
   </h2>
-<div class="loginform">
-    <div class="ui form attached fluid segment inverted">
+<div class="loginform card bg-dark text-light">
+    <div class="card-body">
 
-        <div class="ui message inverted">
-             <p>Username</p>
-             <div class="ui action input">
-                <input type="text" value="{{ username }}" readonly>
-                <button class="ui inverted right labeled icon button">
-                  <i class="copy icon"></i>
-                  Copy
+        <div class="alert alert-info">
+             <p class="mb-2">Username</p>
+             <div class="input-group mb-3 copy-input">
+                <input type="text" value="{{ username }}" class="form-control text-bg-dark" readonly>
+                <button class="btn btn-outline-info copy-btn" type="button">
+                  <i class="bi bi-clipboard-check me-1"></i>Copy
                 </button>
               </div>
-             <p>Password</p>
-             <div class="ui action input">
-                <input type="text" value="{{ password }}" readonly>
-                <button class="ui inverted right labeled icon button">
-                  <i class="copy icon"></i>
-                  Copy
+             <p class="mb-2">Password</p>
+             <div class="input-group copy-input">
+                <input type="text" value="{{ password }}" class="form-control text-bg-dark" readonly>
+                <button class="btn btn-outline-info copy-btn" type="button">
+                  <i class="bi bi-clipboard-check me-1"></i>Copy
                 </button>
               </div>
           </div>
-          <a href="/users" class="ui button inverted">back</a>
+          <a href="/users" class="btn btn-outline-secondary">Back</a>
         </div>
 </div>

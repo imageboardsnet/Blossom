@@ -1,6 +1,7 @@
 import os
 import json
 from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError, VerificationError
 import uuid 
 import time
 
@@ -24,11 +25,15 @@ class usersb:
 
     def check_user(self, username, password):
         for user in self.users:
-            if user['username'] == username and ph.verify(user['password'], password):
-                if ph.check_needs_rehash(user['password']):
-                    user['password'] = ph.hash(password)
-                    self.save_users()
-                return user['id']
+            if user['username'] == username:
+                try:
+                    if ph.verify(user['password'], password):
+                        if ph.check_needs_rehash(user['password']):
+                            user['password'] = ph.hash(password)
+                            self.save_users()
+                        return user['id']
+                except (VerifyMismatchError, VerificationError):
+                    continue
         return False
     
     def get_user(self, user_id):

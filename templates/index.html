@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta charset="UTF-8">
     <title>{{ title }} </title>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css"
-        href="{{ url_for('static',filename='css/semantic.min.css') }}">
-    <script src="{{ url_for('static',filename='js/semantic.min.js') }}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
-    <script src="{{ url_for('static',filename='js/main.js') }}"></script>
     <script src="https://hcaptcha.com/1/api.js" async defer></script>
     
 </head>
@@ -21,14 +18,13 @@
         <div id="content-wrap">
                 {{ content |safe }}
         </div>
-        <div class="ui footer segment center inverted">
-            <div class="ui container inverted">
-                <div class='centered'>
-                    <h4 class="ui header inverted">ImageBoards.net | 2025 | <a href="https://github.com/imageboardsnet/Blossom">Blossom 2.1.1</a></h4>
-                </div>
+        <div class="footer bg-dark border-top border-info text-center text-light py-3">
+            <div class="container">
+                <h4 class="h6 m-0">ImageBoards.net | 2025 | <a href="https://github.com/imageboardsnet/Blossom" class="link-info">Blossom 2.1.1</a></h4>
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static',filename='js/main.js') }}" defer></script>
 </body>
 </html>
-

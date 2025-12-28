@@ -1,34 +1,35 @@
-<h2 class="ui center aligned icon header inverted">
+<h2 class="text-center text-light mb-4">
     Register
   </h2>
-<div class="loginform">
-    <div class="ui attached message inverted">
-        <div class="header inverted">
+<div class="loginform card bg-dark text-light">
+    <div class="card-header border-info text-center">
             Instant Registration™
-        </div>
     </div>
-    <div class="ui form attached fluid segment inverted error">
+    <div class="card-body">
 
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-            <div class="ui error message">
-                <div class="header">Action Forbidden</div>
-                <p>{{ message }}</p>
+            <div class="alert alert-danger">
+                <div class="fw-semibold">Action Forbidden</div>
+                <p class="mb-0">{{ message }}</p>
             </div>
             {% endfor %}
         {% endif %}
         {% endwith %}
 
-        <div class="ui message inverted">
-            <p>Register instantly. Click on the submit button to get your username and password.</p>
-            <p>After you register, save your credentials in your password manager.</p>
+        <div class="alert alert-info">
+            <p class="mb-1">Register instantly. Click on the submit button to get your username and password.</p>
+            <p class="mb-0">After you register, save your credentials in your password manager.</p>
           </div>
         <form method="post">
             {{ form.hidden_tag() }} 
-            <div class="h-captcha" data-sitekey="{{ sitekey }}" data-theme="dark"></div>
-            <p>{{ form.submit(class="ui button teal inverted") }}
-            <a href="/login" class="ui button inverted">Login</a></p>
+            <div class="mb-3">
+                <div class="h-captcha" data-sitekey="{{ sitekey }}" data-theme="dark"></div>
+            </div>
+            <div class="d-flex gap-2">
+                {{ form.submit(class="btn btn-outline-info") }}
+            <a href="/login" class="btn btn-outline-secondary">Login</a></div>
         </form>
     </div>
 </div>

@@ -1,67 +1,68 @@
-<h2 class="ui center aligned header inverted">
+<h2 class="text-center text-light mb-4">
     Edit Imageboard
 </h2>
-<div class="editform">
-    <form class="ui form attached fluid segment inverted error" method="POST">
-
+<div class="editform card bg-dark text-light">
+    <div class="card-body">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-            <div class="ui error message">
-                <div class="header">Action Forbidden</div>
-                <p>{{ message }}</p>
+            <div class="alert alert-danger">
+                <div class="fw-semibold">Action Forbidden</div>
+                <p class="mb-0">{{ message }}</p>
             </div>
             {% endfor %}
         {% endif %}
         {% endwith %}
 
-        {{ form.hidden_tag() }}
-        <div class="field">
-            <div class="three fields">
-                <div class="field two wide">
-                    <label>ID</label>
-                    {{ form.id(placeholder="Enter ID", disabled=True) }}
+        <form method="POST">
+
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">ID</label>
+                    {{ form.id(placeholder="Enter ID", disabled=True, class="form-control text-bg-dark") }}
                 </div>
-                <div class="field two wide">
-                    <label>Status</label>
-                    {{ form.status() }}
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Status</label>
+                    {{ form.status(class="form-select text-bg-dark") }}
                 </div>
-                <div class="field two wide">
-                    <label>Protocol</label>
-                    {{ form.protocol() }}
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Protocol</label>
+                    {{ form.protocol(class="form-select text-bg-dark") }}
                 </div>
             </div>
-        <div class="required field">
-            <label>Name</label>
-            {{ form.name(placeholder="Enter name") }}
-        </div>
-        <div class="required field">
-            <label>URL</label>
-            {{ form.url(placeholder="Enter URL") }}
-        </div>
-        <div class="field">
-            <label>Mirrors</label>
-            {{ form.mirrors(placeholder="Enter mirrors ( eg. myboard.net , myboard.org )") }}
-        </div>
-        <div class="two fields">
-            <div class="required field">
-                <label>Language</label>
-                {{ form.language(class="ui fluid search dropdown") }}
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                {{ form.name(placeholder="Enter name", class="form-control text-bg-dark") }}
             </div>
-            <div class="required field">
-                <label>Software</label>
-                {{ form.software(placeholder="Enter software ( eg. jschan)") }}
+            <div class="mb-3">
+                <label class="form-label">URL</label>
+                {{ form.url(placeholder="Enter URL", class="form-control text-bg-dark") }}
             </div>
-        </div>
-        <div class="field">
-            <label>Boards</label>
-            {{ form.boards(placeholder="Enter boards ( eg. \ r \ Random , \ g \ Computer )") }}
-        </div>
-        <div class="field">
-            <label>Description</label>
-            {{ form.description(placeholder="A small description of your imageboard.",rows="3") }}
-        </div>
-            {{ form.submit(class="ui button teal inverted") }}
-            <a href="/" class="ui button inverted">Cancel</a>
-    </form>
+            <div class="mb-3">
+                <label class="form-label">Mirrors</label>
+                {{ form.mirrors(placeholder="Enter mirrors ( eg. myboard.net , myboard.org )", class="form-control text-bg-dark") }}
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Language</label>
+                    {{ form.language(class="form-select text-bg-dark") }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Software</label>
+                    {{ form.software(placeholder="Enter software ( eg. jschan)", class="form-control text-bg-dark") }}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Boards</label>
+                {{ form.boards(placeholder="Enter boards ( eg. \\ r \\ Random , \\ g \\ Computer )", class="form-control text-bg-dark") }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                {{ form.description(placeholder="A small description of your imageboard.",rows="3", class="form-control text-bg-dark") }}
+            </div>
+                {{ form.submit(class="btn btn-outline-info me-2") }}
+                <a href="/" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
 </div>

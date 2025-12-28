@@ -1,33 +1,50 @@
-<div class="ui menu stackable fixed navbar inverted">
-    <a class="item" href='https://imageboards.net'><img src="{{ url_for('static', filename='favicon.ico') }}" class="navlogo">Home</a>
-    <a class="item" href='/dashboard'><i class="teal columns icon inverted"></i>Dashboard</a>
-    <a class="item" href='/imageboard/add'><i class="teal comments icon inverted"></i>Add Imageboard</a>
-    <a class="item" href='/imageboard/claim'><i class="teal fist raised icon inverted"></i>Claim Imageboard</a>
-    {% if admin == True %}
-    <div class="ui compact inverted menu">
-        <div class="ui simple dropdown inverted item">
-            <i class="teal cog icon inverted"></i> Admin
-            <i class="dropdown icon"></i>
-            <div class="menu">
-                <a class="item" href='/controlpanel'><i class="teal cog icon inverted"></i>Control Panel</a>
-                <a class="item" href='/sauron'><i class="teal eye icon inverted"></i>Sauron</a>
-                <a class="item" href='/imageboard/import'><i class="teal layer group icon inverted"></i>Massive Import</a>
-                <a class="item" href='/users'><i class="teal users icon inverted"></i>Users</a>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="https://imageboards.net">
+            <img src="{{ url_for('static', filename='favicon.ico') }}" class="navlogo" alt="Home">
+            <span class="ms-2">Home</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard"><i class="bi bi-layout-three-columns me-1"></i>Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/imageboard/add"><i class="bi bi-chat-dots-fill me-1"></i>Add Imageboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/imageboard/claim"><i class="bi bi-hand-thumbs-up-fill me-1"></i>Claim Imageboard</a>
+                </li>
+                {% if admin == True %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false"><i class="bi bi-gear-fill me-1"></i>Admin</a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminMenu">
+                        <li><a class="dropdown-item" href="/controlpanel"><i class="bi bi-gear-fill me-2"></i>Control Panel</a></li>
+                        <li><a class="dropdown-item" href="/sauron"><i class="bi bi-eye-fill me-2"></i>Sauron</a></li>
+                        <li><a class="dropdown-item" href="/imageboard/import"><i class="bi bi-layers-fill me-2"></i>Massive Import</a></li>
+                        <li><a class="dropdown-item" href="/users"><i class="bi bi-people-fill me-2"></i>Users</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false"><i class="bi bi-person-circle me-1"></i>{{ user }}</a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="userMenu">
+                        <li><a class="dropdown-item" href="/myaccount"><i class="bi bi-person-fill me-2"></i>My Account</a></li>
+                        <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about"><i class="bi bi-info-circle-fill me-1"></i>About</a>
+                </li>
+            </ul>
         </div>
     </div>
-    {% endif %}
-    <div class="right menu">
-        <div class="ui compact inverted menu">
-            <div class="ui simple dropdown inverted item">
-                <i class="teal user icon inverted"></i> {{ user }}
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <a class="item" href='/myaccount'><i class="teal user icon inverted"></i>My Account</a>
-                    <a class="item" href='/logout'><i class="teal sign out alternate icon inverted"></i>Logout</a>
-                </div>
-            </div>
-        </div>
-        <a class="item" href='/about'><i class="teal info icon inverted"></i>About</a>
-    </div>
-</div>
+</nav>

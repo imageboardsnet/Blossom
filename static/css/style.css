@@ -9,6 +9,56 @@ a {
     color: #2bbfd6;
 }
 
+.table-dark th,
+.table-dark td {
+    color: #e6edf3;
+}
+
+.table-dark.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #1b242d;
+}
+
+.table-dark.table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #222c36;
+}
+
+.table-dark.table-hover tbody tr:hover {
+    background-color: #2c3743;
+}
+
+.table-url {
+    width: 22%;
+}
+
+.table-desc {
+    width: 30%;
+}
+
+.chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chip {
+    background: #2c3743;
+    border: 1px solid #2bbfd6;
+    color: #e6edf3;
+    border-radius: 16px;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.scroll-table {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.scroll-table-claim {
+    max-height: 240px;
+}
+
 .navlogo{
     margin-right: 13px !important;
     height: 16px !important;
@@ -89,6 +139,14 @@ table {
     margin-right: auto!important;
 }
 
+.sortable th {
+    cursor: pointer;
+}
+
+.sorted-asc, .sorted-desc {
+    color: #2bbfd6;
+}
+
 .dashboard_table {
     margin-left: 20px!important;
     margin-right: 20px!important;
@@ -96,16 +154,10 @@ table {
 }
 
 @media screen and (max-width: 800px) {
-    .ui.collapsing.table,.about,.editform,.loginform{
+    .table,.about,.editform,.loginform{
         width: 96vw!important;
     }
     #page-container {
     padding-top: 13em;
-    }
-}
-
-@media only screen and (min-width: 1200px) {
-    .ui.ui.ui.container:not(.fluid) {
-        width: 1627px!important;
     }
 }

@@ -1,20 +1,18 @@
-<h2 class="ui center aligned icon header inverted">
-    <img src="{{ url_for('static', filename='favicon.ico') }}" class="loginlogo"> Blossom <img src="{{ url_for('static', filename='favicon.ico') }}" class="loginlogo">
+<h2 class="text-center text-light mb-4">
+    <img src="{{ url_for('static', filename='favicon.ico') }}" class="loginlogo" alt="logo"> Blossom <img src="{{ url_for('static', filename='favicon.ico') }}" class="loginlogo" alt="logo">
 </h2>
-<div class="loginform">
-    <div class="ui attached message inverted">
-        <div class="header inverted">
+<div class="loginform card bg-dark text-light">
+    <div class="card-header border-info text-center">
             Login
-        </div>
     </div>
-    <div class="ui form attached fluid segment inverted error">
+    <div class="card-body">
 
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-            <div class="ui error message">
-                <div class="header">Action Forbidden</div>
-                <p>{{ message }}</p>
+            <div class="alert alert-danger">
+                <div class="fw-semibold">Action Forbidden</div>
+                <p class="mb-0">{{ message }}</p>
             </div>
             {% endfor %}
         {% endif %}
@@ -22,18 +20,21 @@
 
         <form method="post">
             {{ form.hidden_tag() }}
-            <p>
-                {{ form.username.label }}<br>
-                {{ form.username(size=32, class="inverted") }}<br>
-            </p>
-            <p>
-                {{ form.password.label }}<br>
-                {{ form.password(size=32) }}<br>
-            </p>
-            <div class="h-captcha" data-sitekey="{{ sitekey }}" data-theme="dark"></div>
-            <p>{{ form.submit(class="ui button teal inverted") }}
-                <a href="/register" class="ui button inverted">Register</a>
-            </p>
+            <div class="mb-3">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(size=32, class="form-control text-bg-dark") }}
+            </div>
+            <div class="mb-3">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(size=32, class="form-control text-bg-dark") }}
+            </div>
+            <div class="mb-3">
+                <div class="h-captcha" data-sitekey="{{ sitekey }}" data-theme="dark"></div>
+            </div>
+            <div class="d-flex gap-2">
+                {{ form.submit(class="btn btn-outline-info") }}
+                <a href="/register" class="btn btn-outline-secondary">Register</a>
+            </div>
         </form>
     </div>
 </div>

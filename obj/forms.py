@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField, IntegerField
 from wtforms.widgets import TextArea
-from wtforms.validators import DataRequired, Optional, Length
+from wtforms.validators import DataRequired, Optional, Length, NumberRange
 from butils.iso639 import iso639
 
 
@@ -41,7 +41,7 @@ class ibImportForm(FlaskForm):
     submit = SubmitField('Import')
 
 class ibClaimForm(FlaskForm):
-    id = IntegerField('ID', validators=[DataRequired(), Length(min=1,max=1000)])
+    id = IntegerField('ID', validators=[DataRequired(), NumberRange(min=1, max=1000000)])
     submit = SubmitField('Claim')
 
 class UserEditForm(FlaskForm):
