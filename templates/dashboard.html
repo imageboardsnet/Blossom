@@ -1,27 +1,35 @@
-<h2 class="text-center text-light mb-4">
-    Dashboard
-    <br>
-    <div class="h6 fw-normal mt-2">
-        <a href="/imageboard/add" class="btn btn-outline-info btn-sm me-2"><i class="bi bi-chat-dots-fill me-1"></i>Add Imageboard</a>
-        <a href="/imageboard/claim" class="btn btn-outline-info btn-sm"><i class="bi bi-hand-thumbs-up-fill me-1"></i>Claim Imageboard</a>
+<div class="container-fluid page-content text-light">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+        <div class="dashboard-intro">
+            <div class="eyebrow text-uppercase">Blossom</div>
+            <h2 class="mb-1">Dashboard</h2>
+            <div class="page-subtitle">Review and manage your imageboards</div>
+        </div>
+        <div class="d-flex flex-wrap gap-2 dashboard-cta">
+            <a href="/imageboard/add" class="btn btn-outline-info btn-sm w-100">
+                <i class="bi bi-chat-dots-fill me-1"></i>Add Imageboard
+            </a>
+            <a href="/imageboard/claim" class="btn btn-outline-info btn-sm w-100">
+                <i class="bi bi-hand-thumbs-up-fill me-1"></i>Claim Imageboard
+            </a>
+        </div>
     </div>
-</h2>
-<div class="container-fluid text-light">
 
 {% if imageboards|length > 0 %}
-    <div class="table-responsive dashboard_table mb-4">
-        <table class="table table-dark table-striped table-hover align-middle table-bordered table-sm sortable mb-0">
+    <div class="dashboard-table card viewer-card p-3 fade-in mb-4">
+        <div class="table-responsive dashboard_table">
+            <table class="table table-dark table-striped table-hover align-middle table-bordered table-sm sortable mb-0">
         <thead>
             <tr>
                 <th class="sorted descending" style="width:6%;">ID</th>
-                <th style="width:12%;">Name</th>
-                <th class="table-url">Url</th>
-                <th class="table-desc">Description</th>
+                <th style="width:14%;">Name</th>
+                <th class="table-url table-mobile-hide" style="width:38%;">Url</th>
+                <th style="width:8%;">Description</th>
                 <th style="width:8%;">Mirror(s)</th>
-                <th style="width:10%;">Software(s)</th>
-                <th style="width:10%;">Language(s)</th>
-                <th style="width:12%;">Status</th>
-                <th style="width:12%;">Actions</th>
+                <th style="width:9%;">Software(s)</th>
+                <th style="width:9%;">Language(s)</th>
+                <th style="width:4%;">Status</th>
+                <th style="width:4%;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -29,8 +37,8 @@
         <tr>
             <td>{{ imb.id }}</td>
             <td>{{ imb.name }}</td>
-            <td class="table-url"><a class="iblink link-info" href="{{ imb.url }}" target="_blank">{{ imb.url }}</a></td>
-            <td class="table-desc"><div class="description">{{ imb.description }}</div></td>
+            <td class="table-url table-mobile-hide"><a class="iblink link-info" href="{{ imb.url }}" target="_blank">{{ imb.url }}</a></td>
+            <td class="table-desc">{{ 'Yes' if imb.description else 'No' }}</td>
             <td>
                 {% if imb.mirrors is defined and imb.mirrors | length > 0  %}
                     Yes
@@ -79,6 +87,7 @@
         {% endfor %}
         </tbody>
     </table>
+        </div>
     </div>
 {% else %}
     <div class="alert alert-secondary about text-center" role="alert">
@@ -95,14 +104,14 @@
             <thead>
                 <tr>
                     <th class="sorted descending" style="width:6%;">ID</th>
-                    <th style="width:12%;">Name</th>
-                    <th class="table-url">Url</th>
-                    <th class="table-desc">Description</th>
+                    <th style="width:14%;">Name</th>
+                    <th class="table-url table-mobile-hide" style="width:38%;">Url</th>
+                    <th style="width:8%;">Description</th>
                     <th style="width:8%;">Mirror(s)</th>
-                    <th style="width:10%;">Software(s)</th>
-                    <th style="width:10%;">Language(s)</th>
-                    <th style="width:12%;">Status</th>
-                    <th style="width:12%;">Actions</th>
+                    <th style="width:9%;">Software(s)</th>
+                    <th style="width:9%;">Language(s)</th>
+                    <th style="width:4%;">Status</th>
+                    <th style="width:4%;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,8 +120,8 @@
             <tr>
                 <td>{{ claimib.id }}</td>
                 <td>{{ claimib.name }}</td>
-                <td class="table-url"><a class="iblink link-info" href="{{ claimib.url }}" target="_blank">{{ claimib.url }}</a></td>
-                <td class="table-desc"><div class="description">{{ claimib.description }}</div></td>
+                <td class="table-url table-mobile-hide"><a class="iblink link-info" href="{{ claimib.url }}" target="_blank">{{ claimib.url }}</a></td>
+                <td class="table-desc">{{ 'Yes' if claimib.description else 'No' }}</td>
                 <td>
                     {% if claimib.mirrors is defined and claimib.mirrors | length > 0  %}
                         Yes

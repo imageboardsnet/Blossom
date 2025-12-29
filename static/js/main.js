@@ -1,97 +1,173 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
+    const hero = document.querySelector('.hero');
+    const heroClose = document.getElementById('hero-close');
 
-	const copyGroups = document.querySelectorAll('.copy-input');
+    if (hero) {
+        const heroDismissed = document.cookie.split('; ').find(row => row.startsWith('hero_dismissed='));
+        if (heroDismissed) {
+            hero.remove();
+        }
 
-	copyGroups.forEach(function (group) {
-		const copyButton = group.querySelector('.copy-btn');
-		const inputField = group.querySelector('input');
+        if (heroClose) {
+            heroClose.addEventListener('click', () => {
+                document.cookie = `hero_dismissed=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+                hero.remove();
+            });
+        }
+    }
 
-		if (copyButton && inputField) {
-			copyButton.addEventListener('click', function () {
-				inputField.select();
-				navigator.clipboard.writeText(inputField.value);
-			});
-		}
-	});
+    const copyButtons = document.querySelectorAll('.copy-link');
+    copyButtons.forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const url = btn.dataset.url;
+            try {
+                await navigator.clipboard.writeText(url);
+                btn.innerHTML = '<i class="bi bi-check2"></i> Copied';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy link';
+                }, 1200);
+            } catch (e) {
+                btn.innerHTML = '<i class="bi bi-x"></i> Failed';
+            }
+        });
+    });
 
-	const sortableTables = document.querySelectorAll('table.sortable');
+    const copyGroups = document.querySelectorAll('.copy-input');
+    copyGroups.forEach(group => {
+        const copyButton = group.querySelector('.copy-btn');
+        const inputField = group.querySelector('input');
 
-	sortableTables.forEach(function (table) {
-		const headers = table.tHead ? Array.from(table.tHead.querySelectorAll('th')) : [];
-		const tbody = table.tBodies[0];
-		if (!headers.length || !tbody) {
-			return;
-		}
+        if (copyButton && inputField) {
+            copyButton.addEventListener('click', () => {
+                inputField.select();
+                navigator.clipboard.writeText(inputField.value);
+            });
+        }
+    });
 
-		const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+    const sortableTables = document.querySelectorAll('table.sortable');
+    sortableTables.forEach(table => {
+        const headers = table.tHead ? Array.from(table.tHead.querySelectorAll('th')) : [];
+        const tbody = table.tBodies[0];
+        if (!headers.length || !tbody) {
+            return;
+        }
 
-		const getCellValue = function (row, index) {
-			const cell = row.cells[index];
-			if (!cell) {
-				return '';
-			}
-			return cell.dataset.sortValue != null ? cell.dataset.sortValue : cell.textContent.trim();
-		};
+        const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 
-		const sortBy = function (th, ascending) {
-			headers.forEach(function (header) {
-				if (header !== th) {
-					header.dataset.sortDir = '';
-					header.classList.remove('sorted-asc', 'sorted-desc');
-				}
-			});
+        const getCellValue = (row, index) => {
+            const cell = row.cells[index];
+            if (!cell) {
+                return '';
+            }
+            return cell.dataset.sortValue != null ? cell.dataset.sortValue : cell.textContent.trim();
+        };
 
-			const index = headers.indexOf(th);
-			const rows = Array.from(tbody.rows);
+        const sortBy = (th, ascending) => {
+            headers.forEach(header => {
+                if (header !== th) {
+                    header.dataset.sortDir = '';
+                    header.classList.remove('sorted-asc', 'sorted-desc');
+                }
+            });
 
-			rows.sort(function (a, b) {
-				const aVal = getCellValue(a, index);
-				const bVal = getCellValue(b, index);
-				return collator.compare(aVal, bVal) * (ascending ? 1 : -1);
-			});
+            const index = headers.indexOf(th);
+            const rows = Array.from(tbody.rows);
 
-			rows.forEach(function (row) {
-				tbody.appendChild(row);
-			});
+            rows.sort((a, b) => {
+                const aVal = getCellValue(a, index);
+                const bVal = getCellValue(b, index);
+                return collator.compare(aVal, bVal) * (ascending ? 1 : -1);
+            });
 
-			th.dataset.sortDir = ascending ? 'asc' : 'desc';
-			th.classList.remove('sorted-asc', 'sorted-desc', 'sorted', 'descending', 'ascending');
-			th.classList.add(ascending ? 'sorted-asc' : 'sorted-desc');
-		};
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            });
 
-		headers.forEach(function (th) {
-			th.addEventListener('click', function () {
-				const ascending = th.dataset.sortDir !== 'asc';
-				sortBy(th, ascending);
-			});
-		});
+            th.dataset.sortDir = ascending ? 'asc' : 'desc';
+            th.classList.remove('sorted-asc', 'sorted-desc', 'sorted', 'descending', 'ascending');
+            th.classList.add(ascending ? 'sorted-asc' : 'sorted-desc');
+        };
 
-		const initialHeader = headers.find(function (h) { return h.classList.contains('sorted'); });
-		if (initialHeader) {
-			const ascending = !initialHeader.classList.contains('descending');
-			sortBy(initialHeader, ascending);
-		}
-	});
+        headers.forEach(th => {
+            th.addEventListener('click', () => {
+                const ascending = th.dataset.sortDir !== 'asc';
+                sortBy(th, ascending);
+            });
+        });
+
+        const initialHeader = headers.find(h => h.classList.contains('sorted'));
+        if (initialHeader) {
+            const ascending = !initialHeader.classList.contains('descending');
+            sortBy(initialHeader, ascending);
+        }
+    });
+
+    const backToTop = document.getElementById('back-to-top');
+    if (backToTop) {
+        const toggleBtn = () => {
+            if (window.scrollY > 260) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        };
+        window.addEventListener('scroll', toggleBtn);
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        toggleBtn();
+    }
+
+    if (window.bootstrap) {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    }
+
+    document.querySelectorAll('.unified-menu .dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const menu = item.closest('[data-target]');
+            const target = menu ? menu.dataset.target : null;
+            if (!target) return;
+            const value = item.dataset.value || '';
+            const hiddenInput = document.getElementById(target);
+            const group = item.closest('.btn-group');
+            const label = group ? group.querySelector('.dropdown-label') : null;
+            if (hiddenInput) hiddenInput.value = value;
+            if (label) label.textContent = value || (target === 'language' ? 'Any language' : 'Any software');
+        });
+    });
+
+    const viewerFrame = document.getElementById('viewer-frame');
+    const viewerItems = document.querySelectorAll('.viewer-item');
+    const openNew = document.getElementById('open-new');
+    if (viewerItems.length) {
+        viewerItems.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const url = btn.dataset.url;
+                viewerItems.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                if (viewerFrame) viewerFrame.src = url;
+                if (openNew) openNew.href = url;
+            });
+        });
+    }
 });
 
 function setStatus(id) {
-	var select = document.getElementById("status-select-" + id);
-	var varstatus = select.value;
+    const select = document.getElementById("status-select-" + id);
+    const varstatus = select.value;
 
-	fetch('/imageboard/status/' + id, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ status: varstatus })
-	})
-		.then(response => response.json())
-		.then(data => {
-			if (data.status == "ok") {
-				location.reload();
-			}
-		})
-		.catch(error => {
-
-		});
+    fetch('/imageboard/status/' + id, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: varstatus })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status == "ok") {
+                location.reload();
+            }
+        })
+        .catch(() => {});
 }

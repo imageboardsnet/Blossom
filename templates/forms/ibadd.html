@@ -1,8 +1,6 @@
-<h2 class="text-center text-light mb-4">
-    Add Imageboard
-</h2>
+<h2 class="text-center text-light mb-4">Add Imageboard</h2>
 <div class="editform card bg-dark text-light">
-    <div class="card-body">
+    <div class="card-body form-compact">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
@@ -14,44 +12,51 @@
         {% endif %}
         {% endwith %}
 
-        <form method="POST">
-
+        <form method="POST" class="row g-3">
             {{ form.hidden_tag() }}
-            <div class="mb-3">
+
+            <div class="col-md-6">
                 <label class="form-label">Name</label>
-                {{ form.name(placeholder="Enter name", class="form-control text-bg-dark") }}
+                {{ form.name(placeholder="Imageboard name", class="form-control text-bg-dark") }}
             </div>
-            <div class="mb-3">
+            <div class="col-md-6">
                 <label class="form-label">URL</label>
-                {{ form.url(placeholder="Enter URL", class="form-control text-bg-dark") }}
+                {{ form.url(placeholder="https://example.net", class="form-control text-bg-dark") }}
             </div>
-            <div class="mb-3">
+
+            <div class="col-md-6">
                 <label class="form-label">Mirrors</label>
-                {{ form.mirrors(placeholder="Enter mirrors ( eg. myboard.net , myboard.org )", class="form-control text-bg-dark") }}
+                {{ form.mirrors(placeholder="mirror1.net, mirror2.org", class="form-control text-bg-dark") }}
+                <div class="helper">Comma-separated list</div>
             </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Language</label>
-                    {{ form.language(class="form-select text-bg-dark") }}
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Software</label>
-                    {{ form.software(placeholder="Enter software ( eg. jschan)", class="form-control text-bg-dark") }}
-                </div>
-            </div>
-            <div class="mb-3">
+            <div class="col-md-6">
                 <label class="form-label">Boards</label>
-                {{ form.boards(placeholder="Enter boards ( eg. \\ r \\ Random , \\ g \\ Computer )", class="form-control text-bg-dark") }}
+                {{ form.boards(placeholder="\\r\\ Random, \\g\\ Tech", class="form-control text-bg-dark") }}
+                <div class="helper">Comma-separated boards</div>
             </div>
-            <div class="mb-3">
+
+            <div class="col-md-6">
+                <label class="form-label">Language</label>
+                {{ form.language(class="form-select text-bg-dark") }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Software</label>
+                {{ form.software(placeholder="eg. jschan", class="form-control text-bg-dark") }}
+            </div>
+
+            <div class="col-12">
                 <label class="form-label">Description</label>
-                {{ form.description(placeholder="A small description of your imageboard.",rows="3", class="form-control text-bg-dark") }}
+                {{ form.description(placeholder="Short description", rows="3", class="form-control text-bg-dark") }}
             </div>
-            <div class="mb-3">
+
+            <div class="col-12">
                 <div class="h-captcha" data-sitekey="{{ sitekey }}" data-theme="dark"></div>
             </div>
-                {{ form.submit(class="btn btn-outline-info me-2") }}
+
+            <div class="col-12 d-flex flex-wrap gap-2">
+                {{ form.submit(class="btn btn-outline-info") }}
                 <a href="/" class="btn btn-outline-secondary">Cancel</a>
+            </div>
         </form>
     </div>
 </div>
